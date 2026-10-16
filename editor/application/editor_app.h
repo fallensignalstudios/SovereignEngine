@@ -6,6 +6,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
 #include <SDL3/SDL.h>
 
@@ -119,6 +120,11 @@ class EditorApp {
   std::string status_line() const;
 
  private:
+  // Editor shortcuts. Decided per key event in HandleEvent, run in the next Frame().
+  enum class Shortcut { Save, Undo, Redo, Delete, TogglePlay, Focus };
+  static std::optional<Shortcut> ShortcutFor(const SDL_KeyboardEvent& key);
+  void RunShortcuts();
+
   void BuildUi();
   void RenderScene();
   void ProcessPicks();
@@ -145,6 +151,7 @@ class EditorApp {
   std::optional<std::filesystem::path> window_capture_path_;
   std::optional<std::filesystem::path> viewport_capture_path_;
   bool window_capture_inflight_ = false;
+  std::vector<Shortcut> pending_shortcuts_;
 };
 
 // Panels (editor/panels/panels.cpp). Each draws one dockable window.

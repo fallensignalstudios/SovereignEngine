@@ -1,0 +1,48 @@
+$ ctest --preset dev-headless --output-on-failure
+# started 2026-10-16T23:03:43Z at commit 77d5c39b1359c0c287463efe94085fc16c3597b7
+Test project /home/user/SovereignEngine/build/dev-headless
+      Start  1: headless.core
+      Start  2: headless.math
+      Start  3: headless.scene
+      Start  4: headless.world
+ 1/18 Test  #2: headless.math ......................................   Passed    0.00 sec
+      Start  5: headless.commands
+ 2/18 Test  #4: headless.world .....................................   Passed    0.01 sec
+      Start  6: headless.store
+ 3/18 Test  #5: headless.commands ..................................   Passed    0.05 sec
+      Start  7: headless.cli
+ 4/18 Test  #3: headless.scene .....................................   Passed    0.05 sec
+      Start  8: headless.editor
+ 5/18 Test  #1: headless.core ......................................   Passed    0.11 sec
+      Start  9: headless.play
+ 6/18 Test  #8: headless.editor ....................................   Passed    0.14 sec
+      Start 10: static.no_unreal_dependency
+ 7/18 Test  #9: headless.play ......................................   Passed    0.12 sec
+      Start 11: static.headless_sovereign-cli_has_no_graphics
+ 8/18 Test  #7: headless.cli .......................................   Passed    0.31 sec
+      Start 12: static.headless_sovereign-tests_has_no_graphics
+ 9/18 Test #11: static.headless_sovereign-cli_has_no_graphics ......   Passed    0.21 sec
+      Start 13: static.sovereign-cli_link_dependencies
+10/18 Test #10: static.no_unreal_dependency ........................   Passed    0.34 sec
+      Start 14: static.sovereign-tests_link_dependencies
+11/18 Test #13: static.sovereign-cli_link_dependencies .............   Passed    0.22 sec
+      Start 15: static.license_notices_match_lock
+12/18 Test #12: static.headless_sovereign-tests_has_no_graphics ....   Passed    0.31 sec
+      Start 16: static.packet_files_verbatim
+13/18 Test #16: static.packet_files_verbatim .......................   Passed    0.01 sec
+      Start 17: static.packet_contract_checker
+14/18 Test #15: static.license_notices_match_lock ..................   Passed    0.02 sec
+      Start 18: static.repository_files_conform_to_owner_schemas
+15/18 Test #18: static.repository_files_conform_to_owner_schemas ...   Passed    0.15 sec
+16/18 Test #14: static.sovereign-tests_link_dependencies ...........   Passed    0.30 sec
+17/18 Test #17: static.packet_contract_checker .....................   Passed    0.24 sec
+18/18 Test  #6: headless.store .....................................   Passed    1.11 sec
+
+100% tests passed, 0 tests failed out of 18
+
+Label Time Summary:
+headless    =   3.71 sec*proc (18 tests)
+static      =   1.80 sec*proc (9 tests)
+
+Total Test time (real) =   1.12 sec
+# finished 2026-10-16T23:03:44Z exit 0 after 1s

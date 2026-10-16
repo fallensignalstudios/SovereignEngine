@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <format>
+#include <utility>
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -143,6 +144,10 @@ void EditorApp::HandleEvent(const SDL_Event& e) {
         viewport_.flying = false;
         window_.SetRelativeMouse(false);
       }
+      // Shortcuts are ignored while a text field has focus (that field gets the keys).
+      if (!e.key.repeat && !ImGui::GetIO().WantTextInput) {
+        if (const auto s = ShortcutFor(e.key)) pending_shortcuts_.push_back(*s);
+      }
       break;
     default: break;
   }
@@ -183,17 +188,44 @@ void EditorApp::BuildUi() {
   panels::Diagnostics(*this);
   panels::Viewport(*this);
 
-  // Shortcuts (ignored while a text field has focus).
-  const ImGuiIO& io = ImGui::GetIO();
-  if (!io.WantTextInput) {
-    if (ImGui::IsKeyChordPressed(ImGuiMod_Ctrl | ImGuiKey_S)) Save();
-    if (ImGui::IsKeyChordPressed(ImGuiMod_Ctrl | ImGuiKey_Z)) doc_->Undo();
-    if (ImGui::IsKeyChordPressed(ImGuiMod_Ctrl | ImGuiKey_Y) || ImGui::IsKeyChordPressed(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_Z)) {
-      doc_->Redo();
+  RunShortcuts();
+}
+
+// A shortcut is decided from the key event itself, using the modifier state SDL reports for that
+// press. Sampling ImGui's per-frame key state instead (IsKeyChordPressed) loses a chord whose
+// modifier is released in the same frame as the key press: ImGui applies both changes before the
+// frame's checks run, so Ctrl reads as up. Found by the real-input GUI test (Ctrl+Z / Ctrl+S
+// occasionally ignored); see docs/reports/G0_G1_REPORT.md.
+std::optional<EditorApp::Shortcut> EditorApp::ShortcutFor(const SDL_KeyboardEvent& key) {
+  if ((key.mod & (SDL_KMOD_ALT | SDL_KMOD_GUI)) != 0) return std::nullopt;
+  const bool ctrl = (key.mod & SDL_KMOD_CTRL) != 0;
+  const bool shift = (key.mod & SDL_KMOD_SHIFT) != 0;
+  switch (key.key) {
+    case SDLK_S: if (ctrl && !shift) return Shortcut::Save; break;
+    case SDLK_Z: if (ctrl) return shift ? Shortcut::Redo : Shortcut::Undo; break;
+    case SDLK_Y: if (ctrl && !shift) return Shortcut::Redo; break;
+    case SDLK_DELETE: if (!ctrl && !shift) return Shortcut::Delete; break;
+    case SDLK_F5: if (!ctrl && !shift) return Shortcut::TogglePlay; break;
+    case SDLK_F: if (!ctrl && !shift) return Shortcut::Focus; break;
+    default: break;
+  }
+  return std::nullopt;
+}
+
+void EditorApp::RunShortcuts() {
+  for (const Shortcut s : std::exchange(pending_shortcuts_, {})) {
+    switch (s) {
+      case Shortcut::Save: Save(); break;
+      case Shortcut::Undo: doc_->Undo(); break;
+      case Shortcut::Redo: doc_->Redo(); break;
+      case Shortcut::Delete:
+        if (doc_->selection() && !playing()) doc_->Delete(*doc_->selection());
+        break;
+      case Shortcut::TogglePlay: playing() ? StopPlay() : StartPlay(); break;
+      case Shortcut::Focus:
+        if (!viewport_.flying) FocusCameraOnSelection();
+        break;
     }
-    if (ImGui::IsKeyPressed(ImGuiKey_Delete, false) && doc_->selection() && !playing()) doc_->Delete(*doc_->selection());
-    if (ImGui::IsKeyChordPressed(ImGuiKey_F5)) playing() ? StopPlay() : StartPlay();
-    if (ImGui::IsKeyChordPressed(ImGuiKey_F) && !viewport_.flying) FocusCameraOnSelection();
   }
 }
 

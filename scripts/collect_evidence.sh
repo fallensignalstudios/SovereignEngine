@@ -84,6 +84,22 @@ logrun runtime_opens_editor_saved_scene scripts/with_virtual_display.sh build/de
   --screenshot "$C/runtime_editor_saved_scene.png"
 find build/dev-vulkan/test-tmp -path '*/rendering.*' -name '*.png' -exec cp {} "$C/rendering/" \;
 find "$A/gui_real_input" -maxdepth 1 -type f -exec cp {} "$E/gui_real_input/" \;
+# The real-input check once found a timing-dependent defect (lost shortcuts); record 10 more runs.
+repeat_gui() {
+  local pass=0 i
+  for i in $(seq 1 10); do
+    rm -rf build/dev-vulkan/test-tmp/gui_repeat
+    if SOV_REQUIRE_VALIDATION=1 SOV_CLI="$(pwd)/build/dev-vulkan/bin/sovereign-cli" scripts/ctest_display_launcher.sh \
+         scripts/gui_real_input_check.sh build/dev-vulkan/bin build/dev-vulkan/test-tmp/gui_repeat > /dev/null 2>&1; then
+      pass=$((pass + 1)); echo "run $i: PASS"
+    else
+      echo "run $i: FAIL: $(tail -1 build/dev-vulkan/test-tmp/gui_repeat/gui_real_input.log)"
+    fi
+  done
+  echo "real-input GUI check: $pass/10 consecutive runs passed"
+  [ "$pass" -eq 10 ]
+}
+logrun gui_real_input_repeated_10x repeat_gui
 python3 -I scripts/check_contracts.py "$E/editor" "$E/gui_real_input" > "$E/editor/owner_schema_check.txt" 2>&1
 record owner_schema_check_of_editor_written_scenes $?
 python3 -I scripts/png_provenance.py "$C"/*.png "$C"/rendering/*.png > "$C/PROVENANCE.txt"

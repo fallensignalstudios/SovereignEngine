@@ -1,0 +1,11 @@
+# SDL_EVENT_LOGGING=1 excerpt from a failing run of scripts/gui_real_input_check.sh before the fix
+# (xdotool key ctrl+z). Ctrl is released in the same frame as Z is pressed; the editor sampled
+# ImGui's per-frame key state, so Ctrl read as up and the Undo shortcut was lost.
+71:SDL EVENT: SDL_EVENT_KEY_DOWN (timestamp=4180302091 windowid=2 which=0 state=pressed repeat=false scancode=224 keycode=1073742048 mod=0x40)
+72:SDL EVENT: SDL_EVENT_KEY_DOWN (timestamp=4209200316 windowid=2 which=0 state=pressed repeat=false scancode=29 keycode=122 mod=0x40)
+73:SDL EVENT: SDL_EVENT_KEY_UP (timestamp=4209228462 windowid=2 which=0 state=released repeat=false scancode=224 keycode=1073742048 mod=0x0)
+74:SDL EVENT: SDL_EVENT_KEY_UP (timestamp=4209246418 windowid=2 which=0 state=released repeat=false scancode=29 keycode=122 mod=0x0)
+# test log tail:
+[gui-real-input] ok: Undo button restored the platform (revision 4)
+[gui-real-input] ok: Redo button deleted it again (revision 5)
+[gui-real-input] FAIL: timed out waiting for: Ctrl+Z restored it (revision 6) (state: {'History_shown': True, 'Diagnostics_shown': False, 'revision': 5, 'dirty': True, 'playing': False, 'entity_count': 11, 'history_size': 5, 'window': [1600, 900], 'selected': None})
