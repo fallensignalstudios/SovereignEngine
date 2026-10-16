@@ -38,7 +38,8 @@ constexpr const char* kUsage = R"(usage: sovereign-cli <command> [options]
   --version
   scene validate --scene PATH [--json]
   scene inspect  --scene PATH [--json]
-  scene new      --scene PATH --name NAME [--scene-id UUID] [--camera-id UUID] [--environment ENV.json]
+  scene new      --scene PATH --name NAME [--scene-id UUID] [--camera-id UUID] [--background R,G,B]
+  scene import   --from SOURCE.scene.json --scene PATH   (validate, then create a canonical journalled copy)
   scene apply    --scene PATH --commands BATCH.json [--result OUT.json]
   scene undo     --scene PATH --base-revision N [--actor ACTOR] [--result OUT.json]
   scene redo     --scene PATH --base-revision N [--actor ACTOR] [--result OUT.json]
@@ -226,7 +227,7 @@ int CmdInspect(const Args& a, const Paths& paths) {
   }
   std::printf("scene: \"%s\" (%s)\nrevision: %llu\nentities: %zu\nactive camera: %s\n", doc.name.c_str(),
               doc.scene_id.ToString().c_str(), static_cast<unsigned long long>(doc.revision), doc.entities.size(),
-              doc.active_camera ? doc.active_camera->ToString().c_str() : "(none)");
+              doc.active_camera_id.ToString().c_str());
   std::printf("journal: %s, %zu committed transaction(s)%s\n",
               (*store)->journal_status().present ? "present" : "absent", (*store)->history().size(),
               (*store)->journal_status().consistent ? "" : " (INCONSISTENT; see notes)");
@@ -256,16 +257,20 @@ int CmdNew(const Args& a, const Paths& paths) {
   auto camera_id = uuid_opt("camera-id");
   if (!camera_id) return Fail(camera_id.error(), true);
   auto doc = scene::MakeNewScene(*scene_id, name_it->second, *camera_id);
-  if (a.options.count("environment")) {
-    auto env_path = paths.Resolve(a.options.at("environment"));
-    if (!env_path) return Fail(env_path.error(), true);
-    auto env_text = fs::ReadFile(*env_path, 64 * 1024);
-    if (!env_text) return Fail(env_text.error(), true);
-    auto env_json = ParseStrictJson(*env_text);
-    if (!env_json) return Fail(env_json.error(), true);
-    auto env = scene::ParseEnvironment(*env_json);
-    if (!env) return Fail(env.error(), true);
-    doc.environment = *env;
+  if (auto it = a.options.find("background"); it != a.options.end()) {
+    // "R,G,B" linear, each in [0, 1]; parsed through the same strict field rules as a document.
+    std::string text = "[" + it->second + "]";
+    auto bg_json = ParseStrictJson(text);
+    if (!bg_json || !bg_json->is_array() || bg_json->size() != 3) {
+      return Fail(MakeError(ErrorCode::SchemaError, "--background must be three numbers R,G,B"), true);
+    }
+    scene::SceneDocument probe = doc;
+    Json j = scene::SceneToJson(probe);
+    j["background_linear_rgb"] = *bg_json;
+    scene::Diagnostics d;
+    auto parsed = scene::ParseSceneDocument(j, &d);
+    if (!parsed) return Fail(parsed.error(), true);
+    doc.background_linear_rgb = parsed->background_linear_rgb;
   }
   auto store = SceneStore::Create(*path, doc, "sovereign-cli");
   if (!store) return Fail(store.error(), true);
@@ -274,6 +279,30 @@ int CmdNew(const Args& a, const Paths& paths) {
                  {"scene_id", scene_id->ToString()},
                  {"camera_id", camera_id->ToString()},
                  {"revision", doc.revision}});
+  return kExitOk;
+}
+
+// --- scene import ----------------------------------------------------------------------------
+// Validates SOURCE with the full strict reader and creates PATH as a new scene in canonical form
+// with a fresh journal epoch. SOURCE is never modified. Content and revision are preserved; only
+// formatting may change (canonical field order, entity order, number spelling).
+int CmdImport(const Args& a, const Paths& paths) {
+  auto from = Required(a, paths, "from");
+  if (!from) return Fail(from.error(), true);
+  auto path = Required(a, paths, "scene");
+  if (!path) return Fail(path.error(), true);
+  auto loaded = scene::LoadSceneFile(*from);
+  if (!loaded) return Fail(loaded.error(), true);
+  for (const auto& w : loaded->warnings) std::fprintf(stderr, "warning: %s\n", w.c_str());
+  auto store = SceneStore::Create(*path, loaded->document, "sovereign-cli");
+  if (!store) return Fail(store.error(), true);
+  PrintJson(Json{{"ok", true},
+                 {"scene", path->string()},
+                 {"source", from->string()},
+                 {"source_sha256", loaded->file_sha256},
+                 {"scene_id", loaded->document.scene_id.ToString()},
+                 {"revision", loaded->document.revision},
+                 {"content_sha256", scene::ContentHash(loaded->document)}});
   return kExitOk;
 }
 
@@ -444,6 +473,7 @@ int main(int argc, char** argv) {
     if (verb == "validate") return CmdValidate(*args, paths);
     if (verb == "inspect") return CmdInspect(*args, paths);
     if (verb == "new") return CmdNew(*args, paths);
+    if (verb == "import") return CmdImport(*args, paths);
     if (verb == "apply") return CmdApply(*args, paths);
     if (verb == "undo") return CmdHistoryStep(*args, paths, true);
     if (verb == "redo") return CmdHistoryStep(*args, paths, false);

@@ -13,20 +13,20 @@ namespace sov::cmd {
 
 struct BatchLimits {
   static constexpr std::size_t kMaxBatchBytes = 1u * 1024u * 1024u;
-  static constexpr std::size_t kMaxOperations = 512;
-  static constexpr std::size_t kMaxActorBytes = 64;
-  static constexpr std::size_t kMaxIdempotencyKeyBytes = 128;
+  static constexpr std::size_t kMaxOperations = 128;          // contract: operations maxItems
+  static constexpr std::size_t kMaxActorChars = 128;          // contract: actor maxLength
+  static constexpr std::size_t kMaxIdempotencyKeyBytes = 128; // contract: [A-Za-z0-9_.:-]{1,128}
 };
 
-// sovereign.command_batch v1 (schemas/command_batch.schema.json).
+// Command batch contract v1 (schemas/command_batch.schema.json, urn:sovereign-engine:schema:command-batch:1).
 struct CommandBatch {
   int protocol_version = 1;
   Uuid request_id;
-  std::string actor;            // scope for idempotency keys, e.g. "agent:layout-bot", "cli:matthew"
+  std::string actor;            // a label, not authentication; scope for idempotency keys
   Uuid scene_id;
   std::uint64_t base_revision = 0;
   std::string idempotency_key;  // required; scoped to (scene, actor)
-  bool dry_run = true;          // default true: a batch must opt in to committing
+  bool dry_run = true;          // required on the wire; true never writes
   std::vector<Operation> operations;
 
   // SHA-256 over the normalized request content: protocol_version, scene_id, base_revision and

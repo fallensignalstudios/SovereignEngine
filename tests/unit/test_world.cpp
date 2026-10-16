@@ -83,9 +83,8 @@ SOV_TEST(world, render_snapshot_contents) {
   SOV_CHECK_EQ(snap.instances.size(), std::size_t{2});  // parent box + child cylinder
   SOV_CHECK_EQ(snap.pick_table.size(), std::size_t{2});
   SOV_REQUIRE(snap.active_camera.has_value());
-  SOV_REQUIRE(snap.light.has_value());
-  // Light rotated -60 deg about X travels downward and forward (-Y, -Z).
-  SOV_CHECK(snap.light->direction.y < 0 && snap.light->direction.z < 0);
+  // Scene contract v1 has no lights; the snapshot carries the authored background instead.
+  SOV_CHECK(snap.background_linear_rgb == fixtures::SmallScene().background_linear_rgb);
   SOV_CHECK_EQ(snap.triangle_count, std::uint64_t{12 + PrimitiveTriangleCount(scene::PrimitiveShape::Cylinder)});
   for (const auto& inst : snap.instances) {
     const auto id = snap.ResolvePick(inst.pick_index);

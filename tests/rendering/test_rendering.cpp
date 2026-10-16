@@ -291,8 +291,11 @@ SOV_TEST(rendering, first_light_renders_from_scene_data) {
   visible.erase(0);
   ctx.Note(std::format("visible entities: {} of {} instances; {} triangles submitted", visible.size(),
                        s.snap.instances.size(), r->last_frame().triangles));
-  SOV_CHECK(visible.size() > 40);  // columns, walkway, dais, walls... are actually rasterized
-  SOV_CHECK(s.snap.instances.size() <= 100);
+  // The packet's hall: floor, walkway, raised platform, rear wall, six columns, light strip. Every
+  // one of its primitives is actually rasterized from the authored camera (none culled or lost).
+  SOV_CHECK_EQ(s.snap.instances.size(), std::size_t{11});
+  SOV_CHECK_EQ(visible.size(), s.snap.instances.size());
+  SOV_CHECK(s.snap.instances.size() <= 100);  // G1 S1 content limits (TDD §21.2)
   SOV_CHECK(r->last_frame().triangles < 100000);
   // Emissive accents produce warm highlights; most of the frame is dark.
   std::size_t bright_warm = 0, dark = 0;

@@ -53,9 +53,8 @@ scene::TransformComponent MovedTo(const Vec3& p) {
   return t;
 }
 
-std::vector<FieldAssignment> Roughness(double v) {
-  return {{scene::FindField(scene::MaterialDescriptor(), "roughness"), v}};
-}
+// A complete material (material.set replaces the whole MaterialParameters component).
+scene::MaterialComponent Glow(double v) { return scene::MaterialComponent{{0.8, 0.8, 0.8, 1.0}, {v, v, v}}; }
 
 }  // namespace
 
@@ -67,12 +66,12 @@ SOV_TEST(commands, each_operation_kind_applies) {
   const auto r2 = s.ApplyEdit("editor", 4, {Operation::Rename(kNewId, "Banner (Left)")}, "rename");
   SOV_CHECK(r2.status == ResultStatus::Committed);
   SOV_CHECK_EQ(s.document().Find(kNewId)->name, std::string("Banner (Left)"));
-  const auto r3 = s.ApplyEdit("editor", 5, {Operation::SetTransform(kNewId, MovedTo({3, 4, 5}), false)}, "move");
+  const auto r3 = s.ApplyEdit("editor", 5, {Operation::SetTransform(kNewId, MovedTo({3, 4, 5}))}, "move");
   SOV_CHECK(r3.status == ResultStatus::Committed);
   SOV_CHECK(s.document().Find(kNewId)->transform.position == Vec3(3, 4, 5));
-  const auto r4 = s.ApplyEdit("editor", 6, {Operation::SetMaterial(kNewId, Roughness(0.25))}, "material");
+  const auto r4 = s.ApplyEdit("editor", 6, {Operation::SetMaterial(kNewId, Glow(0.25))}, "material");
   SOV_CHECK(r4.status == ResultStatus::Committed);
-  SOV_CHECK_EQ(s.document().Find(kNewId)->material->roughness, 0.25);
+  SOV_CHECK_EQ(s.document().Find(kNewId)->material->emissive_rgb.x, 0.25);
   const auto r5 = s.ApplyEdit("editor", 7, {Operation::Delete(kNewId)}, "delete");
   SOV_CHECK(r5.status == ResultStatus::Committed);
   SOV_CHECK(s.document().Find(kNewId) == nullptr);
@@ -83,7 +82,7 @@ SOV_TEST(commands, each_operation_kind_applies) {
 SOV_TEST(commands, batch_increments_revision_once_regardless_of_operation_count) {
   SceneSession s = MakeSession();
   const auto r = s.ApplyBatch(Batch(3, {Operation::Create(NewBox(kNewId, "A")), Operation::Create(NewBox(kNewId2, "B")),
-                                        Operation::Rename(kNewId, "A2"), Operation::SetMaterial(kNewId2, Roughness(0.9))}));
+                                        Operation::Rename(kNewId, "A2"), Operation::SetMaterial(kNewId2, Glow(0.9))}));
   SOV_REQUIRE_MSG(r.status == ResultStatus::Committed, CompactJson(r.ToJson()));
   SOV_CHECK_EQ(r.revision_before, std::uint64_t{3});
   SOV_CHECK_EQ(r.revision_after, std::uint64_t{4});
@@ -95,7 +94,7 @@ SOV_TEST(commands, failed_batch_rolls_back_entirely) {
   SceneSession s = MakeSession();
   const auto before = s.document();
   const auto r = s.ApplyBatch(Batch(3, {Operation::Create(NewBox(kNewId, "A")),
-                                        Operation::SetTransform(fixtures::kParentId, MovedTo({9, 9, 9}), false),
+                                        Operation::SetTransform(fixtures::kParentId, MovedTo({9, 9, 9})),
                                         Operation::Rename(*Uuid::Parse("5c0e0000-0000-4000-8000-0000000000ff"), "ghost"),
                                         Operation::Delete(kNewId)}));
   SOV_CHECK(r.status == ResultStatus::Rejected);
@@ -164,7 +163,7 @@ SOV_TEST(commands, dry_run_still_validates) {
 
 SOV_TEST(commands, duplicate_delivery_returns_recorded_result_without_reapplying) {
   SceneSession s = MakeSession();
-  const CommandBatch b = Batch(3, {Operation::SetTransform(fixtures::kParentId, MovedTo({1, 2, 3}), false)}, "move-1");
+  const CommandBatch b = Batch(3, {Operation::SetTransform(fixtures::kParentId, MovedTo({1, 2, 3}))}, "move-1");
   const auto first = s.ApplyBatch(b);
   SOV_REQUIRE(first.status == ResultStatus::Committed);
   const auto after_first = s.document();
@@ -247,10 +246,6 @@ SOV_TEST(commands, create_validates_identity_parent_and_limits) {
   orphan.transform.parent = *Uuid::Parse("5c0e0000-0000-4000-8000-0000000000ff");
   r = s.ApplyEdit("editor", 3, {Operation::Create(orphan)}, "x");
   SOV_CHECK_EQ(r.errors[0].code, ErrorCode::MissingDependency);
-  EntityData light = NewBox(kNewId, "second light");
-  light.directional_light.emplace();
-  r = s.ApplyEdit("editor", 3, {Operation::Create(light)}, "x");
-  SOV_CHECK_EQ(r.errors[0].code, ErrorCode::LimitExceeded);
   // Parent created earlier in the same batch is visible to later operations.
   EntityData child = NewBox(kNewId2, "child of new");
   child.transform.parent = kNewId;
@@ -263,12 +258,12 @@ SOV_TEST(commands, reparenting_rejects_cycles_and_inverse_restores_parent) {
   SceneSession s = MakeSession();
   scene::TransformComponent t = s.document().Find(fixtures::kParentId)->transform;
   t.parent = fixtures::kChildId;  // parent under its own child
-  auto r = s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kParentId, t, true)}, "cycle");
+  auto r = s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kParentId, t)}, "cycle");
   SOV_CHECK_EQ(r.errors[0].code, ErrorCode::CycleDetected);
 
   scene::TransformComponent ct = s.document().Find(fixtures::kChildId)->transform;
   ct.parent.reset();  // move child to scene root
-  r = s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kChildId, ct, true)}, "unparent");
+  r = s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kChildId, ct)}, "unparent");
   SOV_CHECK(r.status == ResultStatus::Committed);
   SOV_CHECK(!s.document().Find(fixtures::kChildId)->transform.parent.has_value());
   SOV_REQUIRE(s.Undo("editor", 4).ok());
@@ -277,14 +272,14 @@ SOV_TEST(commands, reparenting_rejects_cycles_and_inverse_restores_parent) {
 
 SOV_TEST(commands, material_set_requires_material_component) {
   SceneSession s = MakeSession();
-  const auto r = s.ApplyEdit("editor", 3, {Operation::SetMaterial(fixtures::kCameraId, Roughness(0.5))}, "x");
+  const auto r = s.ApplyEdit("editor", 3, {Operation::SetMaterial(fixtures::kCameraId, Glow(0.5))}, "x");
   SOV_CHECK_EQ(r.errors[0].code, ErrorCode::ComponentMissing);
 }
 
 SOV_TEST(commands, no_change_edit_does_not_bump_revision) {
   SceneSession s = MakeSession();
   const auto& t = s.document().Find(fixtures::kParentId)->transform;
-  const auto r = s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kParentId, t, false)}, "same");
+  const auto r = s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kParentId, t)}, "same");
   SOV_CHECK(r.status == ResultStatus::NoChange);
   SOV_CHECK_EQ(s.revision(), std::uint64_t{3});
   SOV_CHECK(s.history().empty());
@@ -293,9 +288,9 @@ SOV_TEST(commands, no_change_edit_does_not_bump_revision) {
 SOV_TEST(commands, undo_redo_restore_content_and_revisions_stay_monotonic) {
   SceneSession s = MakeSession();
   const std::string h0 = scene::ContentHash(s.document());
-  SOV_REQUIRE(s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kParentId, MovedTo({7, 0, 0}), false)}, "move").ok());
+  SOV_REQUIRE(s.ApplyEdit("editor", 3, {Operation::SetTransform(fixtures::kParentId, MovedTo({7, 0, 0}))}, "move").ok());
   const std::string h1 = scene::ContentHash(s.document());
-  SOV_REQUIRE(s.ApplyEdit("editor", 4, {Operation::SetMaterial(fixtures::kParentId, Roughness(0.1)),
+  SOV_REQUIRE(s.ApplyEdit("editor", 4, {Operation::SetMaterial(fixtures::kParentId, Glow(0.1)),
                                         Operation::Delete(fixtures::kChildId)}, "material+delete").ok());
   const std::string h2 = scene::ContentHash(s.document());
   std::uint64_t last = s.revision();
@@ -347,13 +342,13 @@ SOV_TEST(commands, history_rebuilds_undo_stack_from_records) {
 
 SOV_TEST(commands, batch_parsing_is_strict) {
   const auto parse = [](const char* text) { return ParseCommandBatchText(text); };
-  const char* base = R"({"protocol":"sovereign.command_batch","protocol_version":1,
+  const char* base = R"({"protocol_version":1,
     "request_id":"5c0e0000-0000-4000-8000-00000000e001","actor":"agent:t",
-    "scene_id":"5c0e0000-0000-4000-8000-000000000001","base_revision":3,"idempotency_key":"k",
+    "scene_id":"5c0e0000-0000-4000-8000-000000000001","base_revision":3,"idempotency_key":"k","dry_run":true,
     "operations":[{"op":"entity.rename","entity_id":"5c0e0000-0000-4000-8000-0000000000a1","name":"N"}]})";
   auto ok = parse(base);
   SOV_REQUIRE_OK(ok);
-  SOV_CHECK(ok->dry_run);  // dry run unless explicitly disabled
+  SOV_CHECK(ok->dry_run);
 
   auto with = [&](const std::string& from, const std::string& to) {
     std::string s = base;
@@ -362,6 +357,16 @@ SOV_TEST(commands, batch_parsing_is_strict) {
     return ParseCommandBatchText(s);
   };
   SOV_CHECK_EQ(with("\"protocol_version\":1", "\"protocol_version\":2").error().code, ErrorCode::UnknownSchemaVersion);
+  // dry_run is required by contract v1 (no implicit default either way).
+  SOV_CHECK_EQ(with("\"dry_run\":true,", "").error().code, ErrorCode::SchemaError);
+  SOV_CHECK_EQ(with("\"dry_run\":true", "\"dry_run\":\"yes\"").error().code, ErrorCode::SchemaError);
+  // Fields from other formats are unknown, not ignored.
+  SOV_CHECK_EQ(with("\"protocol_version\":1", "\"protocol\":\"x\",\"protocol_version\":1").error().code, ErrorCode::SchemaError);
+  // Actor is a free-form label (1..128 characters), not an identifier pattern; control characters are refused.
+  SOV_REQUIRE_OK(with("\"actor\":\"agent:t\"", "\"actor\":\"Matthew S. (editor)\""));
+  SOV_CHECK_EQ(with("\"actor\":\"agent:t\"", "\"actor\":\"" + std::string(129, 'a') + "\"").error().code, ErrorCode::SchemaError);
+  SOV_REQUIRE_OK(with("\"actor\":\"agent:t\"", "\"actor\":\"" + std::string(128, 'a') + "\""));
+  SOV_CHECK_EQ(with("\"actor\":\"agent:t\"", "\"actor\":\"a\\u0007b\"").error().code, ErrorCode::SchemaError);
   SOV_CHECK_EQ(with("\"entity.rename\"", "\"entity.undo\"").error().code, ErrorCode::SchemaError);
   SOV_CHECK_EQ(with("\"name\":\"N\"", "\"name\":\"N\",\"extra\":1").error().code, ErrorCode::SchemaError);
   SOV_CHECK_EQ(with("\"idempotency_key\":\"k\"", "\"idempotency_key\":\"bad key!\"").error().code, ErrorCode::SchemaError);
@@ -370,18 +375,25 @@ SOV_TEST(commands, batch_parsing_is_strict) {
   SOV_CHECK_EQ(with("\"base_revision\":3", "\"base_revision\":3,\"target\":\"x\"").error().code, ErrorCode::SchemaError);
   auto missing_scale = with(R"({"op":"entity.rename","entity_id":"5c0e0000-0000-4000-8000-0000000000a1","name":"N"})",
                             R"({"op":"transform.set","entity_id":"5c0e0000-0000-4000-8000-0000000000a1",
-                                "transform":{"position":[0,0,0],"rotation":[0,0,0,1]}})");
+                                "transform":{"position":[0,0,0],"rotation_xyzw":[0,0,0,1],"parent_id":null}})");
   SOV_CHECK_EQ(missing_scale.error().code, ErrorCode::SchemaError);
   SOV_CHECK_EQ(missing_scale.error().op_index, 0);
-  auto readonly = with(R"({"op":"entity.rename","entity_id":"5c0e0000-0000-4000-8000-0000000000a1","name":"N"})",
-                       R"({"op":"material.set","entity_id":"5c0e0000-0000-4000-8000-0000000000a1",
-                           "material":{"roughness":2.0}})");
-  SOV_CHECK_EQ(readonly.error().code, ErrorCode::InvalidValue);
+  const auto material_op = [&](const char* material) {
+    return with(R"({"op":"entity.rename","entity_id":"5c0e0000-0000-4000-8000-0000000000a1","name":"N"})",
+                std::string(R"({"op":"material.set","entity_id":"5c0e0000-0000-4000-8000-0000000000a1","material":)") +
+                    material + "}");
+  };
+  SOV_REQUIRE_OK(material_op(R"({"base_color_rgba":[1,1,1,1],"emissive_rgb":[1000,0,0]})"));
+  SOV_CHECK_EQ(material_op(R"({"base_color_rgba":[1,1,1,1],"emissive_rgb":[1001,0,0]})").error().code, ErrorCode::InvalidValue);
+  // material.set is a complete replacement: a partial material is a schema error.
+  SOV_CHECK_EQ(material_op(R"({"base_color_rgba":[1,1,1,1]})").error().code, ErrorCode::SchemaError);
+  SOV_CHECK_EQ(material_op(R"({"base_color_rgba":[1,1,1,1],"emissive_rgb":[0,0,0],"roughness":0.5})").error().code,
+               ErrorCode::SchemaError);
 
   std::string many = base;
   std::string op = R"({"op":"entity.delete","entity_id":"5c0e0000-0000-4000-8000-0000000000a1"})";
   std::string ops;
-  for (int i = 0; i < 513; ++i) ops += (i ? "," : "") + op;
+  for (int i = 0; i < 129; ++i) ops += (i ? "," : "") + op;  // contract: at most 128
   many.replace(many.find("[{"), many.rfind("}]") + 2 - many.find("[{"), "[" + ops + "]");
   SOV_CHECK_EQ(ParseCommandBatchText(many).error().code, ErrorCode::LimitExceeded);
   SOV_CHECK_EQ(ParseCommandBatchText(std::string(BatchLimits::kMaxBatchBytes + 1, ' ')).error().code,
@@ -423,18 +435,54 @@ SOV_TEST(commands, schema_contracts_match_engine_codes_and_operations) {
   std::set<std::string> engine;
   for (int i = 0; i <= static_cast<int>(ErrorCode::Internal); ++i) engine.insert(std::string(ToString(static_cast<ErrorCode>(i))));
   SOV_CHECK(published == engine);
-  // The batch schema's operation kinds are exactly the engine's.
+  // The owner's batch schema (verbatim from the packet): operation kinds and their field sets are
+  // exactly what the engine writes for each kind.
+  const Json& batch_props = (*batch_schema)["properties"];
   std::set<std::string> ops;
-  for (const auto& ref : (*batch_schema)["$defs"]["operation"]["oneOf"]) {
-    const std::string def = ref["$ref"].get<std::string>().substr(std::string("#/$defs/").size());
-    ops.insert((*batch_schema)["$defs"][def]["properties"]["op"]["const"].get<std::string>());
+  for (const auto& variant : batch_props["operations"]["items"]["oneOf"]) {
+    const std::string kind = variant["properties"]["op"]["const"].get<std::string>();
+    ops.insert(kind);
+    std::vector<std::string> schema_fields;
+    for (auto it = variant["properties"].begin(); it != variant["properties"].end(); ++it) schema_fields.push_back(it.key());
+    SOV_CHECK_MSG(variant["required"].size() == schema_fields.size(), kind + ": every field required");
+    Operation sample;
+    if (kind == "entity.create") {
+      EntityData e;
+      e.id = kNewId;
+      e.name = "n";
+      sample = Operation::Create(e);
+    } else if (kind == "entity.rename") {
+      sample = Operation::Rename(kNewId, "n");
+    } else if (kind == "transform.set") {
+      sample = Operation::SetTransform(kNewId, {});
+    } else if (kind == "material.set") {
+      sample = Operation::SetMaterial(kNewId, {});
+    } else {
+      sample = Operation::Delete(kNewId);
+    }
+    std::vector<std::string> written;
+    const Json j = OperationToJson(sample);
+    for (auto it = j.begin(); it != j.end(); ++it) written.push_back(it.key());
+    SOV_CHECK_MSG(written == schema_fields, kind + ": engine wire shape differs from the schema");
   }
   std::set<std::string> engine_ops;
   for (auto k : {OpKind::EntityCreate, OpKind::EntityRename, OpKind::TransformSet, OpKind::MaterialSet, OpKind::EntityDelete}) {
     engine_ops.insert(std::string(ToString(k)));
   }
   SOV_CHECK(ops == engine_ops);
-  // The shipped example parses with the engine and defaults to a dry run.
+  // Envelope: same keys in the same order as the engine writes; limits match BatchLimits.
+  std::vector<std::string> envelope;
+  for (auto it = batch_props.begin(); it != batch_props.end(); ++it) envelope.push_back(it.key());
+  const Json written = CommandBatchToJson(Batch(0, {Operation::Delete(kNewId)}));
+  std::vector<std::string> written_keys;
+  for (auto it = written.begin(); it != written.end(); ++it) written_keys.push_back(it.key());
+  SOV_CHECK(envelope == written_keys);
+  SOV_CHECK_EQ((*batch_schema)["required"].size(), envelope.size());  // dry_run included: no default
+  SOV_CHECK_EQ(batch_props["operations"]["maxItems"].get<std::size_t>(), BatchLimits::kMaxOperations);
+  SOV_CHECK_EQ(batch_props["actor"]["maxLength"].get<std::size_t>(), BatchLimits::kMaxActorChars);
+  SOV_CHECK_EQ(batch_props["idempotency_key"]["maxLength"].get<std::size_t>(), BatchLimits::kMaxIdempotencyKeyBytes);
+  SOV_CHECK_EQ(batch_props["idempotency_key"]["pattern"].get<std::string>(), std::string("^[A-Za-z0-9_.:-]+$"));
+  // The owner's example parses with the engine and is a dry run.
   auto example = fs::ReadFile(ctx.SourceDir() / "examples" / "place_banner.command_batch.json", 1 << 20);
   SOV_REQUIRE_OK(example);
   auto batch = ParseCommandBatchText(*example);

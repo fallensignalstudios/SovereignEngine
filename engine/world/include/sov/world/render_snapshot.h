@@ -20,11 +20,6 @@ struct RenderInstance {
   std::uint32_t pick_index = 0;  // 1-based index into RenderSnapshot::pick_table; 0 = not pickable
 };
 
-struct RenderLight {
-  Vec3 direction{0, -1, 0};  // world-space direction the light travels (unit)
-  Vec3 radiance{1, 1, 1};    // color * intensity
-};
-
 struct RenderCamera {
   Mat4 world;  // camera-to-world; the camera looks along its local -Z
   double vertical_fov_radians = 1.0;
@@ -35,9 +30,8 @@ struct RenderCamera {
 struct RenderSnapshot {
   std::vector<RenderInstance> instances;
   std::vector<Uuid> pick_table;  // pick_table[i - 1] is the entity for pick index i (this frame only)
-  std::optional<RenderLight> light;
   std::optional<RenderCamera> active_camera;
-  scene::Environment environment;
+  Vec3 background_linear_rgb{0.02, 0.02, 0.025};  // scene radiance behind all geometry
   std::uint64_t triangle_count = 0;
 
   // Entity UUID for a pick index read back from the ID attachment, if any.

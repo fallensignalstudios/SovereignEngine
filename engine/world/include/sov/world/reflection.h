@@ -21,10 +21,11 @@
 namespace sov::scene {
 
 enum class FieldType {
-  Number,     // finite double within [min, max]
+  Number,     // finite double within [min, max] (exclusive_min: strictly greater than min)
   Vec3,       // 3 finite doubles, each within [min, max]
   Color,      // linear RGB, each within [min, max]
-  Quat,       // unit quaternion [x, y, z, w], |q| within 1e-3 of 1
+  Color4,     // linear RGBA, each within [min, max]
+  Quat,       // [x, y, z, w], each in [-1, 1], |q|^2 within SceneLimits::kQuatNormTolerance of 1
   Enum,       // one of enum_values
   EntityRef,  // null or canonical UUID string
 };
@@ -36,7 +37,7 @@ enum class FieldAccess {
   MaterialSet,   // material.set
 };
 
-using FieldValue = std::variant<double, Vec3, Quat, std::string, std::optional<Uuid>>;
+using FieldValue = std::variant<double, Vec3, Vec4, Quat, std::string, std::optional<Uuid>>;
 
 struct FieldDescriptor {
   std::string_view key;
@@ -46,6 +47,7 @@ struct FieldDescriptor {
   FieldAccess access;
   double min = -std::numeric_limits<double>::infinity();
   double max = std::numeric_limits<double>::infinity();
+  bool exclusive_min = false;
   std::span<const std::string_view> enum_values = {};
   bool persisted = true;
   bool editor_only = false;
@@ -69,6 +71,7 @@ struct ComponentDescriptor {
 std::span<const ComponentDescriptor> Components();
 const ComponentDescriptor* FindComponent(std::string_view key);
 const FieldDescriptor* FindField(const ComponentDescriptor& component, std::string_view key);
+const ComponentDescriptor& TransformDescriptor();
 const ComponentDescriptor& MaterialDescriptor();
 
 // Parses and range-checks one field value. `path` is the JSON pointer used in errors.

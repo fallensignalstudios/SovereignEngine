@@ -77,8 +77,8 @@ void EditorDocument::Select(std::optional<Uuid> id) {
   selection_ = id;
 }
 
-cmd::CommandResult EditorDocument::SetTransform(const Uuid& id, const scene::TransformComponent& t, bool include_parent) {
-  return Edit({cmd::Operation::SetTransform(id, t, include_parent)}, "Set transform");
+cmd::CommandResult EditorDocument::SetTransform(const Uuid& id, const scene::TransformComponent& t) {
+  return Edit({cmd::Operation::SetTransform(id, t)}, "Set transform");
 }
 
 cmd::CommandResult EditorDocument::Rename(const Uuid& id, std::string name) {
@@ -87,7 +87,15 @@ cmd::CommandResult EditorDocument::Rename(const Uuid& id, std::string name) {
 
 cmd::CommandResult EditorDocument::SetMaterialField(const Uuid& id, const scene::FieldDescriptor& field,
                                                     scene::FieldValue value) {
-  return Edit({cmd::Operation::SetMaterial(id, {{&field, std::move(value)}})}, std::format("Set {}", field.label));
+  const scene::EntityData* e = session_->document().Find(id);
+  scene::MaterialComponent material;
+  if (e && e->material) {
+    scene::EntityData scratch = *e;
+    field.set(scratch, value);
+    material = *scratch.material;
+  }
+  // A missing entity or material is rejected by staging with the standard error.
+  return Edit({cmd::Operation::SetMaterial(id, material)}, std::format("Set {}", field.label));
 }
 
 cmd::CommandResult EditorDocument::CreatePrimitive(scene::PrimitiveShape shape, const Vec3& position, std::string name) {

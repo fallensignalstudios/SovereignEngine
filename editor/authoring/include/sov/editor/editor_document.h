@@ -43,8 +43,10 @@ class EditorDocument {
   void Select(std::optional<Uuid> id);
 
   // --- edit actions: each is one transaction, base_revision = current revision ---------------
-  cmd::CommandResult SetTransform(const Uuid& id, const scene::TransformComponent& t, bool include_parent);
+  // Complete transform, including the parent (transform.set is a full replacement).
+  cmd::CommandResult SetTransform(const Uuid& id, const scene::TransformComponent& t);
   cmd::CommandResult Rename(const Uuid& id, std::string name);
+  // One inspector field: sent as material.set with the complete material (current values + this field).
   cmd::CommandResult SetMaterialField(const Uuid& id, const scene::FieldDescriptor& field, scene::FieldValue value);
   cmd::CommandResult CreatePrimitive(scene::PrimitiveShape shape, const Vec3& position, std::string name);
   cmd::CommandResult Delete(const Uuid& id);

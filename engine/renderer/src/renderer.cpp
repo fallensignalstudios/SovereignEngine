@@ -30,6 +30,15 @@ constexpr VkFormat kPickFormat = VK_FORMAT_R32_UINT;
 constexpr VkFormat kDepthFormat = VK_FORMAT_D32_SFLOAT;
 constexpr VkFormat kViewOutputFormat = VK_FORMAT_R8G8B8A8_SRGB;
 
+// R0 fixed lighting (scene contract v1 has no light or environment data). One warm key light
+// travelling down and away from a default camera (from upper-left-front), hemispheric ambient,
+// a single roughness for every dielectric surface, unit exposure. Engine constants, not authored data.
+constexpr Vec3 kR0KeyLightDirection{0.293197, -0.837706, -0.460738};  // normalize(0.35, -1, -0.55)
+constexpr Vec3 kR0KeyLightRadiance{3.2, 3.0, 2.8};
+constexpr Vec3 kR0AmbientRadiance{0.10, 0.10, 0.12};
+constexpr double kR0Roughness = 0.6;
+constexpr double kR0Exposure = 1.0;
+
 VkDeviceSize AlignUp(VkDeviceSize v, VkDeviceSize a) { return a ? (v + a - 1) / a * a : v; }
 
 void HostReadBarrier(VkCommandBuffer cmd) {
@@ -868,13 +877,12 @@ void Renderer::Impl::DrawScene(Targets& t, vk::Image& output, VkFormat output_fo
   gpu::FrameConstants fc{};
   fc.view_proj = gpu::Pack(cam.Projection(aspect) * cam.ViewMatrix());
   fc.camera_position = gpu::Pack(GetTranslation(cam.world), 1.0);
-  if (snap.light) {
-    fc.light_direction = gpu::Pack(snap.light->direction, 1.0);
-    fc.light_radiance = gpu::Pack(snap.light->radiance, 0.0);
-  }
-  const auto& env = snap.environment;
-  fc.ambient = gpu::Pack(env.ambient_color * env.ambient_intensity, 0.0);
-  fc.fog = gpu::Pack(env.fog_color, env.fog_density);
+  // Scene contract v1 has no lights: R0 lights every scene with the same fixed key light and
+  // hemispheric ambient (docs/architecture/conventions.md, "R0 lighting"). No fog.
+  fc.light_direction = gpu::Pack(kR0KeyLightDirection, 1.0);
+  fc.light_radiance = gpu::Pack(kR0KeyLightRadiance, 0.0);
+  fc.ambient = gpu::Pack(kR0AmbientRadiance, 0.0);
+  fc.fog = gpu::Pack(Vec3{0, 0, 0}, 0.0);
   std::memcpy(static_cast<std::uint8_t*>(f.ubo_arena.mapped) + slot * ubo_stride, &fc, sizeof(fc));
 
   const std::uint32_t count = static_cast<std::uint32_t>(std::min<std::size_t>(snap.instances.size(), kMaxInstancesPerDraw));
@@ -887,9 +895,10 @@ void Renderer::Impl::DrawScene(Targets& t, vk::Image& output, VkFormat output_fo
     gpu::InstanceData& d = inst_out[i];
     d.model = gpu::Pack(ri.model);
     d.normal_matrix = gpu::Pack(ri.normal_matrix);
-    d.base_color_roughness = gpu::Pack(ri.material.base_color, ri.material.roughness);
-    d.emissive = gpu::Pack(ri.material.emissive * ri.material.emissive_strength, 0.0);
-    d.params = {static_cast<float>(ri.material.metallic), 0, 0, 0};
+    const Vec4& bc = ri.material.base_color_rgba;  // alpha is ignored: R0 draws opaque
+    d.base_color_roughness = gpu::Pack(Vec3{bc.x, bc.y, bc.z}, kR0Roughness);
+    d.emissive = gpu::Pack(ri.material.emissive_rgb, 0.0);
+    d.params = {0.0f, 0, 0, 0};  // dielectric
     d.ids[0] = ri.pick_index;
     d.ids[1] = d.ids[2] = d.ids[3] = 0;
   }
@@ -911,8 +920,8 @@ void Renderer::Impl::DrawScene(Targets& t, vk::Image& output, VkFormat output_fo
   colors[0].imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
   colors[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
   colors[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-  colors[0].clearValue.color = {{static_cast<float>(env.background_color.x), static_cast<float>(env.background_color.y),
-                                 static_cast<float>(env.background_color.z), 1.0f}};
+  const Vec3& bg = snap.background_linear_rgb;
+  colors[0].clearValue.color = {{static_cast<float>(bg.x), static_cast<float>(bg.y), static_cast<float>(bg.z), 1.0f}};
   colors[1] = colors[0];
   colors[1].imageView = t.pick.view;
   colors[1].clearValue.color.uint32[0] = 0;
@@ -1003,7 +1012,7 @@ void Renderer::Impl::DrawScene(Targets& t, vk::Image& output, VkFormat output_fo
   vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, tonemap_layout, 0, 1, &t.tonemap_set, 0, nullptr);
   gpu::TonemapPush push{};
   push.outline_color = gpu::Pack(opt.outline_color, 0.9);
-  push.exposure = static_cast<float>(env.exposure);
+  push.exposure = static_cast<float>(kR0Exposure);
   push.selected_pick = opt.selected_pick_index;
   push.width = extent.width;
   push.height = extent.height;

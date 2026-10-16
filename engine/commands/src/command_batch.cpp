@@ -8,27 +8,27 @@
 namespace sov::cmd {
 namespace {
 
-constexpr std::string_view kProtocol = "sovereign.command_batch";
-
-bool AllowedChar(char c, bool allow_at) {
+bool KeyChar(char c) {
   return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '.' || c == '_' ||
-         c == ':' || c == '-' || (allow_at && c == '@');
+         c == ':' || c == '-';
 }
 
 }  // namespace
 
+// Contract: any string of 1..128 characters. The engine additionally refuses control characters
+// and invalid UTF-8 so actor labels stay safe to print in logs and history.
 bool IsValidActor(std::string_view actor) {
-  if (actor.empty() || actor.size() > BatchLimits::kMaxActorBytes) return false;
-  for (char c : actor) {
-    if (!AllowedChar(c, true)) return false;
+  for (unsigned char c : actor) {
+    if (c < 0x20 || c == 0x7f) return false;
   }
-  return true;
+  const auto chars = scene::Utf8CodePoints(actor);
+  return chars && *chars >= 1 && *chars <= BatchLimits::kMaxActorChars;
 }
 
 bool IsValidIdempotencyKey(std::string_view key) {
   if (key.empty() || key.size() > BatchLimits::kMaxIdempotencyKeyBytes) return false;
   for (char c : key) {
-    if (!AllowedChar(c, false)) return false;
+    if (!KeyChar(c)) return false;
   }
   return true;
 }
@@ -46,10 +46,6 @@ std::string CommandBatch::ContentHash() const {
 
 Result<CommandBatch> ParseCommandBatch(const Json& j) {
   if (!j.is_object()) return MakeError(ErrorCode::SchemaError, "command batch must be a JSON object", "");
-  auto proto = j.find("protocol");
-  if (proto == j.end() || !proto->is_string() || proto->get_ref<const std::string&>() != kProtocol) {
-    return MakeError(ErrorCode::SchemaError, std::format("\"protocol\" must be \"{}\"", kProtocol), "/protocol");
-  }
   auto ver = j.find("protocol_version");
   if (ver == j.end() || !ver->is_number_integer()) {
     return MakeError(ErrorCode::SchemaError, "\"protocol_version\" must be an integer", "/protocol_version");
@@ -61,8 +57,8 @@ Result<CommandBatch> ParseCommandBatch(const Json& j) {
                      "/protocol_version");
   }
   for (auto it = j.begin(); it != j.end(); ++it) {
-    static constexpr std::string_view kAllowed[] = {"protocol", "protocol_version", "request_id", "actor", "scene_id",
-                                                    "base_revision", "idempotency_key", "dry_run", "operations"};
+    static constexpr std::string_view kAllowed[] = {"protocol_version", "request_id",      "actor",   "scene_id",
+                                                    "base_revision",    "idempotency_key", "dry_run", "operations"};
     bool known = false;
     for (auto k : kAllowed) known = known || k == it.key();
     if (!known) {
@@ -86,7 +82,8 @@ Result<CommandBatch> ParseCommandBatch(const Json& j) {
 
   auto actor = j.find("actor");
   if (actor == j.end() || !actor->is_string() || !IsValidActor(actor->get_ref<const std::string&>())) {
-    return MakeError(ErrorCode::SchemaError, "\"actor\" must be 1-64 characters of [A-Za-z0-9._:@-]", "/actor");
+    return MakeError(ErrorCode::SchemaError, "\"actor\" must be a string of 1-128 characters without control characters",
+                     "/actor");
   }
   b.actor = actor->get<std::string>();
 
@@ -103,10 +100,11 @@ Result<CommandBatch> ParseCommandBatch(const Json& j) {
   }
   b.idempotency_key = key->get<std::string>();
 
-  if (auto dry = j.find("dry_run"); dry != j.end()) {
-    if (!dry->is_boolean()) return MakeError(ErrorCode::SchemaError, "\"dry_run\" must be a boolean", "/dry_run");
-    b.dry_run = dry->get<bool>();
+  auto dry = j.find("dry_run");
+  if (dry == j.end() || !dry->is_boolean()) {
+    return MakeError(ErrorCode::SchemaError, "\"dry_run\" is required and must be a boolean (true never writes)", "/dry_run");
   }
+  b.dry_run = dry->get<bool>();
 
   auto ops = j.find("operations");
   if (ops == j.end() || !ops->is_array()) {
@@ -141,7 +139,6 @@ Result<CommandBatch> ParseCommandBatchText(std::string_view text) {
 
 Json CommandBatchToJson(const CommandBatch& b) {
   Json j = Json::object();
-  j["protocol"] = kProtocol;
   j["protocol_version"] = b.protocol_version;
   j["request_id"] = b.request_id.ToString();
   j["actor"] = b.actor;

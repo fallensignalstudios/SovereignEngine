@@ -1,0 +1,1336 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sovereign Engine | Technical Design Document v0.1</title><style>
+:root{color-scheme:light;--ink:#172027;--muted:#53616c;--bronze:#986431;--paper:#faf9f6;--rule:#ddd7cf;}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:2rem}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:#171c23;color:#f5f2eb;padding:46px max(6vw,24px) 42px;border-bottom:5px solid var(--bronze)}
+header .eyebrow{letter-spacing:.16em;text-transform:uppercase;font-size:12px;font-weight:750;color:#d6b68f}
+header h1{font-size:clamp(32px,5vw,55px);line-height:1.1;margin:15px 0}
+header p{max-width:760px;color:#d5d9df;margin-bottom:0}.badge{display:inline-block;border:1px solid #766146;padding:3px 10px;font-size:12px;border-radius:3px;margin-top:16px}
+.layout{display:grid;grid-template-columns:265px minmax(0,980px);gap:46px;max-width:1390px;margin:0 auto;padding:38px 25px 85px}
+nav{font-size:12px;line-height:1.45;position:sticky;top:22px;max-height:90vh;overflow:auto;align-self:start;padding:4px 20px 12px 0;border-right:1px solid var(--rule)}
+nav strong{display:block;text-transform:uppercase;letter-spacing:.1em;margin:0 0 14px;font-size:11px;color:var(--bronze)}
+nav a{display:block;color:var(--muted);text-decoration:none;padding:6px 0}nav a:hover{color:var(--bronze)}
+main{min-width:0}main>h1:first-child{display:none}main>h2:first-of-type{margin-top:0}main h1{font-size:29px;line-height:1.25;border-top:2px solid var(--rule);padding-top:32px;margin:55px 0 22px;letter-spacing:-.02em}main h2{font-size:22px;line-height:1.3;margin-top:30px}main h3{font-size:18px;margin-top:25px}p{margin:13px 0 17px}
+a{color:#81551f;text-decoration-thickness:1px;text-underline-offset:3px;overflow-wrap:anywhere}
+strong{font-weight:700}blockquote{margin:26px 0;border-left:4px solid var(--bronze);padding:3px 22px;background:#eee8df;color:#3d3328}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.85em;background:#ece9e2;padding:2px 4px;border-radius:3px;overflow-wrap:anywhere}
+pre{padding:20px;background:#202630;color:#e7e8ec;overflow:auto;line-height:1.5;border-radius:5px}pre code{padding:0;color:inherit;background:none;white-space:pre;overflow-wrap:normal}
+.table-scroll{overflow:auto;margin:23px 0}table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.5;min-width:570px}th{background:#242c35;color:#fff;text-align:left;font-weight:650;padding:12px}td{padding:12px;border-bottom:1px solid var(--rule);vertical-align:top}tr:nth-child(even)td{background:#f0eee8}ul,ol{padding-left:25px}li{margin:6px 0}hr{border:0;border-top:1px solid var(--rule);margin:35px 0}
+footer{border-top:1px solid var(--rule);padding:25px;font-size:12px;text-align:center;color:var(--muted)}
+@media(max-width:950px){.layout{grid-template-columns:1fr;max-width:850px;gap:24px;padding:25px 20px 50px}nav{position:static;border:1px solid var(--rule);padding:18px;max-height:260px;background:#f0eee8}nav a{padding:4px 0}body{font-size:16px}main h1{font-size:25px}}
+@media print{body{background:white;font-size:10pt}header{background:white;color:#172027;padding:20px 0;border-bottom:2px solid #986431}header p,header .eyebrow{color:#53616c}.layout{display:block;padding:0;max-width:none}nav{display:none}main h1{break-before:page;border:0;padding:0;margin-top:10px}table{min-width:0;font-size:8pt}tr{break-inside:avoid}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f0f0f0;color:black}pre code{white-space:pre-wrap}h1,h2,h3{break-after:avoid}a{color:inherit}footer{display:none}}
+</style></head>
+<body><header><div class="eyebrow">Sovereign Engine • Research & Development</div><h1>First Ignition</h1><p>A standalone engine with our own editor, renderer, runtime, and gameplay systems. Start with a real, verified edit-save-run loop.</p><span class="badge">TECHNICAL DESIGN DOCUMENT v0.1 · OCTOBER 16, 2026</span></header>
+<div class="layout"><nav aria-label="Document sections"><strong>Contents</strong><a href="#1-document-authority-and-evidence">1. Document authority and evidence</a><a href="#2-product-definition-and-project-profiles">2. Product definition and project profiles</a><a href="#3-non-negotiable-boundaries">3. Non-negotiable boundaries</a><a href="#4-initial-technology-decisions">4. Initial technology decisions</a><a href="#5-repository-and-module-architecture">5. Repository and module architecture</a><a href="#6-mathematical-and-data-conventions">6. Mathematical and data conventions</a><a href="#7-runtime-scheduling-and-ownership">7. Runtime, scheduling, and ownership</a><a href="#8-world-model-and-reflection">8. World model and reflection</a><a href="#9-asset-pipeline-and-content-portability">9. Asset pipeline and content portability</a><a href="#10-renderer">10. Renderer</a><a href="#11-editor-and-transactional-authoring">11. Editor and transactional authoring</a><a href="#12-physics-and-character-movement">12. Physics and character movement</a><a href="#13-animation-and-motion-matching">13. Animation and motion matching</a><a href="#14-gameplay-foundation-and-combat">14. Gameplay foundation and combat</a><a href="#15-ai-navigation-and-companions">15. AI, navigation, and companions</a><a href="#16-narrative-and-native-cinemafy">16. Narrative and native Cinemafy</a><a href="#17-input-cameras-audio-effects-and-game-ui">17. Input, cameras, audio, effects, and game UI</a><a href="#18-saves-checkpoints-and-streaming">18. Saves, checkpoints, and streaming</a><a href="#19-agent-interface-and-security">19. Agent interface and security</a><a href="#20-platform-profiles-and-networking-boundaries">20. Platform profiles and networking boundaries</a><a href="#21-reference-scenes-and-performance-qualification">21. Reference scenes and performance qualification</a><a href="#22-implementation-gates">22. Implementation gates</a><a href="#23-engineering-effort-and-working-method">23. Engineering effort and working method</a><a href="#24-risk-register">24. Risk register</a><a href="#25-migration-and-continuation-decisions">25. Migration and continuation decisions</a><a href="#26-open-decisions-and-source-register">26. Open decisions and source register</a></nav><main><h1 id="sovereign-engine">Sovereign Engine</h1>
+<h2 id="technical-design-document-v0-1">Technical Design Document v0.1</h2>
+<h3 id="first-ignition-a-standalone-engine-built-one-verified-capability-at-a-time">First Ignition: a standalone engine, built one verified capability at a time</h3>
+<p><strong>Prepared for:</strong> Matthew and Caelis<br/>
+<strong>Project:</strong> Sovereign Engine, provisional name<br/>
+<strong>Document date:</strong> October 16, 2026<br/>
+<strong>Status:</strong> Proposed architecture and implementation specification. No engine implementation is included or claimed.<br/>
+<strong>Immediate assignment:</strong> G0 and G1 only. See <code>CAELIS_FIRST_IGNITION.md</code>.<br/>
+<strong>Long-term intent:</strong> A complete, independently implemented replacement for Unreal within the Sovereign Call projects, with our own editor, renderer, runtime, and gameplay systems.<br/>
+<strong>Production boundary:</strong> This authorizes a separate research project. It does not authorize migration or modification of any existing game.</p>
+<blockquote>
+<p>Build something real enough to judge. The first success is a small scene that we can create, inspect, save, reopen, and run without Unreal. The long-term ambition stays large; each implementation gate stays testable.</p>
+</blockquote>
+<h2 id="contents">Contents</h2>
+<ol>
+<li>Document authority and evidence</li>
+<li>Product definition and project profiles</li>
+<li>Non-negotiable boundaries</li>
+<li>Initial technology decisions</li>
+<li>Repository and module architecture</li>
+<li>Mathematical and data conventions</li>
+<li>Runtime, scheduling, and ownership</li>
+<li>World model and reflection</li>
+<li>Asset pipeline and content portability</li>
+<li>Renderer</li>
+<li>Editor and transactional authoring</li>
+<li>Physics and character movement</li>
+<li>Animation and motion matching</li>
+<li>Gameplay foundation and combat</li>
+<li>AI, navigation, and companions</li>
+<li>Narrative and native Cinemafy</li>
+<li>Input, cameras, audio, effects, and game UI</li>
+<li>Saves, checkpoints, and streaming</li>
+<li>Agent interface and security</li>
+<li>Platform profiles and networking boundaries</li>
+<li>Reference scenes and performance qualification</li>
+<li>Implementation gates</li>
+<li>Engineering effort and working method</li>
+<li>Risk register</li>
+<li>Migration and continuation decisions</li>
+<li>Open decisions and source register</li>
+</ol>
+<hr/>
+<h1 id="1-document-authority-and-evidence">1. Document authority and evidence</h1>
+<h2 id="1-1-what-this-document-is">1.1 What this document is</h2>
+<p>This is an engineering proposal and implementation contract, not evidence that the technology works. <strong>Must</strong> identifies a requirement; <strong>should</strong> identifies a default that may change through a recorded architecture decision; <strong>deferred</strong> means do not implement it in the first assignment.</p>
+<p>The owning decision maker is Matthew. Caelis owns implementation, technical investigations, and honest qualification reports. An agent may propose changes to this document, but must not silently lower an acceptance threshold to mark its own implementation complete.</p>
+<p>The source of truth for current engine behavior will be the code and reproducible tests in the new engine repository. The source of truth for Sovereign Call canon and combat tuning remains the approved game design, not this engine TDD.</p>
+<h2 id="1-2-context-used-and-limitations">1.2 Context used and limitations</h2>
+<p>The accessible project document was <code>Sovereign Call_ Origins Technical Design Document-20251209034722.md</code>. It was used as a legacy inventory of system families: survivability, stamina, poise, Echo, abilities, combat, dialogue, quests, relationships, world state, animation, AI, UI, saves, and streaming. Its numbered phase order, old balance values, class roster, and claims of existing implementation are <strong>not</strong> adopted here. A newer v2 outline mentioned in prior discussions was not retrieved during preparation. Failure to retrieve it does not establish that it does not exist. [P1]</p>
+<p>The brief additionally calls for native cinematic direction, agent-operable editing, a standalone game runtime, and support for multiple Sovereign Call game types. Current repositories, Caelis's active machine, GPU, installed compilers, asset entitlements, and build branches were not inspected. G0 must establish those facts before making platform or reuse claims.</p>
+<p>Public foundation libraries and relevant Epic/Fab terms were checked against the primary sources in Section 26. Exact dependency revisions remain to be pinned and tested in G0. No compatibility, licensing, or performance conclusion is inferred merely from a library being publicly available.</p>
+<h2 id="1-3-evidence-vocabulary">1.3 Evidence vocabulary</h2>
+<p>Every feature report must distinguish:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Specified</td>
+<td>Behavior exists only in documents or contracts.</td>
+</tr>
+<tr>
+<td>Implemented</td>
+<td>Code exists; execution may still be unverified.</td>
+</tr>
+<tr>
+<td>Compiled</td>
+<td>The named target built with the recorded toolchain.</td>
+</tr>
+<tr>
+<td>Headless-tested</td>
+<td>The specified non-graphics tests actually executed.</td>
+</tr>
+<tr>
+<td>GPU-tested</td>
+<td>The graphics path executed on a named physical GPU and driver.</td>
+</tr>
+<tr>
+<td>Human-reviewed</td>
+<td>Matthew reviewed the named artifact or build.</td>
+</tr>
+<tr>
+<td>Qualified</td>
+<td>All acceptance checks for that gate and platform passed.</td>
+</tr>
+<tr>
+<td>Blocked / not run</td>
+<td>A prerequisite prevented verification. Not a pass.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A Null graphics backend does not prove rendering. A software Vulkan implementation does not qualify physical-GPU performance. A screenshot does not prove save/load, editing, packaging, animation, or gameplay.</p>
+<h1 id="2-product-definition-and-project-profiles">2. Product definition and project profiles</h1>
+<h2 id="2-1-engine-ownership">2.1 Engine ownership</h2>
+<p>We own the engine's renderer and render graph, scene model, editor, asset/cook pipeline, scheduling, authoring API, gameplay framework, animation integration, cinematic system, packaging, and diagnostics.</p>
+<p>We may use independently licensed libraries for platform access, memory allocation, physics, parsers, ECS storage, navigation, audio, and tooling UI. Reusing a physics library or graphics API does not turn the engine into an Unreal wrapper. Using another complete engine as a hidden runtime would violate this brief.</p>
+<p>No Unreal executable, Unreal SDK, Unreal runtime module, <code>.uasset</code> reader, or Epic source checkout is required to configure, build, test, edit, or run Sovereign Engine.</p>
+<h2 id="2-2-three-deliverables-one-shared-foundation">2.2 Three deliverables, one shared foundation</h2>
+<p><strong>Runtime:</strong> Runs cooked game content independently of the editor.</p>
+<p><strong>Editor:</strong> Authors and inspects scene, material, gameplay, and cinematic data. Uses the same engine services as the runtime, with a separate authoring world.</p>
+<p><strong>Toolchain:</strong> Imports, validates, cooks, tests, packages, and reports from a command line. It must remain useful when no interactive editor or graphics device is available.</p>
+<h2 id="2-3-game-profiles">2.3 Game profiles</h2>
+<p>These are future consumers, not simultaneous first milestones.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Distinct requirements</th>
+<th>Earliest meaningful proof</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Origins</td>
+<td>Third-person action, character animation, melee/ranged combat, companions, dialogue, cinematic staging, authored missions</td>
+<td>A short self-contained combat and cinematic slice</td>
+</tr>
+<tr>
+<td>Battles of the Reach</td>
+<td>Bounded 5v5 encounters, ability scheduling, readable UI, roster data, mobile constraints</td>
+<td>A ten-unit desktop arena, followed by real mobile packaging and profiling</td>
+</tr>
+<tr>
+<td>Settlement/city builder</td>
+<td>Isometric camera, placement validation, many simple agents, resource simulation, persistent buildings</td>
+<td>A small placement-and-resource sandbox after shared foundations work</td>
+</tr>
+<tr>
+<td>MMO</td>
+<td>Authoritative servers, replication, interest management, persistent services, abuse resistance, live operations</td>
+<td>A separate networking qualification program, not a local crowd demo</td>
+</tr>
+</tbody>
+</table></div>
+<p>No game-specific names or faction rules belong in the platform, renderer, asset system, or core ECS. Generic engine capabilities may understand attributes, actions, tags, factions, and relationships. Values such as Echo, Dominion, Reformation, Tarrik, and Selene live in game modules and data.</p>
+<h2 id="2-4-what-first-success-looks-like">2.4 What first success looks like</h2>
+<p>Launch our editor. Open a compact original sci-fi hall. Select a column, move it, undo that move, change a material parameter, save, close, and reopen. Load the same saved scene in a separate runtime executable. Perform a scoped scene edit through a validated command batch. Receive a report showing exactly what changed.</p>
+<p>That is G1. Combat, imported animated characters, motion matching, and advanced lighting come later. The hall is an original technical test scene, not a rebuilt production mission or a claim of visual parity with Unreal.</p>
+<h1 id="3-non-negotiable-boundaries">3. Non-negotiable boundaries</h1>
+<ol>
+<li><strong>Separate repository and working directory.</strong> Do not create this inside ProjectVelkorran or any other production game's source or content tree. Do not alter production branches, asset files, editor configurations, saves, plugins, or engine installations.</li>
+<li><strong>No hidden technology substitution.</strong> Do not wrap Unreal, Godot, Unity, an existing complete engine, or an unapproved renderer and call it our own implementation.</li>
+<li><strong>Independent implementation.</strong> No copying Epic engine implementation code. Use original code and appropriately licensed independent dependencies. Reusing our own work requires ownership and dependency review, not assumption. [S14]</li>
+<li><strong>No automatic migration.</strong> Even a successful prototype does not authorize transferring Origins or changing the production workflow.</li>
+<li><strong>No automatic spending or publication.</strong> No paid services, purchased assets, cloud GPU jobs, public repository creation, releases, or external telemetry without Matthew's authorization.</li>
+<li><strong>No placeholder success.</strong> A fallback image, Null backend, mocked import, or stubbed test must identify itself and cannot satisfy the real feature gate.</li>
+<li><strong>Evidence before expansion.</strong> Finish and qualify the active slice before starting an unrelated subsystem.</li>
+<li><strong>Source assets stay private by default.</strong> Only original or explicitly cleared assets enter the research project. Public code and public content are separate release decisions.</li>
+</ol>
+<h1 id="4-initial-technology-decisions">4. Initial technology decisions</h1>
+<h2 id="4-1-selected-baseline">4.1 Selected baseline</h2>
+<p>The baseline is <strong>C++20, CMake with Ninja presets, SDL3 for window/input, and a native Vulkan renderer</strong>. This is a deliberate refinement of the earlier conversation's D3D12-first suggestion. A single Vulkan backend offers a practical Windows/Linux development route while we qualify Windows as the first game-delivery target. It avoids writing two native graphics backends immediately.</p>
+<p>The first desktop graphics profile is Vulkan 1.3 with the explicitly requested feature set recorded at startup. Dynamic rendering and synchronization2 are part of that design; feature, queue, format, and device support must still be queried and validated. [S2]</p>
+<p>A graphics abstraction is a small engine-owned boundary, not a universal GPU framework. We do not add D3D12, Metal, ray tracing, or bindless resource requirements until there is a measured reason.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Initial choice</th>
+<th>First use / constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Language</td>
+<td>C++20, conventional headers and translation units</td>
+<td>No C++ modules, multiple native implementation languages, or hot-reload ABI in G1</td>
+</tr>
+<tr>
+<td>Build</td>
+<td>CMake + Ninja, CTest</td>
+<td>Pin supported toolchain and dependency commits in G0</td>
+</tr>
+<tr>
+<td>Platform</td>
+<td>SDL3</td>
+<td>Windowing, event collection, input; not SDL's renderer [S1]</td>
+</tr>
+<tr>
+<td>Graphics</td>
+<td>Native Vulkan 1.3</td>
+<td>One real backend; engine-owned passes and shaders [S2]</td>
+</tr>
+<tr>
+<td>Vulkan loading / memory</td>
+<td>volk and Vulkan Memory Allocator</td>
+<td>Do not build an API loader or device-memory allocator from scratch [S3, S4]</td>
+</tr>
+<tr>
+<td>Shaders</td>
+<td>HLSL compiled offline with DXC to SPIR-V</td>
+<td>Pin compiler, flags, binding conventions, and reflection contract [S5]</td>
+</tr>
+<tr>
+<td>ECS storage</td>
+<td>EnTT</td>
+<td>Keep its internal entity handles out of persisted/public contracts [S6]</td>
+</tr>
+<tr>
+<td>Editor UI</td>
+<td>Dear ImGui docking build, pinned</td>
+<td>Tool UI only; not a finished player-facing accessibility solution [S7]</td>
+</tr>
+<tr>
+<td>Authoring serialization</td>
+<td>JSON using a pinned parser, proposed nlohmann/json</td>
+<td>Strict schemas, stable ordering, bounded parsing [S13]</td>
+</tr>
+<tr>
+<td>Asset interchange</td>
+<td>glTF 2.0 / GLB, cgltf parser</td>
+<td>Narrow supported subset; parsing is not a complete importer [S8, S9]</td>
+</tr>
+<tr>
+<td>Physics</td>
+<td>Jolt</td>
+<td>Rigid-body, collision, and character integration from G3 [S10]</td>
+</tr>
+<tr>
+<td>Navigation</td>
+<td>Recast + Detour</td>
+<td>Build and query navmeshes from G3; engine owns behavior [S11]</td>
+</tr>
+<tr>
+<td>Audio</td>
+<td>miniaudio</td>
+<td>Playback and mixing integration, initially WAV [S12]</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>CTest and a small native assertion harness</td>
+<td>Adopt a larger test framework only when useful</td>
+</tr>
+<tr>
+<td>Scripting</td>
+<td>Compiled C++ game modules and data first</td>
+<td>Lua is a later proposal, not a G1 dependency [S15]</td>
+</tr>
+</tbody>
+</table></div>
+<p>A library listed for a future gate must not be linked into the first executable merely because it appears in this table. G1 requires only its active foundation dependencies.</p>
+<h2 id="4-2-dependency-controls">4.2 Dependency controls</h2>
+<p>Use one dependency acquisition method: CMake FetchContent against immutable commits for source dependencies, with verified prebuilt tool packages where appropriate. Record exact revisions and checksums. Do not track <code>main</code>, <code>master</code>, floating tags, or an implicit latest version in a reproducible build.</p>
+<p><code>dependencies.lock.json</code> must record origin, selected revision, archive checksum when applicable, license-file path/hash, optional transitive dependencies, build options, and redistribution notes. Keep third-party notices. A dependency lock is a record of the selected stack, not a claim that every upstream license is interchangeable.</p>
+<p>Build directory and generated dependencies stay outside authored content. A clean checkout must bootstrap from documented prerequisites. A populated dependency cache must allow subsequent normal builds without network access. Updates require a dedicated change, build/test evidence, and lockfile refresh.</p>
+<h2 id="4-3-platform-truth">4.3 Platform truth</h2>
+<p>G0 records the actual host. Windows and Linux can host the initial Vulkan work when required support exists. Portable core, scene, command, and cook tests should also compile without graphics on a supported macOS toolchain. A native macOS editor is <strong>not</strong> promised by that fact.</p>
+<p>When Caelis has no supported physical GPU, he can finish the headless portion and prepare an executable/test procedure for a suitable host. He must report graphics qualification as blocked. Do not silently install a different engine, substitute OpenGL, or start a second backend to conceal the limitation.</p>
+<h1 id="5-repository-and-module-architecture">5. Repository and module architecture</h1>
+<h2 id="5-1-proposed-layout">5.1 Proposed layout</h2>
+<pre><code class="language-text">SovereignEngine/
+  CMakeLists.txt
+  CMakePresets.json
+  dependencies.lock.json
+  AGENTS.md
+  cmake/
+  docs/
+    architecture/
+    decisions/
+    reports/
+  engine/
+    core/
+    platform/
+    world/
+    assets/
+    rhi/
+      null/
+      vulkan/
+    renderer/
+    physics/
+    animation/
+    navigation/
+    audio/
+    gameplay/
+    narrative/
+    cinematics/
+    ui/
+    runtime/
+  editor/
+    application/
+    panels/
+    authoring/
+  tools/
+    cli/
+    cooker/
+    validators/
+  games/
+    sandbox/
+    reach_arena/          # future independent sample
+  content/
+    source/
+    authoring/
+  schemas/
+  tests/
+    unit/
+    integration/
+    rendering/
+    fixtures/
+  scripts/
+  third_party_notices/
+</code></pre>
+<p>This is the target organization. Do not create dozens of empty classes, hollow modules, fake plugins, or directories that imply implementation. Add modules when their first real consumer exists.</p>
+<h2 id="5-2-dependency-direction">5.2 Dependency direction</h2>
+<pre><code class="language-text">Editor shell ---&gt; Authoring services ---&gt; World / Assets / Commands
+Runtime app ---------------------------&gt; Runtime orchestration
+CLI ---------&gt; Validators / Cooker ---&gt; World / Assets / Core
+
+Game modules ---&gt; Gameplay / Narrative / Cinematics / World
+Runtime -------&gt; Gameplay / Physics / Animation / Navigation / Audio
+Renderer ------&gt; Render snapshot / RHI / Assets
+Vulkan RHI ----&gt; Vulkan / volk / VMA / platform surface adapter
+World ---------&gt; Core / ECS storage / reflection descriptors
+Everything ----&gt; Core
+</code></pre>
+<p>Core cannot depend on the editor, a game, a renderer, or a platform graphics SDK. Renderer cannot read live mutable gameplay state; it consumes a render snapshot. A game module does not include Vulkan headers. Public asset handles do not carry <code>VkImage</code>, <code>JPH::BodyID</code>, or <code>entt::entity</code>.</p>
+<p>The authoritative schema and validation library must be linked by editor, CLI, and cooker rather than reimplemented in three places.</p>
+<h2 id="5-3-executable-targets">5.3 Executable targets</h2>
+<p><strong><code>sovereign-editor</code>:</strong> Interactive authoring and an isolated play session.</p>
+<p><strong><code>sovereign-runtime</code>:</strong> A standalone application loading a project/game manifest and scene or cooked package.</p>
+<p><strong><code>sovereign-cli</code>:</strong> Validation, command batches, asset cooking, test orchestration, inspection, and later packaging.</p>
+<p><strong><code>sovereign-tests</code>:</strong> Native automated checks. Renderer checks are separate and clearly tagged.</p>
+<p>G1 runtime may read validated authoring JSON. Cooked-only distribution is introduced and required at G2. G1 must already run in a separate executable without editor UI code.</p>
+<h2 id="5-4-abi-and-extension-policy">5.4 ABI and extension policy</h2>
+<p>Use static or normally linked engine/game libraries first. Do not promise binary compatibility across compiler or engine revisions. Data schemas and command protocol versions are the early compatibility boundary.</p>
+<p>A future plugin system should use explicit API versions and handles, not exported STL containers across an unstable DLL boundary. General plugin loading and C++ hot reload are deferred. Restarting a small runtime is acceptable while the module ABI is unsettled.</p>
+<h1 id="6-mathematical-and-data-conventions">6. Mathematical and data conventions</h1>
+<p>Conventions must be implemented in tests before importing production-like assets.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Engine convention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Distance</td>
+<td>Meters</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>Seconds at interfaces; integer ticks for simulation scheduling</td>
+</tr>
+<tr>
+<td>Basis</td>
+<td>Right-handed, +Y up, +X right; cameras look along local -Z</td>
+</tr>
+<tr>
+<td>Rotation</td>
+<td>Unit quaternion, serialized <code>[x, y, z, w]</code>; editor displays degrees</td>
+</tr>
+<tr>
+<td>Transform</td>
+<td>Column-vector convention, <code>M = T * R * S</code></td>
+</tr>
+<tr>
+<td>Matrix storage</td>
+<td>Defined by engine math types and shader packers, never inferred from notation</td>
+</tr>
+<tr>
+<td>Physics scale</td>
+<td>Positive unit scale for animated characters and dynamic rigid bodies initially</td>
+</tr>
+<tr>
+<td>Render depth</td>
+<td>Vulkan depth range <code>[0,1]</code>; reversed-Z from the first 3D camera</td>
+</tr>
+<tr>
+<td>Reversed-Z state</td>
+<td>Near maps to 1, far approaches 0; clear depth 0; compare greater-or-equal</td>
+</tr>
+<tr>
+<td>CPU color</td>
+<td>Linear floating point for lighting and material factors</td>
+</tr>
+<tr>
+<td>Color textures</td>
+<td>Base color and emissive textures decoded from sRGB; data maps remain linear</td>
+</tr>
+<tr>
+<td>Presentation</td>
+<td>Linear HDR scene buffer, explicit tone mapping, one output encoding step</td>
+</tr>
+<tr>
+<td>Persisted IDs</td>
+<td>Canonical lowercase UUID strings, independent of runtime slot handles</td>
+</tr>
+</tbody>
+</table></div>
+<p>glTF uses a right-handed, Y-up coordinate system and meters. Interchange adapters must still check camera, transform, material, and animation conventions rather than assuming no conversion is needed. [S8]</p>
+<h3 id="required-conversion-tests">Required conversion tests</h3>
+<p>An asymmetric axis fixture has differently shaped X/Y/Z markers, a front-facing triangle, a camera, a textured quad, a child transform, and eventually an animated joint. Test culling, texture orientation, normal mapping, world/local transforms, nonuniform scale handling, and camera projection together.</p>
+<p>Vulkan framebuffer orientation is solved <strong>once</strong> in the projection/viewport adapter. Document whether the implementation flips the projection Y or uses a negative-height viewport; do not do both. Lock triangle front-face convention using the fixture. Shader matrix packing and multiplication order must be tested independently of CPU memory layout.</p>
+<p>Unreal-origin assets require an explicit source-basis and unit conversion. Do not merely divide positions by 100: handedness, winding, tangents, rotations, skeleton roots, cameras, and animation translations can also need conversion. Source import settings must record the applied conversion.</p>
+<h3 id="large-coordinates">Large coordinates</h3>
+<p>G1 scenes use local floating-point coordinates. The scene format reserves a region identity, but does not pretend large-world precision is solved. Later, a world position may be represented as an integer region/cell coordinate plus a local position; physics and rendering operate on a local origin. This needs its own streaming and precision tests before large planets or MMO zones are qualified.</p>
+<h1 id="7-runtime-scheduling-and-ownership">7. Runtime, scheduling, and ownership</h1>
+<h2 id="7-1-time-model">7.1 Time model</h2>
+<p>The initial simulation uses a fixed <strong>60 Hz</strong> tick. This is a proposed default, not a universal game requirement. Rendering is variable rate and interpolates between published simulation snapshots.</p>
+<p>The interactive loop caps catch-up work at four simulation steps per render iteration, records backlog, and applies an explicit overload policy. Offline tests advance an exact requested number of ticks without wall-clock catch-up. Cinematic export uses an explicit rational frame rate and authoritative sequence time.</p>
+<p>A fixed timestep and a seeded random generator do <strong>not</strong> by themselves guarantee determinism. Ordering, floating-point behavior, library configuration, physics, and asynchronous delivery also matter. Initial repeatability promises are restricted to named tests on the same pinned build/configuration. Jolt's own determinism conditions must be respected and tested if that property is required. [S10b]</p>
+<h2 id="7-2-tick-pipeline">7.2 Tick pipeline</h2>
+<p>The starting schedule is single-writer and intentionally explicit:</p>
+<ol>
+<li>Consume timestamped input, authorized commands, and queued world changes at the tick boundary.</li>
+<li>Advance gameplay action timers and select state transitions, including valid cancel/interrupt requests.</li>
+<li>Evaluate AI intent and action requests against the current observed state.</li>
+<li>Sample the action/animation segment for this tick and extract the requested root-motion delta.</li>
+<li>Resolve movement authority and produce one movement request per controlled character.</li>
+<li>Execute character collision/movement and physics according to the integration contract.</li>
+<li>Build world-space poses and swept combat queries from the resolved transforms.</li>
+<li>Resolve hits, attributes, effects, deaths, quest events, and deferred structural changes.</li>
+<li>Publish presentation events and an immutable render/audio-facing snapshot.</li>
+</ol>
+<p>The physics/character substep ordering must be documented and tested against the selected Jolt integration. This schedule must not be treated as permission to move a character twice.</p>
+<p>Gameplay-active animation markers are processed across the entire traversed time interval, not only at a sampled frame. A short hit window cannot disappear just because a tick steps over it. Presentation interpolation never deals damage or advances cooldowns.</p>
+<h2 id="7-3-threading">7.3 Threading</h2>
+<p>G1 runs engine state mutation on one owner thread. Background tasks can read immutable inputs and return results. No worker directly mutates the world, renderer resource registry, or authoring document.</p>
+<p>Later, worker pools perform import, asset I/O, animation jobs, culling preparation, and other independent work. Mutations are applied through declared dependency barriers. Begin with ordinary queues and measured locks. Do not create a custom lock-free job system before there is evidence that it is needed.</p>
+<p>GPU commands and resource retirement have explicit owners. Audio callbacks cannot wait on gameplay locks or allocate through unpredictable code paths.</p>
+<h2 id="7-4-errors-shutdown-and-memory">7.4 Errors, shutdown, and memory</h2>
+<p>Use RAII, clear ownership, generation-checked handles, and descriptive failure results. An invalid content reference should produce an error with the affected asset/entity ID, not an unexplained crash.</p>
+<p>Shutdown must stop new work, cancel/join workers, drain or retire GPU use safely, release device-dependent resources, and finally release platform objects. Include double-close, failed-initialization, device-loss, and partial-shutdown tests as relevant modules appear.</p>
+<p>Do not optimize allocations everywhere in advance. Track persistent heaps, transient frame arenas, resource counts, high-water marks, and unbounded-growth candidates. A repeated load/unload loop should return close to its settled resource baseline, not leak a little more each iteration.</p>
+<h1 id="8-world-model-and-reflection">8. World model and reflection</h1>
+<h2 id="8-1-entities-and-identity">8.1 Entities and identity</h2>
+<p>Use EnTT for in-memory component storage behind an engine world API. EnTT's implementation details are not a persistence contract. [S6]</p>
+<p>Each authored entity has a stable UUID. Each live world maps that UUID to its own generation-checked runtime handle. Distinguish authoring-world, play-world, and runtime-world identities; an editor selection must not accidentally target a different world's entity with the same slot number.</p>
+<p>A scene has a UUID, schema version, monotonically increasing authoring revision, a list of entities, and explicit asset references. Names are labels, not keys. Duplicate names are allowed; duplicate UUIDs are not.</p>
+<h2 id="8-2-initial-component-set">8.2 Initial component set</h2>
+<p>G1 implements only <code>Name</code>, <code>Transform</code>, <code>PrimitiveMesh</code>, <code>MaterialParameters</code>, <code>Camera</code>, and optionally a simple <code>DirectionalLight</code> when the first lighting pass exists. <code>Transform</code> includes an optional parent UUID. The initial primitive set is box, plane, and cylinder; a box and plane are sufficient for the earliest render check.</p>
+<p>G2 adds asset-backed mesh/material references, visibility bounds, and import metadata. G3 adds collider, character motor, animation player, attribute container, ability owner, and simple AI components.</p>
+<p>Reflection descriptors must define field name, serialized type, schema version, default, validation constraints, display metadata, mutability, and whether a field is editor-only or persisted. The same descriptors power validation, inspector fields, and command allowlists. No raw pointer offset or arbitrary memory address is accepted from an agent.</p>
+<h2 id="8-3-hierarchies-and-structural-changes">8.3 Hierarchies and structural changes</h2>
+<p>A parenting change rejects cycles and missing parents before commit. Deleting an entity either rejects while dependents exist or explicitly includes the affected dependent operations in the same transaction. There is no hidden cascading delete in G1.</p>
+<p>Changes to entity structure are applied at a safe world boundary. Iteration invalidation rules are tested. Transform propagation runs in parent-before-child order. Prefab instances and nested overrides are deferred until ordinary scenes are stable.</p>
+<h2 id="8-4-serialization">8.4 Serialization</h2>
+<p>Human-authored JSON is canonical source. Cooked runtime blobs are derived. Keep source asset, import recipe, authoring document, and cook artifact separate.</p>
+<p>G1 stores one JSON scene document, sorted by stable UUID and canonical field order. Floating-point output must be finite and stable enough to avoid noisy diffs. Writing the same unmodified scene must not rewrite arbitrary formatting or increment revision unnecessarily.</p>
+<p>Unknown schema versions fail clearly. Unknown component types cannot be silently discarded. A read-only inspection tool may preserve opaque data, but the writer must not overwrite a document it cannot fully understand.</p>
+<p>A save operation writes a temporary file, flushes it, and performs a platform-appropriate atomic replacement on the same filesystem. It preserves the last known valid file on failure. Do not claim that a sequence of independent file renames is an atomic multi-file transaction.</p>
+<h2 id="8-5-future-collaborative-format">8.5 Future collaborative format</h2>
+<p>One-file scenes are adequate for the first proof, not the end state. G5 evaluates scene manifests plus per-entity or per-cell documents and explicit prefab override records. A journal or generation-pointer approach must make multi-file commits recoverable. Format changes require an explicit migration tool, backups, and round-trip tests.</p>
+<h1 id="9-asset-pipeline-and-content-portability">9. Asset pipeline and content portability</h1>
+<h2 id="9-1-pipeline">9.1 Pipeline</h2>
+<pre><code class="language-text">Cleared source bytes + import recipe
+             |
+       Parse and validate
+             |
+   Normalize units, basis, and types
+             |
+  Produce engine intermediate asset
+             |
+ Cook for a named platform/profile
+             |
+ Hash-addressed artifact + manifest
+             |
+ Runtime asset registry and streaming
+</code></pre>
+<p>The editor is a client of this pipeline, not a second importer. A CLI cook must work without the editor process.</p>
+<h2 id="9-2-source-derived-data-and-provenance">9.2 Source, derived data, and provenance</h2>
+<p>Every asset has a stable <code>AssetId</code>, asset kind, source path or URI within the project, source hash, import-recipe hash, dependency list, importer version, and license/provenance record.</p>
+<p>The cook key includes source/dependency content hashes, importer and processor revisions, recipe, shader/compiler options when relevant, target profile, and cook-format version. A content change invalidates only dependent artifacts. Timestamps alone cannot establish that a cache entry is valid.</p>
+<p>During development, a missing optional visual asset may show a clearly labeled error primitive. Shipping/qualification cooks fail on missing required references. A previous successfully cooked version stays usable if a new reimport fails.</p>
+<h2 id="9-3-narrow-gltf-support-first">9.3 Narrow glTF support first</h2>
+<p>The initial import target is GLB with triangle meshes, node transforms, metallic-roughness materials, bounded buffers, and PNG/JPEG texture inputs. cgltf provides parsing and validation utilities, but asset normalization, GPU upload, engine formats, material interpretation, and lifecycle remain ours. [S9]</p>
+<p>G2 must explicitly handle or reject: accessor stride/range, sparse accessors, index component types, missing normals/tangents, zero-area primitives, alpha mode, double-sided materials, negative determinant transforms, and declared required extensions. Do not interpret an unsupported extension as default-looking valid content.</p>
+<p>Initial support may reject sparse accessors, compressed geometry, skins, morphs, and complex material extensions with precise errors. Add each support path only with fixtures. Animated skeleton import arrives with G3, not through an untested checkbox in G2.</p>
+<p>Apply per-import resource limits before allocation: maximum input size, total decoded buffer bytes, image dimensions, material count, node depth, joint count, and animation samples. Reject path traversal, absolute external paths, and unapproved network URIs.</p>
+<h2 id="9-4-textures-materials-and-skeletons">9.4 Textures, materials, and skeletons</h2>
+<p>Texture import records usage, color space, channel mapping, normal-map convention, mip policy, and target compression. Base color alpha and material transparency require explicit handling. glTF's roughness and metallic channel convention must be translated deliberately. [S8]</p>
+<p>For first static PBR, use ordinary textures and generated mip chains. Texture compression is a later named cook step; do not introduce a proprietary codec or platform restriction without recording it.</p>
+<p>A skeleton asset stores joint hierarchy, bind transforms, inverse bind matrices, root selection, and stable joint identifiers. Clip assets store sample times, interpolation mode, channel targets, and root-motion policy. Validate bind-pose reconstruction before evaluating imported animation.</p>
+<p>Retargeting and animation compression are separate features. Correct playback on the source skeleton comes first. A successful mesh import does not prove a retargeted character works.</p>
+<h2 id="9-5-unreal-portability-matrix">9.5 Unreal portability matrix</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Existing material</th>
+<th>Potential reusable input</th>
+<th>What must be replaced or reviewed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Original meshes/textures/audio</td>
+<td>Original source files with cleared rights</td>
+<td>Import/cook recipes and engine bindings</td>
+</tr>
+<tr>
+<td>Third-party assets</td>
+<td>Only assets whose applicable license permits the intended engine/use</td>
+<td>Entitlements, acquisition terms, exportability, redistribution</td>
+</tr>
+<tr>
+<td>Unreal scenes and Blueprints</td>
+<td>Approved design intent; our own portable source data when available</td>
+<td>Scene/runtime logic, serialization, references, editor behavior</td>
+</tr>
+<tr>
+<td>Materials, Niagara, Chaos assets</td>
+<td>Original source textures or designs when cleared</td>
+<td>Material graphs, shaders, effects authoring, simulation integration</td>
+</tr>
+<tr>
+<td>Motion-matching databases / GASPALS content</td>
+<td>Potentially cleared source clips and our own metadata</td>
+<td>Per-item rights; database format, feature extraction, search, graph integration</td>
+</tr>
+<tr>
+<td>Cinemafy, Holofy, Grungify</td>
+<td>Our own independently owned logic and concepts where portable</td>
+<td>Unreal APIs, compiled assets, editor integration, any third-party/Epic code</td>
+</tr>
+<tr>
+<td>Narrative-plugin assets</td>
+<td>Owned dialogue/script content where export and rights permit</td>
+<td>Graph interpretation, conditions, runtime, editor, dependencies</td>
+</tr>
+</tbody>
+</table></div>
+<p>The engine does <strong>not</strong> ingest <code>.uasset</code> or <code>.umap</code> files directly. Any later export bridge is a separately approved, read-only migration tool. It cannot be a hidden runtime dependency.</p>
+<h2 id="9-6-license-gate">9.6 License gate</h2>
+<p>Fab's current Standard License summary allows assets to be used with compatible tools beyond Unreal. Epic's Content License separately defines UE-Only Content with engine restrictions. These are not a basis for claiming that the entire existing library can move. Terms can differ by asset, acquisition path, date, and separate agreement. [S16, S17]</p>
+<p>Keep <code>asset_provenance.json</code> records containing item identifier, source, acquisition evidence, applicable license/evidence location, permitted research/runtime/source-sharing uses, reviewer, review date, and status. <strong>Unverified means quarantined.</strong> Self-authored primitives and original shaders are the G1 default.</p>
+<p>No blanket claim is made here about MetaHuman, Megascans, Epic sample animation, or any specific purchased pack. Review the actual applicable grant. Keep licensed raw content out of public source packages. These are engineering controls, not legal advice about a particular asset.</p>
+<h1 id="10-renderer">10. Renderer</h1>
+<h2 id="10-1-renderer-goal-and-boundaries">10.1 Renderer goal and boundaries</h2>
+<p>Own the shading, visibility, lighting, post-processing, render-resource planning, and frame construction. Use Vulkan as the graphics API, volk as its loader, and VMA for device-memory allocation. VMA does not replace synchronization, resource lifetime, or our render graph. [S2, S3, S4]</p>
+<p>The first renderer must be understandable in a frame capture. Advanced techniques are earned by a representative visual requirement and measured budget, not added for a checklist.</p>
+<h2 id="10-2-three-capability-levels">10.2 Three capability levels</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Required result</th>
+<th>Explicit exclusions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R0 / G1</td>
+<td>Original primitives, camera, depth, flat or simple lit materials, editor viewport, picking, presentation, screenshot</td>
+<td>No PBR-parity claim, global illumination, imported animation, ray tracing, virtual geometry</td>
+</tr>
+<tr>
+<td>R1 / G2</td>
+<td>Static glTF meshes, metallic-roughness PBR, environment lighting, one shadowed directional light, tone mapping, basic antialiasing, useful debug views</td>
+<td>No Nanite/Lumen replacement claim; no automatic emissive GI</td>
+</tr>
+<tr>
+<td>R2 / G4-G5</td>
+<td>Skinned characters, expanded lighting/shadows, decals, effects, temporal stability, conventional LOD/streaming, production-like visual tests</td>
+<td>Advanced GI/virtualized geometry remain separate research decisions</td>
+</tr>
+</tbody>
+</table></div>
+<p>Start R0 with a forward pass. R1 adds environment lighting and shadows. If scene measurements require many local lights, extend to Forward+ light culling rather than simultaneously building forward, deferred, and visibility-buffer renderers.</p>
+<h2 id="10-3-rhi-contract">10.3 RHI contract</h2>
+<p>Expose typed descriptors and generation-checked handles for buffers, textures, samplers, pipelines, command lists, and submission completion. Keep backend objects private.</p>
+<p>Initial capabilities include buffer upload, texture upload, render/compute commands when actually needed, indexed drawing, resource copy/readback, render targets, synchronization, and presentation. Unsupported capabilities return typed errors. Do not add fake working methods for ray tracing or mesh shaders.</p>
+<p>Start with a single graphics queue and two CPU/GPU frame contexts. Transfer work can execute on the same queue with explicit synchronization. A dedicated transfer queue, async compute, aliasing, and bindless resource allocation are deferred until tested value justifies them.</p>
+<h2 id="10-4-resource-safety">10.4 Resource safety</h2>
+<p>Track each resource's state and last submission use. Retire resources only after the relevant fence/completion signal. Resize, material changes, shader reload, and viewport closure must not free resources still referenced by in-flight commands.</p>
+<p>Separate frame-context indexing from acquired swapchain-image indexing. A two-frame ring does not imply a two-image swapchain. Synchronize acquire/submit/present correctly for the image actually obtained.</p>
+<p>Zero-sized/minimized windows suspend rendering safely. Out-of-date/suboptimal swapchain paths recreate dependent targets without using stale framebuffers or descriptors. Device loss produces a diagnostic report and graceful failure; automatic recovery is not a G1 promise.</p>
+<p>Vulkan validation and synchronization validation must be part of GPU qualification. Waivers identify the exact message, upstream cause if any, reproduction, and owner; do not suppress every warning to produce a clean screenshot.</p>
+<h2 id="10-5-render-graph">10.5 Render graph</h2>
+<p>In R0 a small explicit ordered pass list is sufficient. At R1, evolve it into a graph describing read/write resources and subresource usage. One system owns barrier/layout decisions; do not layer hand-maintained barriers around an unrelated graph that assumes it owns them.</p>
+<p>The first graph validates missing producers, incompatible formats/usages, read-before-write, cycles, and invalid lifetime references. It schedules on one queue and keeps resources separately allocated. Transient aliasing and multi-queue scheduling are later optimizations.</p>
+<p>Proposed R1 order:</p>
+<pre><code class="language-text">Upload finalized assets
+  -&gt; Directional shadow pass
+  -&gt; Optional depth prepass (only if measured useful)
+  -&gt; Forward opaque / alpha-mask pass into linear HDR
+  -&gt; Sky/environment background
+  -&gt; Sorted transparent pass
+  -&gt; Tone map and selected AA resolve
+  -&gt; Editor/game overlays in their intended color space
+  -&gt; Present or readback
+</code></pre>
+<p>Editor picking may be an ID attachment or a dedicated pass. Prefer an integer entity-ID target using an ephemeral index-to-UUID table for that frame; never truncate a persistent UUID into a collision-prone pixel ID.</p>
+<h2 id="10-6-shaders-and-material-model">10.6 Shaders and material model</h2>
+<p>HLSL is source; DXC emits SPIR-V for the first backend. DXC supports both DXIL and SPIR-V, but the two paths require separate qualification. [S5]</p>
+<p>Pin shader target, compiler revision, matrix packing, descriptor-set/binding convention, include roots, optimization flags, and feature defines. Reflection metadata validates CPU/shader resource layouts. Compile shaders during build/cook, not unpredictably during a shipping combat encounter.</p>
+<p>Start with a small fixed material family: unlit, metallic-roughness opaque, alpha-mask, simple transparent, and eventually skinned variants. Keep shader permutation counts bounded and reported.</p>
+<p>G1 material edits change constants safely. G2 shader reload builds a replacement pipeline off to the side; on failure, retain the prior valid version and show the compiler diagnostic. A shader edit must not reset the entire authoring scene.</p>
+<h2 id="10-7-lighting-and-visual-ambition">10.7 Lighting and visual ambition</h2>
+<p>For R1, use direct lighting, an environment map, and conventional shadow maps. The original First Light hall can look atmospheric through composition, readable materials, deliberate key/fill light, and restrained emissive surfaces. Emission is not illumination unless a lighting solution explicitly accounts for it.</p>
+<p>For R2, evaluate reflection probes, baked lighting for static areas, screen-space effects with visible limitations, fog, and later a probe-based or hardware-assisted GI research path. Specify what happens for moving lights, occluders, characters, and disocclusion before describing a feature as dynamic GI.</p>
+<p>Virtualized geometry, meshlets, GPU-driven visibility, and hierarchical occlusion can be studied later. They are not interchangeable features, and their absence must not block the early editor/scene proof.</p>
+<h2 id="10-8-antialiasing-and-history">10.8 Antialiasing and history</h2>
+<p>R1 may use a simple spatial AA solution. Temporal AA requires tested motion vectors, jittered camera handling, depth conventions, history rejection, exposure consistency, and animated-mesh motion. Do not ship a blurry history blend under the label of production TAA.</p>
+<p>Reset temporal histories after camera cuts, scene swaps, resolution changes, and discontinuous transforms. Transparency and particles need their own policy. Image-quality evaluation includes motion clips, not only stills.</p>
+<h2 id="10-9-render-extraction-and-observability">10.9 Render extraction and observability</h2>
+<p>Simulation publishes transforms, mesh/material IDs, animation-pose handles, lights, cameras, and bounds into a render snapshot. Renderer may cache GPU state, but cannot become the owner of gameplay transforms.</p>
+<p>Required diagnostics grow with each feature: frame number, CPU frame time, GPU timing when supported, draw count, visible instances, triangle counts, memory allocation/residency, shader/pipeline counts, asset upload queues, and current backend/device identity.</p>
+<p>Debug views include normals, albedo, roughness, metallic, depth, shadow coverage, wireframe when supported, and entity IDs as their underlying features arrive.</p>
+<h1 id="11-editor-and-transactional-authoring">11. Editor and transactional authoring</h1>
+<h2 id="11-1-native-editor-shared-services">11.1 Native editor, shared services</h2>
+<p>The editor is an original executable built with Dear ImGui for immediate tool UI. Dear ImGui explicitly targets tools and has limitations in full internationalization and accessibility; use it knowingly, not as evidence that game UI requirements are solved. [S7]</p>
+<p>G1 panels: scene hierarchy, viewport, inspector, project/scene controls, command history, diagnostics, and a small performance display. Transform entry fields are required. A polished gizmo is optional until the basic edit contract is correct.</p>
+<p>Editor chrome should be neutral dark graphite with restrained bronze highlights, readable text, and clear selection/warning states. Do not hard-code faction colors into usability-critical diagnostics. This is a workbench, not a game HUD.</p>
+<h2 id="11-2-one-authoring-path">11.2 One authoring path</h2>
+<p>GUI, CLI, and agents call the same command services. They do not separately mutate JSON or ECS fields.</p>
+<p>An edit command identifies project, scene UUID, base revision, operation, entity UUID, and typed fields. An edit transaction validates the entire batch against a staged copy, including cross-operation effects, before commit. A drag interaction previews locally and commits a coalesced operation rather than hundreds of unrelated undo entries.</p>
+<p>First commands: create entity, rename, set transform, set supported material parameters, delete an unreferenced entity, and undo/redo. The included batch schema covers the five forward-edit operation kinds. Undo/redo are separate history-service calls with the same scene lock, revision checks, and journaling rules; they are not mixed into a forward-edit batch. Import, bake, render, and package are jobs, not ordinary reversible scene mutations.</p>
+<h2 id="11-3-transactions-and-revision-rules">11.3 Transactions and revision rules</h2>
+<p>Reject stale <code>base_revision</code> values. Return current revision and conflict details; never silently overwrite newer human edits. A successful non-empty mutation increments scene revision once, regardless of operation count. Undo and redo also produce new revisions rather than rewinding the revision counter.</p>
+<p>An idempotency key is scoped to scene/project and actor. Bind it to the request-content hash. Retrying the same successful request returns the recorded result; reusing the key with different content fails. A reused expired key cannot silently become a new action: return an explicit unknown/expired status requiring inspection or a new request.</p>
+<p>A batch failure produces no authored scene change. The transaction contract must specify deletion dependencies, operation order, and reference resolution. Durable exactly-once behavior needs a commit journal or generation record tying request identity to the scene commit; two unrelated JSON writes are not sufficient.</p>
+<h2 id="11-4-play-mode">11.4 Play mode</h2>
+<p>Play creates a separate runtime-world instance from the validated authoring scene. Simulation, physics, temporary effects, and spawned entities cannot mutate the authoring document.</p>
+<p>Stopping play discards the runtime world. A future 'apply selected changes' feature requires an explicit diff, validation, and new transaction. G1 has no automatic write-back.</p>
+<p>The editor camera and play camera have independent input focus. Escape releases capture without terminating a save. Minimize, focus loss, pause, single-step, and stop/play loops are tested.</p>
+<h2 id="11-5-recovery">11.5 Recovery</h2>
+<p>Autosave writes a separate recoverable snapshot and journal marker, not destructive replacement of the user's last explicit save. After a crash, compare committed document, journal state, and recovery snapshot. Offer recovery with a visible diff.</p>
+<p>G1 may implement a simpler single-scene backup plus verified atomic save; full session recovery is a later gate. Reports must name which durability guarantees actually exist.</p>
+<h1 id="12-physics-and-character-movement">12. Physics and character movement</h1>
+<h2 id="12-1-responsibilities">12.1 Responsibilities</h2>
+<p>Jolt provides collision and physics capabilities. The engine owns world lifecycle, collision-layer policy, physics-to-entity mapping, character integration, gameplay queries, event delivery, and debugging. [S10]</p>
+<p>Use one physics world per play/runtime world. Character motion is initially kinematic through a tested virtual-character/controller integration, not by teleporting a dynamic rigid body each tick. Dynamic props have a different ownership path.</p>
+<p>Collision categories start small: world static, world dynamic, character, projectile/query, trigger, and editor-only. Query filters and simulation-pair filters are distinct and tested. Queries can exclude the instigator without accidentally excluding all characters.</p>
+<h2 id="12-2-one-movement-authority">12.2 One movement authority</h2>
+<p><code>MovementIntent</code> can be requested by player input, AI navigation, a scripted action, or root motion. A <code>MovementAuthority</code> resolver selects the valid owner for the current state. The character motor consumes the chosen intent and applies collision-resolved movement once.</p>
+<p>Root motion is a displacement request, not permission to bypass collision. Report the difference between requested and resolved displacement. Animation warping and foot-placement corrections respond to that difference without independently teleporting the actor.</p>
+<p>Physics controls ragdolls and dynamic bodies; gameplay controls the character motor; recorded cinematics may explicitly take control in a non-gameplay playback mode. Authority changes are state transitions with validation and cleanup, not competing writes.</p>
+<h2 id="12-3-locomotion-qualification">12.3 Locomotion qualification</h2>
+<p>G3 requires a capsule character that walks, turns, stops, and respects world collision. A third-person camera follows without clipping into walls. Required fixtures: flat floor, slope, step, narrow passage, low ceiling, moving prop, wall corner, spawn overlap, fall/reset, and frame-rate variation.</p>
+<p>Stairs, dynamic moving platforms, crouch-clearance tests, jump buffering, dodge, and advanced traversal are separate features. A navigation path is not proof that the character can physically traverse it.</p>
+<p>High-speed projectiles and melee use appropriate continuous/swept queries. Do not assume that a single instantaneous overlap catches fast motion. Contact callback delivery is buffered into the simulation owner's event processing and must not directly edit the ECS from a physics worker.</p>
+<h1 id="13-animation-and-motion-matching">13. Animation and motion matching</h1>
+<h2 id="13-1-first-animation-capability">13.1 First animation capability</h2>
+<p>G3 starts with skeleton import, bind-pose validation, clip sampling, hierarchical pose composition, GPU skinning, simple transitions, and named animation events. Blend two correct clips before building a node-graph editor.</p>
+<p>Test local/global transforms, inverse bind matrices, normalized skin weights, joint-index bounds, clip loop boundaries, zero-length clips, nonuniform time samples, interpolation modes, and missing optional channels. Rendering a static bind pose does not satisfy animated-character qualification.</p>
+<h2 id="13-2-animation-responsibilities">13.2 Animation responsibilities</h2>
+<p><strong>Animation evaluation</strong> samples and blends poses.</p>
+<p><strong>Action selection</strong> decides what the character is attempting, from gameplay or cinematic direction.</p>
+<p><strong>Motion matching</strong> chooses an appropriate segment from a cleared animation database, using trajectory/pose features and declared constraints.</p>
+<p><strong>Character motor</strong> decides where the collision-constrained actor actually moves.</p>
+<p><strong>IK/contact adjustment</strong> improves the pose relative to the resolved environment.</p>
+<p><strong>Cinematic director</strong> schedules authored intentions and shot structure.</p>
+<p>None of these responsibilities is automatically performed by importing a motion library. Epic-specific databases and runtime implementations are not portable merely because source animations can be obtained.</p>
+<h2 id="13-3-motion-matching-research-gate">13.3 Motion-matching research gate</h2>
+<p>Do not implement motion matching before the clip player and motor pass their tests. Begin the later research gate with a compact, cleared locomotion dataset: idle, forward/backward movement, strafes, turns, starts, and stops.</p>
+<p>Offline processing extracts joint positions/velocities in a declared root-local frame, future trajectory positions/headings, contact labels, gait/action metadata, and segment validity. Dataset version and extraction settings belong in the database key.</p>
+<p>A first search implementation can be exhaustive for a small dataset. Measure it before adopting a tree/index. Normalize feature dimensions, expose weights, enforce hard constraints before soft costs, and penalize unnecessary discontinuities.</p>
+<p>Retain pose/velocity continuity through blending or inertialization only after each is independently tested. Include negative cases: no valid segment, changed speed, sharp turn, obstacle, start/stop, missing action, and contact mismatch.</p>
+<p>Do not promise neural animation, model training, or cross-skeleton automatic retargeting in this gate. Those are separate research tracks with data rights, evaluation, and maintenance costs.</p>
+<h2 id="13-4-root-motion-hit-windows-and-interruptions">13.4 Root motion, hit windows, and interruptions</h2>
+<p>Each action specifies whether root motion is extracted, ignored, or used only for presentation. Loop wrap and playback-rate changes must preserve displacement consistency.</p>
+<p>Gameplay events carry stable action instance and marker IDs. If a marker interval is crossed twice through a loop or replay, the owning system applies its explicit repeat policy. Combat effects cannot be fired from both a pose sampler and a gameplay timer for the same event.</p>
+<p>Interrupts cancel the action's future gameplay windows and release movement ownership. Presentation may blend out, but cancelled attacks cannot continue dealing damage because a montage-like clip is still visually finishing.</p>
+<h1 id="14-gameplay-foundation-and-combat">14. Gameplay foundation and combat</h1>
+<h2 id="14-1-generic-services-game-owned-rules">14.1 Generic services, game-owned rules</h2>
+<p>Implement a small <strong>Ability and Attribute Framework</strong>, inspired by the needs of action games but independently designed. It is not a port or reimplementation-by-copying of Unreal GAS. Do not reproduce GAS's entire prediction, replication, tooling, or effect surface in the first combat proof.</p>
+<p>Engine services provide typed attributes, hierarchical tags, ability definitions, activation state, costs, cooldowns, timed effects, effect ownership, and semantic events. Game modules define names, numbers, faction rules, weapon behavior, damage policy, resource generation, and narrative consequences.</p>
+<p>Tags are interned runtime IDs generated from a collision-checked registry. Persist canonical tag strings or versioned IDs with a registry fingerprint. Test exact and parent/child matching separately.</p>
+<h2 id="14-2-ability-lifecycle">14.2 Ability lifecycle</h2>
+<pre><code class="language-text">Request
+ -&gt; Validate owner / target / state / cooldown / resources
+ -&gt; Reserve or commit declared costs exactly once
+ -&gt; Start action instance
+ -&gt; Advance phase windows
+ -&gt; Resolve authorized effects
+ -&gt; Complete or interrupt
+ -&gt; Cleanup ownership / subscriptions / temporary state
+</code></pre>
+<p>Each activation has an instance UUID or equivalent collision-safe runtime identifier. It defines activation requirements, cost timing, allowed cancellation windows, target rules, animation/action reference, effect windows, cooldown start policy, and cleanup behavior.</p>
+<p>An activation failure must not spend resources, play a successful action, or start an unrelated cooldown. An interrupted action follows an explicit refund policy. The initial rule is no refund after a successful activation unless that ability definition says otherwise.</p>
+<h2 id="14-3-attribute-effect-semantics">14.3 Attribute/effect semantics</h2>
+<p>The framework clamps bounded attributes and distinguishes base values from evaluated values. A proposed modifier pipeline is:</p>
+<pre><code class="language-text">value = clamp((base + sum(flat_add)) * product(multiplier), min, max)
+</code></pre>
+<p>Overrides, if later needed, have a declared precedence and cannot be mixed ambiguously with ordinary modifiers. Effect stacking policies are named: independent instances, refresh duration, replace by priority, or capped additive stacks. Every combination implemented needs tests.</p>
+<p>Changing a maximum attribute uses a game-selected policy: clamp current, preserve absolute deficit, or preserve percentage. There is no silent universal choice.</p>
+<p>Effect expiration and cancellation occur on simulation time. Presentation subscriptions cannot become a second health or resource authority.</p>
+<h2 id="14-4-damage-and-hit-resolution">14.4 Damage and hit resolution</h2>
+<p>A hit result contains attacker/target IDs, attack instance, hit-window ID, contact/query information, damage payload, and resolved outcome. The initial per-window hit ledger prevents repeated damage to the same target unless the attack explicitly allows repeat hits.</p>
+<p>For the sandbox, damage resolves through immunity, game-defined modifiers, shield absorption, health spillover, optional poise/effects, and one death transition. Damage routing belongs to one service; the projectile and the target do not both subtract health.</p>
+<p>Companion down/revive, critical hits, armor formulas, weak points, deflection, finishers, corruption, and Echo-generation policies are <strong>not</strong> implied by this primitive pipeline. Add only what the selected gate tests.</p>
+<h2 id="14-5-first-combat-demonstration">14.5 First combat demonstration</h2>
+<p>Create an original <strong>Test Operative</strong>, not a claim that Tarrik's or Selene's current kit is ported. Use simple geometry until cleared character content is available.</p>
+<p>The G3 loop includes a player, three enemies, one hitscan weapon, one melee action, damage feedback, death/despawn or disable, reset/checkpoint, a minimal HUD, and an executable package. Ability costs and cooldowns must run through the shared framework.</p>
+<p>All tuning is in <code>sandbox</code> data. Proposed <strong>test-only</strong> values:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Health</td>
+<td>100</td>
+<td>Easy-to-verify survivability arithmetic</td>
+</tr>
+<tr>
+<td>Shield</td>
+<td>50</td>
+<td>Verifies shield-to-health spillover</td>
+</tr>
+<tr>
+<td>Hitscan damage</td>
+<td>20</td>
+<td>Three hits leave shield 0 and health 90</td>
+</tr>
+<tr>
+<td>Melee damage</td>
+<td>25</td>
+<td>Distinct query/action fixture</td>
+</tr>
+<tr>
+<td>Ability resource</td>
+<td>100 maximum, 20 cost</td>
+<td>Verifies atomic activation and insufficient-resource rejection</td>
+</tr>
+<tr>
+<td>Cooldown</td>
+<td>30 simulation ticks</td>
+<td>Verifies fixed-tick scheduling at the default 60 Hz</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are not Origins balance recommendations. Death, regeneration, ammo reserve, poise reset, and revival defaults from the old game TDD must not sneak into engine behavior.</p>
+<h2 id="14-6-game-module-seams">14.6 Game-module seams</h2>
+<p>Future modules may implement <code>OriginsCombat</code>, <code>ReachArenaCombat</code>, <code>SettlementSimulation</code>, and <code>MMOServerRules</code>. They share serialization, entity services, time, resource/effect primitives, and observability where appropriate.</p>
+<p>Do not force turn-based or queued squad combat through a third-person controller. Do not require an MMO server to instantiate a renderer, audio device, cinematic camera, or local input subsystem.</p>
+<h1 id="15-ai-navigation-and-companions">15. AI, navigation, and companions</h1>
+<h2 id="15-1-ownership-split">15.1 Ownership split</h2>
+<p>Recast builds navigation data; Detour queries paths and supports navigation-related facilities. Behavior selection, sensing, threat, action execution, and character movement remain engine/game responsibilities. [S11]</p>
+<p>The first AI uses a small explicit finite-state machine: idle, acquire target, request path, approach, attack, recover, dead. A general StateTree/behavior-graph editor is deferred.</p>
+<h2 id="15-2-perception-and-path-requests">15.2 Perception and path requests</h2>
+<p>Sight checks include range, field of view, and line of sight. Hearing is event-driven. Awareness and memory are explicit gameplay data, not renderer visibility. An offscreen enemy is not necessarily blind.</p>
+<p>Requests carry world generation, entity generation, destination, and cancellation token. Results from an old world or a destroyed agent are discarded. An unloaded navigation cell returns unavailable/partial status instead of an invented complete route.</p>
+<p>The character motor consumes steering intent. Detour or a behavior node must not write the transform while the motor also moves it.</p>
+<h2 id="15-3-budgets-and-tests">15.3 Budgets and tests</h2>
+<p>Stagger perception and repath work. Record query count, duration, queue backlog, failed paths, and recovery attempts. Keep algorithmic correctness separate from crowd-scale performance claims.</p>
+<p>Tests include unreachable target, stale path, blocked corridor, invalid spawn, target death mid-attack, line-of-sight loss, scene unload, and re-entered encounter. Teleport-to-safety is a logged recovery policy, not a way to hide routine navigation bugs.</p>
+<p>A future companion layer adds follow positioning, line-of-fire avoidance, support actions, narrative participation, and explicit recovery. Approval affects game decisions, not core pathfinding correctness.</p>
+<h1 id="16-narrative-and-native-cinemafy">16. Narrative and native Cinemafy</h1>
+<h2 id="16-1-narrative-data">16.1 Narrative data</h2>
+<p>A future narrative module stores dialogue graphs, speaker IDs, localization keys, choices, conditions, actions, quest state, relationship variables, and story flags. Actual manuscript content remains a game-owned asset.</p>
+<p>Use a typed condition/action registry. No arbitrary shell, file access, or unrestricted code evaluation from a dialogue node. Validators catch missing speakers, broken edges, unreachable required nodes, unintended loops, and missing outcome actions.</p>
+<p>Persistent story facts, mutable current state, and derived presentation state are different things. For example, 'door was unlocked' can be historical, while 'door is open now' is mutable. Do not encode every changing property as an immutable Boolean flag.</p>
+<h2 id="16-2-cinemafy-as-a-native-engine-tool">16.2 Cinemafy as a native engine tool</h2>
+<p>The long-term goal is to select a character, place spatial/action intentions, and author a directed performance. This is a new native implementation informed by the desired workflow, not a claim that the existing Unreal plugin can run unchanged.</p>
+<p>The core data boundary is:</p>
+<pre><code class="language-text">Authored beat
+  -&gt; Validated/resolved action plan
+  -&gt; Live execution under engine authorities
+  -&gt; Recorded result / baked take
+</code></pre>
+<p>An authored beat describes intent, participants, target marker, relative timing, action identifier, constraints, and optional language annotation. A resolver selects a known capability and produces a plan. Execution reports the actual result: completed, interrupted, unreachable, unavailable animation, failed contact, or timed out.</p>
+<p>A one-word prompt is not itself a movement or animation capability. Language assistance may suggest a plan, but unknown actions remain unresolved and visible. No network/model access is required for basic directing, playback, or runtime execution.</p>
+<h2 id="16-3-division-of-responsibilities">16.3 Division of responsibilities</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>System</th>
+<th>Owns</th>
+<th>Must not own</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Director</td>
+<td>Narrative intent, relative timing, shot schedule</td>
+<td>Raw character movement or damage</td>
+</tr>
+<tr>
+<td>Action resolver</td>
+<td>Capability lookup, target validation, execution plan</td>
+<td>Invented unsupported animation</td>
+</tr>
+<tr>
+<td>Navigation</td>
+<td>Feasible route/steering suggestion</td>
+<td>Independent transform writes</td>
+</tr>
+<tr>
+<td>Motion matching</td>
+<td>Locomotion segment selection</td>
+<td>Deciding the narrative action or destination</td>
+</tr>
+<tr>
+<td>Character motor</td>
+<td>Collision-resolved movement</td>
+<td>Camera composition</td>
+</tr>
+<tr>
+<td>Animation/IK</td>
+<td>Pose, blending, contact correction within limits</td>
+<td>Unbounded root teleportation</td>
+</tr>
+<tr>
+<td>Camera system</td>
+<td>Framing, lens, shot transitions</td>
+<td>Character position changes to fix framing</td>
+</tr>
+<tr>
+<td>Recorder</td>
+<td>Sampled transforms/poses/events and timing</td>
+<td>Re-solving the scene differently during playback</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="16-4-timeline-and-takes">16.4 Timeline and takes</h2>
+<p>One master sequence clock controls authored timing. Store rational frame rates and integer time units/ticks suitable for sample mapping, not accumulating floating-point frame deltas indefinitely.</p>
+<p>A recorded take includes engine/schema versions, scene revision, asset hashes, participants, actual transforms, animation references or baked pose data, camera states, relevant events, and time mapping. Audio references and offsets are part of the take; rendering does not repeatedly retrigger them while scrubbing.</p>
+<p>Separate a live simulation preview from a recorded playback mode. Baking should preserve the observed result, not rerun AI navigation and hope to get the same performance. Scrubbing a baked take must not reapply damage, spawn enemies, or mutate persistent quest state.</p>
+<p>Regeneration creates a new take or layer. Preserve manual camera keys, approved animation edits, and timing locks unless the user explicitly targets them. Store the generation inputs and a diff.</p>
+<h2 id="16-5-runtime-cinematics">16.5 Runtime cinematics</h2>
+<p>Use a cinematic session that acquires input/camera/actor-control permissions and releases them reliably on completion, skip, cancellation, load, or error.</p>
+<p>Separate presentation events from final gameplay outcomes. On skip, apply an idempotent final-outcome action list and intended end transforms. Do not fast-forward through every explosion, footstep, projectile, and dialogue event and replay their side effects.</p>
+<p>When a required streamed area is unavailable, preload or enter an explicit transition state. Never teleport a player into unloaded collision. Restore gameplay only after the post-scene world state is valid.</p>
+<h2 id="16-6-g4-cinematic-proof">16.6 G4 cinematic proof</h2>
+<p>Author a short original encounter: the Test Operative approaches a marker, turns toward a second actor, plays a simple action, changes camera shot, and returns to player control. The exact duration is a test parameter, not a content target.</p>
+<p>Demonstrate normal playback, skip, replay, baked scrubbing, failed/unreachable action, interrupted preview, and recovery. The camera must not move the character to make a shot look correct. Facial performance, lip sync, voice synthesis, and production dialogue tools remain distinct later requirements.</p>
+<h1 id="17-input-cameras-audio-effects-and-game-ui">17. Input, cameras, audio, effects, and game UI</h1>
+<h2 id="17-1-input">17.1 Input</h2>
+<p>SDL3 collects platform events; an engine action layer maps keyboard, mouse, and gamepad input to named actions. Gameplay sees actions and values, not hard-coded OS key codes. [S1]</p>
+<p>Support focus changes, held/pressed/released semantics, dead zones, cursor capture, and input-context priority. An inspector text field cannot simultaneously trigger gameplay movement. Rebinding and persistent device preferences follow after the basic action layer is tested.</p>
+<p>The runtime has no editor shortcuts. Offline replay supplies recorded action inputs, not simulated mouse clicks.</p>
+<h2 id="17-2-cameras">17.2 Cameras</h2>
+<p>Camera modes include editor orbit/free camera, runtime third-person follow, and cinematic playback. Only one system chooses the final active camera, with explicit blends and cuts.</p>
+<p>Third-person follow uses collision-aware placement and stable target smoothing. Camera smoothing runs in presentation time but does not change authoritative character motion. FOV, invert axes, sensitivity, and shake options are game-facing configuration.</p>
+<p>Camera cuts reset temporal histories. A fallback camera is clearly named and only used when the scene's camera is missing according to an explicit policy.</p>
+<h2 id="17-3-audio">17.3 Audio</h2>
+<p>Integrate miniaudio behind an engine-owned audio service. Begin with WAV playback, master/music/dialogue/effects buses, position/attenuation, and bounded simultaneous voices. miniaudio is an audio foundation, not a complete cinematic authoring system. [S12]</p>
+<p>Audio commands are queued. Do not load/decode files or block on ECS state from a realtime callback. Missing optional sound fails gracefully. Dialogue subtitles and gameplay cannot wait forever on audio completion after a device loss.</p>
+<p>Qualification includes device absence, mute/volume persistence, scene stop, repeated playback, overlapping voices, and no double-triggering during pause/scrub. Advanced acoustics, occlusion, and platform audio certification are deferred.</p>
+<h2 id="17-4-effects">17.4 Effects</h2>
+<p>The first effects layer supports bounded simple particles, impact flashes, and decals when the renderer supports them. A typed effect event describes location, direction, material/surface category, lifetime, and deterministic seed where useful.</p>
+<p>Effects never deal authoritative damage through a rendering callback. Separate visual projectile trails from collision/projectile simulation. Pooling is introduced when allocation measurements justify it.</p>
+<p>Native Holofy/Grungify-style tools may follow as custom material/effect utilities. Their names are not proof that Unreal shader graphs or plugin bindings have migrated.</p>
+<h2 id="17-5-game-ui">17.5 Game UI</h2>
+<p>The debug HUD may use ImGui during G3. A production game UI needs its own input focus/navigation, layouts, text shaping, localization, scalable fonts, safe-area support, resolution/DPI handling, and accessibility work. Do not mistake an attractive debug overlay for a shippable mobile or controller UI. [S7]</p>
+<p>Plan a lightweight retained game-UI tree driven by observable game state. Attributes/events update widgets; widgets do not own gameplay state. Avoid per-frame string formatting and layout work when data did not change.</p>
+<p>For Sovereign Call, themes are data: Dominion bronze/oxblood/amber, Reformation graphite/muted blue/cool light, Remnant white/gold, Eclipse dark/violet. Provide shape/text cues in addition to color.</p>
+<h1 id="18-saves-checkpoints-and-streaming">18. Saves, checkpoints, and streaming</h1>
+<h2 id="18-1-authoring-documents-versus-save-games">18.1 Authoring documents versus save games</h2>
+<p>Scene documents describe authored content. Save games store game-owned persistent state. A runtime checkpoint stores enough validated state to restart an encounter/mission at a known safe point. They are not interchangeable serialized ECS memory dumps.</p>
+<p>A save header includes schema version, engine/game version, content-manifest hash or compatibility identity, active region/checkpoint, and integrity metadata. Persist stable IDs and typed values, not pointers, GPU handles, or raw component layouts.</p>
+<h2 id="18-2-restore-pipeline">18.2 Restore pipeline</h2>
+<p>Validate the save before mutating the current live world. Build or stage the target world, resolve required content, restore persistent entities and game state, reestablish physics/navigation/runtime bindings, then publish it as active. Failed restoration leaves the prior usable state intact or returns to a safe menu.</p>
+<p>Gameplay cooldowns/effects must define save behavior explicitly. Temporary render/audio state is generally reconstructed. Checkpoint reset cannot duplicate quest rewards, kill rewards, or one-shot outcomes.</p>
+<p>G3 needs one small sandbox checkpoint/reset. Versioned long-lived saves, migration tools, and corrupt-file recovery arrive with G5.</p>
+<h2 id="18-3-streaming">18.3 Streaming</h2>
+<p>Begin with explicit scene loading. G5 introduces authored cells/chunks with dependency manifests, navigation/collision membership, asset residency budgets, and activation states.</p>
+<p>Proposed cell lifecycle:</p>
+<pre><code class="language-text">Unloaded -&gt; Requested -&gt; Loading -&gt; Validated -&gt; Ready -&gt; Active
+        -&gt; Deactivating -&gt; Retiring -&gt; Unloaded
+</code></pre>
+<p>Render visibility, gameplay activation, collision readiness, and navigation readiness are related but distinct. A visually present floor is not automatically safe to spawn on.</p>
+<p>Unload waits for gameplay references, asynchronous jobs, and GPU use to retire. Persistent entity IDs survive cell reload according to policy. Cross-cell references are handles that can explicitly report unavailable, not dangling pointers.</p>
+<p>A cinematic/teleport preloads its destination and waits for required readiness. Streaming tests include rapid backtracking, failed asset load, stale navigation result, cancel/retry, a character crossing a cell boundary, and restoration after a checkpoint.</p>
+<h1 id="19-agent-interface-and-security">19. Agent interface and security</h1>
+<h2 id="19-1-api-first-not-model-dependent">19.1 API-first, not model-dependent</h2>
+<p>The engine exposes typed commands and queries that humans, scripts, and agents can use. It does not contain a mandatory LLM runtime. Natural-language interpretation is an optional external client, never the authority for validation.</p>
+<p>G1 uses local JSON command batches through <code>sovereign-cli</code> plus the same in-process command service in the editor. Offline CLI edits require an exclusive scene lock and fail while another writer owns it. Do not edit the same scene file from an agent and editor concurrently by bypassing revision checks.</p>
+<p>Live IPC is introduced only when needed. Prefer a local transport with OS access control and authenticated session ownership. A loopback TCP port is not automatically trusted. No public listener, unauthenticated RPC, or unrestricted shell endpoint.</p>
+<h2 id="19-2-command-batch-contract">19.2 Command batch contract</h2>
+<p>The included <code>schemas/command_batch.schema.json</code> describes the initial wire contract. A batch contains protocol version, request ID, actor label, scene ID, base revision, idempotency key, dry-run flag, and bounded typed operations.</p>
+<p>Supported first operations:</p>
+<ul>
+<li><code>entity.create</code> with an explicit stable entity ID and initial components.</li>
+<li><code>entity.rename</code>.</li>
+<li><code>transform.set</code> with complete position/rotation/scale values.</li>
+<li><code>material.set</code> with supported material fields.</li>
+<li><code>entity.delete</code> with dependency validation.</li>
+</ul>
+<p>Each operation carries its own target. There is no ambiguous batch-wide target that accidentally changes the wrong entity.</p>
+<p><code>dry_run</code> returns the proposed diff and diagnostics without incrementing revision, writing files, or reserving an idempotency key as successfully committed. The same validation runs again during real commit against the then-current revision.</p>
+<h2 id="19-3-results-and-errors">19.3 Results and errors</h2>
+<p>A response includes request ID, status, scene revision before/after, operation results, validation errors, diff summary, and undo/commit token when applicable. Error codes distinguish schema error, stale revision, unknown entity, missing dependency, unsupported component, permission denied, lock unavailable, and I/O failure.</p>
+<p>Successful scene mutation is not the same as a successful render. Long operations such as cook/render/package return job identity and observable job status. They execute outside a rollbackable world transaction and publish artifacts atomically on success.</p>
+<h2 id="19-4-safety-controls">19.4 Safety controls</h2>
+<p>Limit operations, payload bytes, file sizes, nesting, job duration, and output location. Resolve project-relative paths after normalization and reject escapes through <code>..</code>, symlinks, or absolute paths according to an explicit policy. Treat imported asset text and external metadata as data, not instructions.</p>
+<p>Agents receive scoped authority: project, scene, operation set, and asset write areas. Sensitive operations such as production export, package publication, dependency changes, or deletion of unrelated assets are not implied by a scene-edit permission.</p>
+<p>Logs redact credentials and sensitive local paths before sharing. No telemetry or asset upload occurs by default. Dependency fetching is a separately recorded build action, not a hidden runtime behavior.</p>
+<h2 id="19-5-testability">19.5 Testability</h2>
+<p>A scene edit completed through the GUI and the same edit completed through the CLI must produce equivalent authored state. Test duplicate delivery, conflicting human edits, retry after failure, reuse of a key with changed content, invalid batch rollback, restart after commit, and malformed/untrusted inputs.</p>
+<p>The JSON schemas are contract examples. They do not implement runtime validation, persistence, transactions, or security. Caelis must implement and test those guarantees in the engine.</p>
+<h1 id="20-platform-profiles-and-networking-boundaries">20. Platform profiles and networking boundaries</h1>
+<h2 id="20-1-desktop-first-not-desktop-only-forever">20.1 Desktop first, not desktop-only forever</h2>
+<p>Initial qualification targets Windows x64 game delivery, with Linux x64 as a practical development/test host where available. Record platform qualification individually. Passing Linux tests does not close a Windows build gate.</p>
+<p>RHI and platform boundaries should permit later D3D12/Metal work without exposing Vulkan in game logic. That is an architectural allowance, not a committed backend implementation.</p>
+<p>Mobile requires independent shader/material budgets, touch/UI design, texture formats, packaging/signing, memory-pressure handling, suspend/resume, device thermal testing, and actual iOS/Android runtime tests. Vulkan on a desktop does not prove mobile readiness. iOS also needs a qualified rendering/platform route rather than an assumed desktop port.</p>
+<p>Consoles are outside current scope. No platform SDK access or certification capability is assumed.</p>
+<h2 id="20-2-data-profiles">20.2 Data profiles</h2>
+<p>A project manifest selects <code>DesktopCinematic</code>, <code>ArenaMobile</code>, or <code>DedicatedServer</code> profile when those profiles actually exist. Each defines features, memory/performance budgets, content limits, and cook options.</p>
+<p>No profile should silently use the most expensive desktop material or VFX feature. Cook validators reject unsupported content rather than relying on runtime failure.</p>
+<h2 id="20-3-multiplayer-and-mmo">20.3 Multiplayer and MMO</h2>
+<p>Design input/action commands so a future authoritative server can validate them. Keep player input, world state, effects, and presentation separate. Use stable IDs and bounded state serialization. These decisions help networking but do not make the engine network-ready.</p>
+<p>Defer transport selection, replication protocol, prediction/reconciliation, interest management, account systems, persistence services, shard orchestration, commerce, anti-cheat, and live operations to an MMO TDD with its own tests.</p>
+<p>A dedicated server must build without renderer/editor/audio dependencies. Physics repeatability should be qualified for the intended role; do not assume deterministic lockstep is the right architecture for an action MMO.</p>
+<p>The first multiplayer proof, when explicitly authorized, is a small authoritative client/server interaction with loss/latency/reconnect tests. It is not thousands of bots in a single local scene.</p>
+<h1 id="21-reference-scenes-and-performance-qualification">21. Reference scenes and performance qualification</h1>
+<h2 id="21-1-test-scenes">21.1 Test scenes</h2>
+<p><strong>S0: Axis Lab.</strong> Original boxes/planes and asymmetric axis markers, camera, depth overlaps, parent/child transforms, and a material swatch. Used for math, projection, picking, serialization, and GPU startup. This must not depend on downloaded art.</p>
+<p><strong>S1: First Light.</strong> A compact original ceremonial sci-fi hall assembled from primitives. Suggested layout: roughly 30 by 18 meters, repeated columns, a central walkway, and a raised platform. Use bronze, deep red, charcoal, and restrained emissive accents as material data. The setting expresses the Dominion-inspired visual direction without importing any production scene or asset.</p>
+<p>G1 uses simple shading. G2 evolves the same hall with approved static GLB assets, PBR materials, environment lighting, and directional shadows. Maintain versioned scene manifests so a performance comparison does not quietly change content.</p>
+<p><strong>S2: Combat Yard.</strong> A bounded arena with a player, three enemies, cover/obstacles, one checkpoint, and a minimal combat HUD. This is the G3 test, not an adaptation of a particular Origins mission.</p>
+<p><strong>S3: Director Room.</strong> Two actors, a reachable marker, an intentionally unreachable marker, two cameras, one action clip, and a short event timeline. Used for G4 live performance, bake, scrubbing, skip, and restoration.</p>
+<p><strong>S4: Reach Arena.</strong> Later ten-unit 5v5 sample using game-owned rules. It is a bounded desktop qualification fixture before any mobile-production claim.</p>
+<h2 id="21-2-budget-policy">21.2 Budget policy</h2>
+<p>Performance numbers here are <strong>provisional engineering targets</strong>, not measured results or promises. G0 records a real reference machine; G1 establishes the first baseline. Matthew must approve later target changes, and reports must show before/after results instead of redefining success retroactively.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Profile / fixture</th>
+<th>Provisional limits or targets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G1 S1 content</td>
+<td>Up to 100 visible primitive instances, up to 100,000 submitted triangles, small constant-material set</td>
+</tr>
+<tr>
+<td>G2 S1 content</td>
+<td>Up to 500 visible static instances, about 1 million submitted triangles, up to 64 material instances; texture residency measured and capped in the fixture</td>
+</tr>
+<tr>
+<td>Desktop qualification resolution</td>
+<td>1920 x 1080, fixed internal resolution, no frame generation, quality settings recorded</td>
+</tr>
+<tr>
+<td>Desktop frame target</td>
+<td>Median steady-state frame time at or below 16.7 ms; p95 at or below 20 ms; p99 at or below 33.3 ms on the recorded reference machine</td>
+</tr>
+<tr>
+<td>Investigation thresholds</td>
+<td>CPU frame work above 6 ms or GPU work above 12 ms prompts profiling; these are not a claim that their sum equals frame time</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td>No reproducible crash, corruption, invalid memory access, or unbounded growth during the defined test suite</td>
+</tr>
+<tr>
+<td>Authoring integrity</td>
+<td>Invalid batch leaves scene state/revision unchanged; save/reopen preserves authored meaning</td>
+</tr>
+</tbody>
+</table></div>
+<p>These budgets apply to these fixtures. Meeting them says nothing about a full Origins mission, mobile thermals, or MMO capacity.</p>
+<h2 id="21-3-measurement-procedure">21.3 Measurement procedure</h2>
+<p>Record engine commit, dependency lock hash, scene/content hashes, build configuration, compiler, operating system, GPU/driver, CPU, RAM/VRAM, display mode, renderer settings, and device features.</p>
+<p>Run the same camera path and workload, warm caches deliberately, then collect several repeated samples. Report cold startup/first-load behavior separately from warmed frame timing. Include p50/p95/p99, CPU/GPU breakdown, memory high-water marks, and spikes. Do not present only an average FPS.</p>
+<p>Use an uncapped or explicitly controlled timing mode for performance runs and a presentation-stability run with the selected vsync mode. State which measurement includes vsync waits. A frame capture assists diagnosis but can distort timing, so do not use instrumented capture timings as the only performance evidence.</p>
+<h2 id="21-4-visual-review">21.4 Visual review</h2>
+<p>A technically correct renderer can still fail the desired art direction. Capture fixed-camera images and a short motion clip from the named scene revision. Matthew reviews readability, material response, silhouette, shadow quality, camera comfort, temporal stability, and overall mood.</p>
+<p>Image regression uses tolerances and explicit baselines on pinned hardware. Do not require bitwise identical images across all vendors. Cross-vendor comparisons should find structural defects, not fail on every harmless floating-point difference.</p>
+<h2 id="21-5-stability-and-adversarial-tests">21.5 Stability and adversarial tests</h2>
+<p>Run at least 50 open/save/close cycles for the small fixture, 50 play/stop cycles once play exists, repeated resize/minimize/restore, invalid JSON/asset cases, stale commands, duplicate requests, failed write injection, and shutdown during an unfinished job.</p>
+<p>Use sanitizers where supported, compiler warnings, and graphics validation. A sanitizer-unavailable platform is named as such. Put the required tests in CI when the runner supports them, and keep GPU tests separate from headless CI status.</p>
+<h1 id="22-implementation-gates">22. Implementation gates</h1>
+<h2 id="22-1-gate-sequence">22.1 Gate sequence</h2>
+<pre><code class="language-text">G0 Reproducible foundation
+ -&gt; G1 First Light: edit/save/run
+ -&gt; G2 Assets, PBR, and cook/package
+ -&gt; G3 Combat Yard
+ -&gt; G4 Native directing and animation research
+ -&gt; G5 Production reliability and representative scale
+ -&gt; G6 Per-game migration decision
+</code></pre>
+<p>The first handoff authorizes <strong>G0 and G1</strong>. Later sections define the destination without authorizing Caelis to build every subsystem in one uninterrupted change.</p>
+<p>A blocked GPU gate does not prohibit productive headless work. It does prohibit marking the whole gate complete or skipping to unrelated gameplay features.</p>
+<h2 id="g0-reproducible-foundation">G0: Reproducible foundation</h2>
+<p><strong>Goal:</strong> Know where we are building and make the smallest independent targets compile.</p>
+<p><strong>Deliverables:</strong> Host inventory, isolated repository, build presets, dependency lock, notices, a working CLI/version command, unit test target, log/error conventions, schema fixtures, and decision records for the selected toolchain/backend.</p>
+<p><strong>Acceptance:</strong> A clean configure/build/test procedure works on the recorded host; headless targets do not require a display or Vulkan initialization; dependencies are pinned; no production paths changed; no Unreal headers, libraries, or tools are required.</p>
+<p><strong>Proof:</strong> <code>g0-report.md</code>, configure/build/test logs, dependency/license manifest, and commit identifier. Record untested platforms without inference.</p>
+<p><strong>Exclude:</strong> Renderer architecture embellishment, engine logo/website, combat, physics, scripting, networking, and a plugin marketplace.</p>
+<h2 id="g1-first-light">G1: First Light</h2>
+<p><strong>Goal:</strong> Create, edit, persist, and run a real original scene independently of Unreal.</p>
+<p><strong>Work order:</strong></p>
+<ol>
+<li>Implement math/scene identity and strict validation, with round-trip tests.</li>
+<li>Implement command validation, staged mutation, revision conflicts, atomic scene commit, and idempotency behavior.</li>
+<li>Expose offline scene validation and command batches through CLI with writer locking.</li>
+<li>Open SDL window and initialize the real Vulkan backend with diagnostic output.</li>
+<li>Render the S0 fixture with camera, depth, and original primitives.</li>
+<li>Add the editor viewport, hierarchy, inspector, selection, and command history.</li>
+<li>Implement undo/redo, save/reopen, and isolated play/stop.</li>
+<li>Load the authored scene in a separate <code>sovereign-runtime</code> executable.</li>
+<li>Assemble S1 First Light from the supported original primitives.</li>
+<li>Produce GPU evidence and run the G1 validation matrix.</li>
+</ol>
+<p><strong>Acceptance:</strong> Native rendering on a named physical GPU; correct transform/picking/depth behavior; create/change/delete/undo/redo; save/reopen; CLI edit equivalent to GUI edit; invalid batch rollback; stale-revision rejection; duplicate-request handling; runtime without editor UI dependencies; safe play-world isolation; resize/shutdown tests; no unapproved production changes.</p>
+<p><strong>Proof:</strong> Editor image, runtime image, scene before/after/diff, command request/result, test logs, GPU validation log, reproducible commands, and a status report. Screenshot files must identify their real capture source.</p>
+<p><strong>Exclude:</strong> Imported skinned assets, Jolt/Detour integration, motion matching, native Cinemafy, PBR parity, GI, virtual geometry, MMO, mobile backend, public distribution.</p>
+<p><strong>Stop/report boundary:</strong> Report what is actually verified and the next proposed task. Do not proceed to G2 on the strength of a pretty screenshot alone.</p>
+<h2 id="g2-content-pipeline-and-static-visual-quality">G2: Content pipeline and static visual quality</h2>
+<p><strong>Goal:</strong> Prove the engine handles real cleared source assets, interprets materials, and packages cooked content.</p>
+<p><strong>Deliverables:</strong> Narrow GLB importer with explicit unsupported-feature errors; asset registry; incremental cook/cache; static metallic-roughness material path; environment lighting; one directional shadow; diagnostics; packaged runtime containing cooked assets and required notices.</p>
+<p><strong>Acceptance:</strong> Asset/material/axis fixtures pass; source-change invalidation works; failed reimport retains the previous valid artifact; required missing/uncleared content blocks cook; runtime runs from a clean output directory without editor or source-asset paths; PBR hall reviewed in motion; shader reload failures preserve valid rendering.</p>
+<p><strong>Proof:</strong> Cook manifests and hashes, import diagnostics, before/after images, representative frame metrics, package contents, clean-machine/directory test instructions and actual run results.</p>
+<p><strong>Exclude:</strong> General material graph editor, USD/FBX importer, automatic Unreal conversion, full shader-feature parity.</p>
+<h2 id="g3-combat-yard">G3: Combat Yard</h2>
+<p><strong>Goal:</strong> A small original playable game loop on the new runtime.</p>
+<p><strong>Deliverables:</strong> Character motor, Jolt collision/physics integration, clip player and skinning, basic navigation/AI, ability/attribute primitives, hitscan and melee, basic audio/HUD, checkpoint/reset.</p>
+<p><strong>Acceptance:</strong> Player and three enemies complete the encounter/reset loop; collision and animation are consistent; one movement authority; no repeated hit per attack window; deterministic test arithmetic; cooldown/resource rejection; stale AI work cannot modify dead or unloaded entities; play/stop does not alter authored content; standalone package works.</p>
+<p><strong>Proof:</strong> Gameplay recording, named scenarios, metrics, native/headless/GPU test results, unresolved issues, game-data fixture version.</p>
+<p><strong>Exclude:</strong> Production protagonist kits, full inventory/economy, branching campaign, advanced facial animation, online services.</p>
+<h2 id="g4-native-directing-and-motion-matching-research">G4: Native directing and motion-matching research</h2>
+<p><strong>Goal:</strong> Prove the workflow that makes this engine personally valuable, not merely different.</p>
+<p><strong>G4A, directing:</strong> Authored beats, validated capabilities, execution reporting, camera timeline, non-destructive takes, bake/playback/scrub, skip/final-state reconciliation, reliable return to gameplay.</p>
+<p><strong>G4B, motion matching:</strong> A cleared small locomotion database, documented features/weights, constrained search, transition behavior, and observable motor/contact interaction. G4B can be evaluated separately from G4A.</p>
+<p><strong>Acceptance:</strong> S3 succeeds and fails honestly; camera never drives character movement; unreachable/unsupported actions report their cause; baked playback reconstructs the recorded result within declared tolerances; scrubbing has no gameplay side effects; manual take edits survive regeneration; motion matching improves a named locomotion case without hiding regressions.</p>
+<p><strong>Proof:</strong> Live and baked recordings, timing/contact comparisons, take diff, capability failures, dataset provenance, performance and search-debug data.</p>
+<p><strong>Exclude:</strong> Automatic generation of arbitrary acting, full facial performance, cloning Epic databases, one-prompt production cutscenes without review.</p>
+<h2 id="g5-production-reliability-and-representative-scale">G5: Production reliability and representative scale</h2>
+<p><strong>Goal:</strong> Establish that the engine can survive ongoing content development, not just demonstrations.</p>
+<p><strong>Deliverables:</strong> Versioned saves/migrations, crash recovery, stronger content validation, prefabs/overrides as needed, world streaming, asset residency budgets, profiling, game UI fundamentals, multi-machine packaging, regression infrastructure, representative visual/animation quality.</p>
+<p><strong>Acceptance:</strong> A substantially representative mini-mission or arena survives content revisions, save/load, streaming, restart, error recovery, and repeated builds. Qualified platforms and hardware configurations are explicit. Known limitations and workarounds are documented and acceptable to Matthew.</p>
+<p><strong>Proof:</strong> Repeatable production workflow comparison, memory/frame traces, reliability results, content-authoring recordings, package/install tests, and current risk register.</p>
+<p><strong>Exclude:</strong> Calling the engine 'Unreal-equivalent' because the sample works.</p>
+<h2 id="g6-per-game-adoption-decision">G6: Per-game adoption decision</h2>
+<p><strong>Goal:</strong> Decide whether any specific game benefits from adoption.</p>
+<p>Recreate an approved representative slice in a separate project, never over the production original. Compare content creation, image/motion quality, gameplay reliability, iteration time, memory/performance, deployment, and ongoing maintenance. Migration of one bounded game does not authorize migration of Origins, the city builder, or the MMO.</p>
+<p>Matthew makes the adoption decision. A successful research engine may remain a tool/research project indefinitely without being a failed experiment.</p>
+<h1 id="23-engineering-effort-and-working-method">23. Engineering effort and working method</h1>
+<h2 id="23-1-plan-by-uncertainty-not-generated-code-volume">23.1 Plan by uncertainty, not generated code volume</h2>
+<p>This is self-funded work. No external team, funding, or paid infrastructure is assumed. Additional agent availability increases implementation capacity, but does not automatically provide physical-GPU testing, animation data rights, human visual review, or correct integration.</p>
+<p>The first estimates should be counts of small verified work items and unresolved risks, not a promised multi-year calendar. Re-estimate after G1 and G3 using actual build/test cycles, regressions, and the time needed to produce an accepted result.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Work package</th>
+<th>Relative effort / uncertainty</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G0 portable core and reproducible build</td>
+<td>Moderate / host-dependent</td>
+<td>Toolchain/dependency setup and clear boundaries</td>
+</tr>
+<tr>
+<td>G1 scene/commands/editor/runtime</td>
+<td>High / bounded</td>
+<td>Several interacting products, persistence and GPU lifecycle</td>
+</tr>
+<tr>
+<td>G2 import/cook/PBR</td>
+<td>High / high</td>
+<td>Malformed content, material correctness, shader and resource handling</td>
+</tr>
+<tr>
+<td>G3 character/animation/combat</td>
+<td>Very high / high</td>
+<td>Contact, timing, movement ownership, gameplay edge cases</td>
+</tr>
+<tr>
+<td>G4 directing/motion matching</td>
+<td>Very high / research-heavy</td>
+<td>Semantic action resolution, temporal continuity, bake fidelity</td>
+</tr>
+<tr>
+<td>G5 production reliability</td>
+<td>Very high / open-ended until representative content exists</td>
+<td>Scale, recovery, compatibility, long-tail bugs</td>
+</tr>
+<tr>
+<td>Mobile/MMO</td>
+<td>Separate major programs</td>
+<td>Platform qualification and distributed systems are not minor backends</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are planning judgments, not externally sourced productivity figures.</p>
+<h2 id="23-2-work-item-standard">23.2 Work-item standard</h2>
+<p>Each item includes a narrow goal, owned files/modules, prerequisites, observable result, test procedure, failure cases, and evidence paths. Avoid 'implement animation system' as a single unchecked ticket.</p>
+<p>Use one lead integrator. Parallel workers can implement independent fixtures, parsers, tests, or documented modules, but must not concurrently redesign the same scene schema, command protocol, RHI, or movement authority. Shared contracts change through small reviewed decision records.</p>
+<p>A useful implementation cycle is: describe expected behavior, add fixture/test, implement the smallest working path, run actual checks, inspect output, record limitations, and commit. No test suite may be replaced by unconditional success to keep the cycle green.</p>
+<h2 id="23-3-bounded-research">23.3 Bounded research</h2>
+<p>Research branches have an explicit question and comparison. Examples: does Forward+ improve the many-light fixture; does motion matching improve starts/stops on the cleared dataset; does a new GI method improve the hall within the measured budget?</p>
+<p>Failure to improve the chosen metric can result in reverting the experiment. That is a technical result, not an excuse to keep an unmaintained subsystem because it took effort.</p>
+<p>Stop and report when a decision would require production edits, paid resources, unclear content rights, a second native graphics backend, a major schema rewrite, or unapproved public distribution. Ordinary implementation details inside the approved gate do not require repeated permission requests.</p>
+<h2 id="23-4-required-implementation-report">23.4 Required implementation report</h2>
+<p>Every report contains: goal and scope; commit; platform/toolchain/GPU; files/modules changed; actual commands executed and exit results; passed/failed/not-run tests; screenshots/recordings with provenance; defects and limitations; safety-boundary check; and next proposed task.</p>
+<p>Use a checklist that maps directly to <code>docs/VALIDATION_MATRIX.md</code>. A final report cannot call a gate complete while required tests are merely planned.</p>
+<h1 id="24-risk-register">24. Risk register</h1>
+<p>Ratings are qualitative planning assessments, not measured probabilities.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Severity</th>
+<th>Control / evidence required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Engine work displaces Origins</td>
+<td>High</td>
+<td>Separate repo and first assignment; no production migration; explicit review after G1</td>
+</tr>
+<tr>
+<td>AI writes plausible but incorrect GPU code</td>
+<td>High</td>
+<td>Validation layers, physical-device tests, frame capture, no mock passes</td>
+</tr>
+<tr>
+<td>Available host lacks suitable graphics capability</td>
+<td>High</td>
+<td>G0 inventory; headless/GPU status separated; no unsupported platform claims</td>
+</tr>
+<tr>
+<td>Current assets cannot legally or practically move</td>
+<td>High</td>
+<td>Original fixtures; per-item provenance/quarantine; source export review</td>
+</tr>
+<tr>
+<td>Renderer never reaches desired visual quality</td>
+<td>High</td>
+<td>Early art review at G2, motion review, realistic content and fixed budgets</td>
+</tr>
+<tr>
+<td>Animation/motor/contact integration is poor</td>
+<td>High</td>
+<td>One movement authority; root-motion and contact fixtures before advanced search</td>
+</tr>
+<tr>
+<td>Editor/API corruption loses work</td>
+<td>High</td>
+<td>Revision checks, staged validation, atomic writes, journal/recovery tests</td>
+</tr>
+<tr>
+<td>Large scene/asset memory behavior breaks</td>
+<td>High</td>
+<td>Explicit residency limits, cache invalidation, repeated load/unload traces</td>
+</tr>
+<tr>
+<td>Untested determinism or replay claims</td>
+<td>High</td>
+<td>Qualified-build scope; event ordering; separate recorded playback from resimulation</td>
+</tr>
+<tr>
+<td>Mobile or MMO requirements distort early architecture</td>
+<td>High</td>
+<td>Profiles and interfaces now; separate implementation/qualification programs later</td>
+</tr>
+<tr>
+<td>Dependency updates break reproducibility</td>
+<td>Medium-high</td>
+<td>Immutable pins, checksums, one acquisition method, isolated update changes</td>
+</tr>
+<tr>
+<td>Multiple agents create incompatible authorities</td>
+<td>High</td>
+<td>Lead integrator; shared contract ownership; no concurrent RHI/schema rewrites</td>
+</tr>
+<tr>
+<td>Debug UI mistaken for production UI</td>
+<td>Medium-high</td>
+<td>Separate player-UI gate, localization/accessibility/controller tests</td>
+</tr>
+<tr>
+<td>Packaging works only on the developer's machine</td>
+<td>High</td>
+<td>Clean output directory and alternate-machine testing; no source/editor paths</td>
+</tr>
+<tr>
+<td>Long-tail maintenance exceeds benefit</td>
+<td>High</td>
+<td>Workflow comparison at G5/G6; retain useful parts without forced adoption</td>
+</tr>
+</tbody>
+</table></div>
+<p>The highest-risk unknowns are not how quickly code can be generated. They are whether real content can be imported lawfully and correctly, whether characters move and act convincingly, whether rendering holds up in motion, and whether changes remain reproducible.</p>
+<h1 id="25-migration-and-continuation-decisions">25. Migration and continuation decisions</h1>
+<h2 id="25-1-continuing-engine-research">25.1 Continuing engine research</h2>
+<p>Continue past a gate when its intended capability is verified, limitations are understood, and the next question remains worth investigating. A rough-looking but correct editor can earn another stage. A beautiful static scene with a broken data model cannot.</p>
+<p>An inability to test on the current host may be a qualification block rather than a design failure. Record it explicitly and preserve the verified work.</p>
+<h2 id="25-2-adopting-the-engine-for-a-game">25.2 Adopting the engine for a game</h2>
+<p>The engine need not outperform Unreal in every metric. It must meet the particular game's non-negotiable quality, reliability, platform, and performance needs, while offering enough benefit to justify migration and long-term ownership.</p>
+<p>Require a representative rather than toy comparison. For Origins, that means character close-ups, real movement/combat, a cinematic transition, relevant effects, authored encounter progression, save/checkpoint behavior, and an independently runnable package. A hall made of boxes cannot decide this question.</p>
+<p>For a bounded arena game, the first comparison may be smaller, but real target-device performance and UI still matter. For an MMO, engine rendering success cannot substitute for backend/network qualification.</p>
+<h2 id="25-3-migration-accounting">25.3 Migration accounting</h2>
+<p>Inventory each source asset, gameplay system, mission, cinematic, UI surface, plugin dependency, and packaging requirement. Classify it as reusable source, convertible with tested loss, rewrite, replace, or blocked. Include manual fixes and regression coverage in the migration cost.</p>
+<p>Keep production Unreal projects usable throughout evaluation. Any bridge/export experiment uses copies and produces a manifest/diff. No automated importer may overwrite the source project.</p>
+<h2 id="25-4-useful-outcomes-short-of-replacement">25.4 Useful outcomes short of replacement</h2>
+<p>A standalone cinematic tool, portable combat simulator, asset-validation pipeline, agent command framework, or renderer research bed can be valuable even if a full game never migrates. Those outcomes do not require relabeling the project as an Unreal replacement before it qualifies.</p>
+<h1 id="26-open-decisions-and-source-register">26. Open decisions and source register</h1>
+<h2 id="26-1-decisions-to-resolve-with-evidence">26.1 Decisions to resolve with evidence</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Question</th>
+<th>Default until evidence changes it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-001</td>
+<td>Which host/toolchain/GPU can Caelis actually use?</td>
+<td>Inventory in G0; never assume remembered hardware is current</td>
+</tr>
+<tr>
+<td>ADR-002</td>
+<td>First real graphics backend?</td>
+<td>Vulkan 1.3; no simultaneous D3D12/Metal implementation</td>
+</tr>
+<tr>
+<td>ADR-003</td>
+<td>Exact dependency revisions and licenses?</td>
+<td>Pin and preserve notices in G0; no floating versions</td>
+</tr>
+<tr>
+<td>ADR-004</td>
+<td>First game profile?</td>
+<td>Original sandbox only; no production game adoption</td>
+</tr>
+<tr>
+<td>ADR-005</td>
+<td>Source scene storage granularity?</td>
+<td>One strict JSON file through G1; revisit with collaboration data</td>
+</tr>
+<tr>
+<td>ADR-006</td>
+<td>Initial command durability?</td>
+<td>Journal/recovery design tied to single-scene commit; explicit tested guarantee</td>
+</tr>
+<tr>
+<td>ADR-007</td>
+<td>Reference hardware and finalized budgets?</td>
+<td>Record first available qualified machine; targets in Section 21 remain provisional</td>
+</tr>
+<tr>
+<td>ADR-008</td>
+<td>Cleared source character/animation dataset?</td>
+<td>Original primitives first; imported dataset quarantined until reviewed</td>
+</tr>
+<tr>
+<td>ADR-009</td>
+<td>Engine publication/license?</td>
+<td>Private research; do not choose a public license on Matthew's behalf</td>
+</tr>
+<tr>
+<td>ADR-010</td>
+<td>Need for advanced GI or virtual geometry?</td>
+<td>Separate later experiments driven by representative content</td>
+</tr>
+<tr>
+<td>ADR-011</td>
+<td>Mobile renderer and packaging route?</td>
+<td>Separate future profile; not implied by desktop success</td>
+</tr>
+<tr>
+<td>ADR-012</td>
+<td>Native Cinemafy plan/compiler format?</td>
+<td>Preserve authored intent, resolved plan, and executed take as separate data</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="26-2-project-source">26.2 Project source</h2>
+<p><strong>[P1]</strong> <code>Sovereign Call_ Origins Technical Design Document-20251209034722.md</code>, supplied project document. Used only for the legacy system inventory and broad integration requirements. Newer combat rules, current code status, and current level roster were not established from this file.</p>
+<h2 id="26-3-primary-public-sources">26.3 Primary public sources</h2>
+<p>These references support dependency capabilities and terms, not performance promises or proof that this proposed integration works. Retrieved during preparation on October 16, 2026. Exact versions used for implementation must be recorded separately.</p>
+<p><strong>[S1] SDL official repository.</strong> Platform/window/input foundation and license.<br/>
+https://github.com/libsdl-org/SDL</p>
+<p><strong>[S2] Khronos Vulkan versions/porting guide and dynamic-rendering synchronization guide.</strong> Vulkan 1.3 design context; explicit rendering and synchronization requirements.<br/>
+https://github.khronos.org/Vulkan-Site/guide/latest/versions.html<br/>
+https://github.khronos.org/Vulkan-Site/tutorial/latest/Synchronization/Dynamic_Rendering_Sync/01_introduction.html</p>
+<p><strong>[S3] volk official repository.</strong> Vulkan API loading library.<br/>
+https://github.com/zeux/volk</p>
+<p><strong>[S4] Vulkan Memory Allocator official repository.</strong> Vulkan allocation helper; MIT license.<br/>
+https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator</p>
+<p><strong>[S5] Microsoft DirectX Shader Compiler official repository.</strong> HLSL compilation including DXIL and SPIR-V.<br/>
+https://github.com/microsoft/DirectXShaderCompiler</p>
+<p><strong>[S6] EnTT official repository.</strong> ECS storage and current integration requirements. Code and documentation have distinct license notices; preserve the relevant ones.<br/>
+https://github.com/skypjack/entt</p>
+<p><strong>[S7] Dear ImGui official repository.</strong> Tool UI, supported backends, MIT license, and stated internationalization/accessibility limitations.<br/>
+https://github.com/ocornut/imgui</p>
+<p><strong>[S8] Khronos glTF 2.0 specification.</strong> Coordinate, transform, material, skin, and animation interchange semantics.<br/>
+https://github.com/KhronosGroup/glTF/blob/main/specification/2.0/Specification.adoc</p>
+<p><strong>[S9] cgltf official repository.</strong> glTF parsing/validation foundation.<br/>
+https://github.com/zeux/cgltf</p>
+<p><strong>[S10] Jolt Physics official repository.</strong> Physics foundation and MIT license.<br/>
+https://github.com/jrouwe/JoltPhysics</p>
+<p><strong>[S10b] Jolt Physics 5.0.0 documentation, Deterministic Simulation section.</strong> Version-specific explanation of determinism prerequisites. This is not asserted to be the latest Jolt documentation; recheck the selected revision before relying on its guarantees.<br/>
+https://jrouwe.github.io/JoltPhysicsDocs/5.0.0/index.html</p>
+<p><strong>[S11] Recast/Detour official repository.</strong> Navigation building/query responsibilities and license.<br/>
+https://github.com/recastnavigation/recastnavigation</p>
+<p><strong>[S12] miniaudio official repository.</strong> Audio foundation and licensing information.<br/>
+https://github.com/mackron/miniaudio</p>
+<p><strong>[S13] nlohmann/json official repository.</strong> Proposed authoring JSON parser/serializer.<br/>
+https://github.com/nlohmann/json</p>
+<p><strong>[S14] Unreal Engine EULA.</strong> Engine code/content definitions, distribution, and related rights. This TDD's no-Epic-code policy is an independent implementation boundary, not a claim that every kind of interoperability is legally prohibited.<br/>
+https://www.unrealengine.com/eula/unreal</p>
+<p><strong>[S15] Lua official license page.</strong> Reference for a deferred scripting option only.<br/>
+https://www.lua.org/license.html</p>
+<p><strong>[S16] Fab EULA page and Standard License summary.</strong> The summary says compatible tools are not limited to Unreal; review the binding agreement and particular asset grant, not just the summary.<br/>
+https://www.fab.com/eula</p>
+<p><strong>[S17] Epic Content License Agreement.</strong> UE-Only designation and content-specific restrictions; review applicable acquisition terms.<br/>
+https://www.unrealengine.com/eula/content</p>
+<hr/>
+<h2 id="closing-implementation-directive">Closing implementation directive</h2>
+<p><strong>Build the first independent scene-authoring and runtime loop. Make the real path visible, make failures honest, and leave the existing games untouched. The next decision should be based on a working artifact, not another impressive description of one.</strong></p>
+</main></div><footer>Prepared for Matthew and Caelis. Proposed architecture, not an implemented or qualified engine.</footer></body></html>

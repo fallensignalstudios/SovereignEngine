@@ -36,31 +36,24 @@ Result<std::string> ParseName(const Json& obj, const std::string& path) {
   return it->get<std::string>();
 }
 
-// Parses a components object for entity.create: omitted fields take descriptor defaults,
-// unknown components and fields are rejected.
-Result<void> ParseCreateComponents(const Json& j, const std::string& path, scene::EntityData& e) {
-  if (!j.is_object()) return At(ErrorCode::SchemaError, "components must be an object", path);
+// Parses one complete component object against its descriptor (all fields required, unknown
+// fields rejected), writing into `scratch`.
+Result<void> ParseWholeComponent(const scene::ComponentDescriptor& c, const Json& j, const std::string& path,
+                                 scene::EntityData& scratch) {
+  if (!j.is_object()) return At(ErrorCode::SchemaError, std::format("{} must be an object", c.key), path);
   for (auto it = j.begin(); it != j.end(); ++it) {
-    const std::string cpath = JsonPointerAppend(path, it.key());
-    const scene::ComponentDescriptor* c = scene::FindComponent(it.key());
-    if (!c) {
-      return At(ErrorCode::UnsupportedComponent, std::format("component type \"{}\" is not supported", it.key()), cpath);
-    }
-    if (!it.value().is_object()) return At(ErrorCode::SchemaError, "component must be an object", cpath);
-    c->add_default(e);
-    for (auto fit = it.value().begin(); fit != it.value().end(); ++fit) {
-      const scene::FieldDescriptor* f = scene::FindField(*c, fit.key());
-      if (!f) {
-        return At(ErrorCode::SchemaError, std::format("unknown field \"{}\" in {}", fit.key(), c->key),
-                  JsonPointerAppend(cpath, fit.key()));
-      }
-      auto v = scene::ParseFieldValue(*f, fit.value(), JsonPointerAppend(cpath, fit.key()));
-      if (!v) return v.take_error();
-      f->set(e, *v);
+    if (!scene::FindField(c, it.key())) {
+      return At(ErrorCode::SchemaError, std::format("unknown field \"{}\" in {}", it.key(), c.key), JsonPointerAppend(path, it.key()));
     }
   }
-  if (e.camera && e.camera->far_clip <= e.camera->near_clip) {
-    return At(ErrorCode::InvalidValue, "camera far_clip must exceed near_clip", JsonPointerAppend(path, "camera"));
+  for (const auto& f : c.fields) {
+    auto it = j.find(f.key);
+    if (it == j.end()) {
+      return At(ErrorCode::SchemaError, std::format("{} requires \"{}\" (complete replacement)", c.key, f.key), path);
+    }
+    auto v = scene::ParseFieldValue(f, *it, JsonPointerAppend(path, f.key));
+    if (!v) return v.take_error();
+    f.set(scratch, *v);
   }
   return Ok();
 }
@@ -94,21 +87,19 @@ Operation Operation::Rename(const Uuid& id, std::string name) {
   return op;
 }
 
-Operation Operation::SetTransform(const Uuid& id, const scene::TransformComponent& t, bool include_parent) {
+Operation Operation::SetTransform(const Uuid& id, const scene::TransformComponent& t) {
   Operation op;
   op.kind = OpKind::TransformSet;
   op.entity_id = id;
   op.transform = t;
-  op.parent_specified = include_parent;
-  if (!include_parent) op.transform.parent.reset();
   return op;
 }
 
-Operation Operation::SetMaterial(const Uuid& id, std::vector<FieldAssignment> fields) {
+Operation Operation::SetMaterial(const Uuid& id, const scene::MaterialComponent& material) {
   Operation op;
   op.kind = OpKind::MaterialSet;
   op.entity_id = id;
-  op.material = std::move(fields);
+  op.material = material;
   return op;
 }
 
@@ -126,21 +117,17 @@ Result<Operation> ParseOperation(const Json& j, const std::string& path) {
     return At(ErrorCode::SchemaError, "operation needs a string \"op\" field", path);
   }
   const auto& kind = kind_it->get_ref<const std::string&>();
-  auto id = ParseId(j, "entity_id", path);
-  if (!id) return id.take_error();
 
   if (kind == "entity.create") {
-    if (auto r = RejectUnknown(j, {"op", "entity_id", "name", "components"}, path); !r) return r.take_error();
-    scene::EntityData e;
-    e.id = *id;
-    auto name = ParseName(j, path);
-    if (!name) return name.take_error();
-    e.name = *name;
-    if (auto comps = j.find("components"); comps != j.end()) {
-      if (auto r = ParseCreateComponents(*comps, JsonPointerAppend(path, "components"), e); !r) return r.take_error();
-    }
-    return Operation::Create(std::move(e));
+    if (auto r = RejectUnknown(j, {"op", "entity"}, path); !r) return r.take_error();
+    auto it = j.find("entity");
+    if (it == j.end()) return At(ErrorCode::SchemaError, "entity.create requires a complete \"entity\" object", path);
+    auto e = scene::ParseEntity(*it, JsonPointerAppend(path, "entity"));
+    if (!e) return e.take_error();
+    return Operation::Create(std::move(e).value());
   }
+  auto id = ParseId(j, "entity_id", path);
+  if (!id) return id.take_error();
   if (kind == "entity.rename") {
     if (auto r = RejectUnknown(j, {"op", "entity_id", "name"}, path); !r) return r.take_error();
     auto name = ParseName(j, path);
@@ -150,57 +137,23 @@ Result<Operation> ParseOperation(const Json& j, const std::string& path) {
   if (kind == "transform.set") {
     if (auto r = RejectUnknown(j, {"op", "entity_id", "transform"}, path); !r) return r.take_error();
     auto t = j.find("transform");
-    const std::string tpath = JsonPointerAppend(path, "transform");
-    if (t == j.end() || !t->is_object()) return At(ErrorCode::SchemaError, "transform.set needs a \"transform\" object", path);
-    const scene::ComponentDescriptor& tc = *scene::FindComponent("transform");
+    if (t == j.end()) return At(ErrorCode::SchemaError, "transform.set requires a \"transform\" object", path);
     scene::EntityData scratch;
-    bool parent_specified = false;
-    for (auto it = t->begin(); it != t->end(); ++it) {
-      const scene::FieldDescriptor* f = scene::FindField(tc, it.key());
-      if (!f) return At(ErrorCode::SchemaError, std::format("unknown field \"{}\"", it.key()), JsonPointerAppend(tpath, it.key()));
-      if (f->access != scene::FieldAccess::TransformSet) {
-        return At(ErrorCode::PermissionDenied, std::format("{} cannot be written by transform.set", it.key()),
-                  JsonPointerAppend(tpath, it.key()));
-      }
-      auto v = scene::ParseFieldValue(*f, it.value(), JsonPointerAppend(tpath, it.key()));
-      if (!v) return v.take_error();
-      f->set(scratch, *v);
-      if (it.key() == "parent") parent_specified = true;
+    if (auto r = ParseWholeComponent(scene::TransformDescriptor(), *t, JsonPointerAppend(path, "transform"), scratch); !r) {
+      return r.take_error();
     }
-    for (std::string_view required : {"position", "rotation", "scale"}) {
-      if (t->find(required) == t->end()) {
-        return At(ErrorCode::SchemaError,
-                  std::format("transform.set requires complete position, rotation and scale (missing \"{}\")", required), tpath);
-      }
-    }
-    return Operation::SetTransform(*id, scratch.transform, parent_specified);
+    return Operation::SetTransform(*id, scratch.transform);
   }
   if (kind == "material.set") {
     if (auto r = RejectUnknown(j, {"op", "entity_id", "material"}, path); !r) return r.take_error();
     auto m = j.find("material");
-    const std::string mpath = JsonPointerAppend(path, "material");
-    if (m == j.end() || !m->is_object() || m->empty()) {
-      return At(ErrorCode::SchemaError, "material.set needs a non-empty \"material\" object", path);
+    if (m == j.end()) return At(ErrorCode::SchemaError, "material.set requires a \"material\" object", path);
+    scene::EntityData scratch;
+    scratch.material.emplace();
+    if (auto r = ParseWholeComponent(scene::MaterialDescriptor(), *m, JsonPointerAppend(path, "material"), scratch); !r) {
+      return r.take_error();
     }
-    std::vector<FieldAssignment> fields;
-    // Assignments are kept in descriptor order so equal requests normalize identically.
-    for (const auto& f : scene::MaterialDescriptor().fields) {
-      auto it = m->find(f.key);
-      if (it == m->end()) continue;
-      if (f.access != scene::FieldAccess::MaterialSet) {
-        return At(ErrorCode::PermissionDenied, std::format("{} cannot be written by material.set", f.key),
-                  JsonPointerAppend(mpath, f.key));
-      }
-      auto v = scene::ParseFieldValue(f, *it, JsonPointerAppend(mpath, f.key));
-      if (!v) return v.take_error();
-      fields.push_back({&f, *v});
-    }
-    for (auto it = m->begin(); it != m->end(); ++it) {
-      if (!scene::FindField(scene::MaterialDescriptor(), it.key())) {
-        return At(ErrorCode::SchemaError, std::format("unknown material field \"{}\"", it.key()), JsonPointerAppend(mpath, it.key()));
-      }
-    }
-    return Operation::SetMaterial(*id, std::move(fields));
+    return Operation::SetMaterial(*id, *scratch.material);
   }
   if (kind == "entity.delete") {
     if (auto r = RejectUnknown(j, {"op", "entity_id"}, path); !r) return r.take_error();
@@ -216,33 +169,31 @@ Result<Operation> ParseOperation(const Json& j, const std::string& path) {
 Json OperationToJson(const Operation& op) {
   Json j = Json::object();
   j["op"] = ToString(op.kind);
-  j["entity_id"] = op.entity_id.ToString();
   switch (op.kind) {
     case OpKind::EntityCreate:
-      j["name"] = op.entity->name;
-      j["components"] = scene::ComponentsToJson(*op.entity);
+      j["entity"] = scene::EntityToJson(*op.entity);
       break;
     case OpKind::EntityRename:
+      j["entity_id"] = op.entity_id.ToString();
       j["name"] = op.name;
       break;
     case OpKind::TransformSet: {
-      Json t = Json::object();
-      if (op.parent_specified) {
-        t["parent"] = op.transform.parent ? Json(op.transform.parent->ToString()) : Json(nullptr);
-      }
-      t["position"] = Json::array({op.transform.position.x, op.transform.position.y, op.transform.position.z});
-      t["rotation"] = Json::array({op.transform.rotation.x, op.transform.rotation.y, op.transform.rotation.z, op.transform.rotation.w});
-      t["scale"] = Json::array({op.transform.scale.x, op.transform.scale.y, op.transform.scale.z});
-      j["transform"] = std::move(t);
+      j["entity_id"] = op.entity_id.ToString();
+      scene::EntityData scratch;
+      scratch.transform = op.transform;
+      j["transform"] = scene::ComponentsToJson(scratch)["Transform"];
       break;
     }
     case OpKind::MaterialSet: {
-      Json m = Json::object();
-      for (const auto& a : op.material) m[std::string(a.field->key)] = scene::FieldValueToJson(*a.field, a.value);
-      j["material"] = std::move(m);
+      j["entity_id"] = op.entity_id.ToString();
+      scene::EntityData scratch;
+      scratch.primitive_mesh.emplace();
+      scratch.material = op.material;
+      j["material"] = scene::ComponentsToJson(scratch)["MaterialParameters"];
       break;
     }
     case OpKind::EntityDelete:
+      j["entity_id"] = op.entity_id.ToString();
       break;
   }
   return j;

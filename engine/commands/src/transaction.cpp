@@ -70,14 +70,6 @@ std::optional<Error> ApplyOne(SceneDocument& doc, const Operation& op, int index
         return OpError(ErrorCode::LimitExceeded, "scene entity limit reached", index, op.entity_id);
       }
       if (auto err = CheckParent(doc, op.entity_id, op.entity->transform.parent, index)) return err;
-      if (op.entity->directional_light) {
-        for (const auto& e : doc.entities) {
-          if (e.directional_light) {
-            return OpError(ErrorCode::LimitExceeded, "scene already has a directional light (G1 supports one)", index,
-                           op.entity_id);
-          }
-        }
-      }
       doc.Insert(*op.entity);
       inverse.push_back(Operation::Delete(op.entity_id));
       return std::nullopt;
@@ -92,32 +84,23 @@ std::optional<Error> ApplyOne(SceneDocument& doc, const Operation& op, int index
     case OpKind::TransformSet: {
       EntityData* e = doc.Find(op.entity_id);
       if (!e) return OpError(ErrorCode::UnknownEntity, std::format("entity {} does not exist", op.entity_id.ToString()), index, op.entity_id);
-      if (op.parent_specified) {
-        if (auto err = CheckParent(doc, op.entity_id, op.transform.parent, index)) return err;
-      }
+      // Complete replacement: parent_id is always part of transform.set.
+      if (auto err = CheckParent(doc, op.entity_id, op.transform.parent, index)) return err;
       e = doc.Find(op.entity_id);
-      inverse.push_back(Operation::SetTransform(op.entity_id, e->transform, op.parent_specified));
-      const auto parent = op.parent_specified ? op.transform.parent : e->transform.parent;
+      inverse.push_back(Operation::SetTransform(op.entity_id, e->transform));
       e->transform = op.transform;
-      e->transform.parent = parent;
       return std::nullopt;
     }
     case OpKind::MaterialSet: {
       EntityData* e = doc.Find(op.entity_id);
       if (!e) return OpError(ErrorCode::UnknownEntity, std::format("entity {} does not exist", op.entity_id.ToString()), index, op.entity_id);
-      if (!e->material) {
-        return OpError(ErrorCode::ComponentMissing, "entity has no material component", index, op.entity_id);
+      if (!e->primitive_mesh || !e->material) {
+        return OpError(ErrorCode::ComponentMissing,
+                       "material.set targets an entity without geometry (PrimitiveMesh + MaterialParameters)", index,
+                       op.entity_id);
       }
-      std::vector<FieldAssignment> previous;
-      for (const auto& a : op.material) {
-        if (a.field->access != scene::FieldAccess::MaterialSet) {
-          return OpError(ErrorCode::PermissionDenied, std::format("{} is not writable by material.set", a.field->key), index,
-                         op.entity_id);
-        }
-        previous.push_back({a.field, a.field->get(*e)});
-      }
-      for (const auto& a : op.material) a.field->set(*e, a.value);
-      inverse.push_back(Operation::SetMaterial(op.entity_id, std::move(previous)));
+      inverse.push_back(Operation::SetMaterial(op.entity_id, *e->material));
+      e->material = op.material;
       return std::nullopt;
     }
     case OpKind::EntityDelete: {
@@ -133,9 +116,9 @@ std::optional<Error> ApplyOne(SceneDocument& doc, const Operation& op, int index
                                    children.size(), list),
                        index, op.entity_id);
       }
-      if (doc.active_camera && *doc.active_camera == op.entity_id) {
-        return OpError(ErrorCode::MissingDependency, "entity is the scene's active_camera and cannot be deleted", index,
-                       op.entity_id);
+      if (doc.active_camera_id == op.entity_id) {
+        return OpError(ErrorCode::MissingDependency, "entity is the scene's active camera (active_camera_id) and cannot be deleted",
+                       index, op.entity_id);
       }
       inverse.push_back(Operation::Create(*e));
       doc.Erase(op.entity_id);

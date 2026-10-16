@@ -28,7 +28,7 @@ CommandBatch MoveBatch(std::uint64_t base, const Vec3& to, std::string key) {
   b.dry_run = false;
   scene::TransformComponent t;
   t.position = to;
-  b.operations = {Operation::SetTransform(fixtures::kParentId, t, false)};
+  b.operations = {Operation::SetTransform(fixtures::kParentId, t)};
   return b;
 }
 

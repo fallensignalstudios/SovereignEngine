@@ -97,3 +97,22 @@ add_test(NAME static.license_notices_match_lock
   COMMAND "${CMAKE_COMMAND}" -DSOURCE_DIR=${PROJECT_SOURCE_DIR} "-DFETCHED=${SOV_FETCHED_SOURCE_DIRS}"
     -P "${PROJECT_SOURCE_DIR}/cmake/CheckLicenseNotices.cmake")
 set_tests_properties(static.license_notices_match_lock PROPERTIES LABELS "headless;static")
+
+# --- owner's packet: verbatim copies and contract conformance --------------------------------
+add_test(NAME static.packet_files_verbatim
+  COMMAND "${CMAKE_COMMAND}" -DSOURCE_DIR=${PROJECT_SOURCE_DIR} -P "${PROJECT_SOURCE_DIR}/cmake/CheckPacketCopies.cmake")
+set_tests_properties(static.packet_files_verbatim PROPERTIES LABELS "headless;static")
+find_package(Python3 COMPONENTS Interpreter)
+if(Python3_FOUND)
+  # The packet's own fixture checker, run unmodified against the repository's copies.
+  # It exits 2 when jsonschema is missing: reported as skipped, never as passed.
+  add_test(NAME static.packet_contract_checker
+    COMMAND "${Python3_EXECUTABLE}" -I "${PROJECT_SOURCE_DIR}/tools/validate_contract_examples.py")
+  set_tests_properties(static.packet_contract_checker PROPERTIES LABELS "headless;static" SKIP_RETURN_CODE 2)
+  # Every scene and batch in the repository (engine-written ones included) against the owner's schemas.
+  add_test(NAME static.repository_files_conform_to_owner_schemas
+    COMMAND "${Python3_EXECUTABLE}" -I "${PROJECT_SOURCE_DIR}/scripts/check_contracts.py")
+  set_tests_properties(static.repository_files_conform_to_owner_schemas PROPERTIES LABELS "headless;static" SKIP_RETURN_CODE 77)
+else()
+  message(STATUS "Python 3 not found: packet contract checks are not registered (report them as not run)")
+endif()

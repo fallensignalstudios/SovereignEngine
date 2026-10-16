@@ -1,0 +1,14 @@
+{
+  "AGENTS.md": "78a9661c95566de05bf83234b00dc991c32e72bde099b144880a204dd74af6cc",
+  "CAELIS_FIRST_IGNITION.md": "cf785275eab871441f663ffcdefbc53208be959c39eef8f483062b9368a4cfa5",
+  "README.md": "3e62a34599397103bde7f0577871704b5f75f536ab892b3a0177c49ddfabb935",
+  "Sovereign_Engine_TDD_v0.1.html": "bdeddd19f8589abcb14f9a61b52a05b1a8d8f85aa9a01a5bcf0d34de2a3b27cf",
+  "Sovereign_Engine_TDD_v0.1.md": "1d55af4ce81d03bcbed5a80e37dc95162222753441f439bd78ee0bf97e1b9a24",
+  "docs/PACKET_VALIDATION.txt": "ed83ed2258bb6498d052f00b91c51bb9bdf05b5ed3f976504c656b4837db76cc",
+  "docs/VALIDATION_MATRIX.md": "41350dd56b762d8717686183b1b6cfe5913bc78ff59fd3e44c313a08839e43be",
+  "examples/first_light.scene.json": "8999ced4226324de5c76a32237557dd2b58d3bfe03bf75c081db3383c967a024",
+  "examples/place_banner.command_batch.json": "313b6324e636b3a407091361038beb08efcb128c09f76e7c700d25ba9dcd84b2",
+  "schemas/command_batch.schema.json": "981b878d93200d64ccc79ab8a4762736c4cbcd831ccd6c7f5e2298705d5a2f4b",
+  "schemas/scene.schema.json": "8ecfe027787d0b631b24cc9d6cd81142afee5de13934f78c2044f4ae8dd6c282",
+  "tools/validate_contract_examples.py": "f3664fe7a63ab242d25a994a98c61627d7ae1049e98cafaeff81851aa9313c0a"
+}

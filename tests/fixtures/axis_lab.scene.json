@@ -1,42 +1,27 @@
 {
-  "format": "sovereign.scene",
   "schema_version": 1,
   "scene_id": "7083bf1f-9684-5acb-aa3a-d10cafdd264b",
   "name": "Axis Lab",
   "revision": 1,
-  "region": {
-    "cell": [0, 0, 0]
-  },
-  "asset_references": [],
-  "active_camera": "a8d31808-fe78-5037-a920-fd2fa1aed080",
-  "environment": {
-    "ambient_color": [1.0, 1.0, 1.0],
-    "ambient_intensity": 0.15,
-    "background_color": [0.0, 0.0, 0.0],
-    "fog_color": [0.0, 0.0, 0.0],
-    "fog_density": 0.0,
-    "exposure": 1.0
-  },
+  "active_camera_id": "a8d31808-fe78-5037-a920-fd2fa1aed080",
+  "background_linear_rgb": [0.0, 0.0, 0.0],
   "entities": [
     {
       "id": "225a22d9-3059-5c76-8e84-240230f5e1f6",
       "name": "Hierarchy Parent",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [-4.0, 2.0, 0.0],
-          "rotation": [0.0, 0.0, 0.382683432, 0.923879533],
-          "scale": [2.0, 2.0, 2.0]
+          "rotation_xyzw": [0.0, 0.0, 0.382683432365, 0.923879532511],
+          "scale": [2.0, 2.0, 2.0],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [0.2, 0.2, 0.6],
-          "emissive_strength": 0.5
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [0.1, 0.1, 0.3]
         }
       }
     },
@@ -44,21 +29,18 @@
       "id": "3d872e2a-5bc9-5e6c-b8ec-86eb1dfd32c2",
       "name": "Front-Facing Plane",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [3.5, -2.0, 0.0],
-          "rotation": [0.707106781, 0.0, 0.0, 0.707106781],
-          "scale": [1.5, 1.0, 1.5]
+          "rotation_xyzw": [0.707106781187, 0.0, 0.0, 0.707106781187],
+          "scale": [1.5, 1.0, 1.5],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "plane"
+        "PrimitiveMesh": {
+          "primitive": "plane"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [1.0, 0.5, 0.0],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [1.0, 0.5, 0.0]
         }
       }
     },
@@ -66,21 +48,18 @@
       "id": "62e658ab-fe06-538c-9039-40113b04258f",
       "name": "Y Marker (cylinder)",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [0.0, 2.0, 0.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [0.3, 2.0, 0.3]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.3, 2.0, 0.3],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "cylinder"
+        "PrimitiveMesh": {
+          "primitive": "cylinder"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [0.0, 1.0, 0.0],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [0.0, 1.0, 0.0]
         }
       }
     },
@@ -88,21 +67,18 @@
       "id": "7236fd42-cf38-5012-95b2-c72307994404",
       "name": "X Marker (long box)",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [2.0, 0.0, 0.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [2.0, 0.3, 0.3]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.0, 0.3, 0.3],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [1.0, 0.0, 0.0],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [1.0, 0.0, 0.0]
         }
       }
     },
@@ -110,21 +86,18 @@
       "id": "7fa878f1-b15d-5ecf-9c68-f8e19a3dce56",
       "name": "Swatch Charcoal",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [1.5, -3.2, 2.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [0.8, 0.8, 0.8]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.8, 0.8, 0.8],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.03, 0.03, 0.034],
-          "roughness": 0.85,
-          "metallic": 0.0,
-          "emissive": [0.0, 0.0, 0.0],
-          "emissive_strength": 0.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.03, 0.03, 0.034, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
         }
       }
     },
@@ -132,21 +105,18 @@
       "id": "8cd47368-5863-57eb-a378-525d3cd12238",
       "name": "Origin Cube",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [0.0, 0.0, 0.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [0.4, 0.4, 0.4]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.4, 0.4, 0.4],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [1.0, 1.0, 1.0],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [1.0, 1.0, 1.0]
         }
       }
     },
@@ -154,16 +124,17 @@
       "id": "a8d31808-fe78-5037-a920-fd2fa1aed080",
       "name": "Main Camera",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [0.0, 0.0, 10.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [1.0, 1.0, 1.0]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0],
+          "parent_id": null
         },
-        "camera": {
-          "vertical_fov_degrees": 60.0,
-          "near_clip": 0.1,
-          "far_clip": 1000.0
+        "Camera": {
+          "projection": "perspective",
+          "fov_y_degrees": 60.0,
+          "near_m": 0.1,
+          "far_m": 1000.0
         }
       }
     },
@@ -171,21 +142,18 @@
       "id": "afd10a00-a4ac-5252-956f-4395a66c20b4",
       "name": "Z Marker (flat box)",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [0.0, 0.0, 1.5],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [0.5, 0.15, 1.5]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.5, 0.15, 1.5],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [0.0, 0.0, 1.0],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [0.0, 0.0, 1.0]
         }
       }
     },
@@ -193,21 +161,18 @@
       "id": "b6032c9d-b7b9-5f02-9185-ceaa5905be78",
       "name": "Hierarchy Child",
       "components": {
-        "transform": {
-          "parent": "225a22d9-3059-5c76-8e84-240230f5e1f6",
+        "Transform": {
           "position": [0.9, 0.0, 0.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [0.2, 0.2, 0.2]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.2, 0.2, 0.2],
+          "parent_id": "225a22d9-3059-5c76-8e84-240230f5e1f6"
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [1.0, 0.0, 0.5],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [1.0, 0.0, 0.5]
         }
       }
     },
@@ -215,37 +180,18 @@
       "id": "b7489c15-cb66-5b2c-80f2-f192dbc07e3a",
       "name": "Back-Facing Plane",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [3.5, 2.5, 0.0],
-          "rotation": [-0.707106781, 0.0, 0.0, 0.707106781],
-          "scale": [1.5, 1.0, 1.5]
+          "rotation_xyzw": [-0.707106781187, 0.0, 0.0, 0.707106781187],
+          "scale": [1.5, 1.0, 1.5],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "plane"
+        "PrimitiveMesh": {
+          "primitive": "plane"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [1.0, 0.0, 1.0],
-          "emissive_strength": 1.0
-        }
-      }
-    },
-    {
-      "id": "b8ab7a2e-1bc2-51a5-9d05-bc00d3ff1e43",
-      "name": "Axis Lab Light",
-      "components": {
-        "transform": {
-          "parent": null,
-          "position": [0.0, 10.0, 0.0],
-          "rotation": [-0.492403877, 0.150383734, 0.086824089, 0.852868532],
-          "scale": [1.0, 1.0, 1.0]
-        },
-        "directional_light": {
-          "color": [1.0, 1.0, 1.0],
-          "intensity": 2.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [1.0, 0.0, 1.0]
         }
       }
     },
@@ -253,21 +199,18 @@
       "id": "d22ad718-ba31-5baa-8949-5c8801eb3aab",
       "name": "Depth Near Box",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [-3.0, -2.0, 1.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [1.0, 1.0, 1.0]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [0.0, 1.0, 1.0],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [0.0, 1.0, 1.0]
         }
       }
     },
@@ -275,21 +218,18 @@
       "id": "d8f400c7-d628-5ace-a9ad-72f45f407779",
       "name": "Depth Far Box",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [-3.5, -2.0, -2.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [2.5, 2.5, 1.0]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.5, 2.5, 1.0],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.0, 0.0, 0.0],
-          "roughness": 1.0,
-          "metallic": 0.0,
-          "emissive": [1.0, 1.0, 0.0],
-          "emissive_strength": 1.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.0, 0.0, 0.0, 1.0],
+          "emissive_rgb": [1.0, 1.0, 0.0]
         }
       }
     },
@@ -297,21 +237,18 @@
       "id": "e2efe6c2-db71-5dec-96b7-d0c4f6b61d59",
       "name": "Swatch Floor",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [0.0, -3.6, 0.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [12.0, 1.0, 5.0]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [12.0, 1.0, 5.0],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "plane"
+        "PrimitiveMesh": {
+          "primitive": "plane"
         },
-        "material": {
-          "base_color": [0.18, 0.18, 0.18],
-          "roughness": 0.9,
-          "metallic": 0.0,
-          "emissive": [0.0, 0.0, 0.0],
-          "emissive_strength": 0.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.18, 0.18, 0.18, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
         }
       }
     },
@@ -319,21 +256,18 @@
       "id": "eaf9bff8-295d-5c3e-a94e-598a3199bbce",
       "name": "Swatch Deep Red",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [0.0, -3.2, 2.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [0.8, 0.8, 0.8]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.8, 0.8, 0.8],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.3, 0.022, 0.026],
-          "roughness": 0.55,
-          "metallic": 0.0,
-          "emissive": [0.0, 0.0, 0.0],
-          "emissive_strength": 0.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.3, 0.022, 0.026, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
         }
       }
     },
@@ -341,21 +275,18 @@
       "id": "fbaf5c08-f2ae-5ae3-9d4d-20fa70e2484f",
       "name": "Swatch Bronze",
       "components": {
-        "transform": {
-          "parent": null,
+        "Transform": {
           "position": [-1.5, -3.2, 2.0],
-          "rotation": [0.0, 0.0, 0.0, 1.0],
-          "scale": [0.8, 0.8, 0.8]
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.8, 0.8, 0.8],
+          "parent_id": null
         },
-        "primitive_mesh": {
-          "shape": "box"
+        "PrimitiveMesh": {
+          "primitive": "box"
         },
-        "material": {
-          "base_color": [0.48, 0.29, 0.12],
-          "roughness": 0.32,
-          "metallic": 1.0,
-          "emissive": [0.0, 0.0, 0.0],
-          "emissive_strength": 0.0
+        "MaterialParameters": {
+          "base_color_rgba": [0.48, 0.29, 0.12, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
         }
       }
     }

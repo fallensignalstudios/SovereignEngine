@@ -1,76 +1,64 @@
-# AGENTS.md: working rules for agents in this repository
+# Agent instructions: Sovereign Engine research
 
-> **Reconstructed.** The First Ignition packet listed an `AGENTS.md`, but only the TDD (v0.1) was
-> supplied. This file is rebuilt from TDD sections 1, 3, 4, 19, 22 and 23 plus what this repository
-> actually contains. If Matthew's original exists, it takes precedence; reconcile and delete this note.
+## Mission and active scope
 
-## What this repository is
+Build an independently implemented engine with its own editor, renderer, runtime, and authoring pipeline. The current assignment is G0/G1, as defined by `Sovereign_Engine_TDD_v0.1.md` and `CAELIS_FIRST_IGNITION.md`.
 
-Sovereign Engine is a **separate research engine** (TDD §2-3): our own editor, renderer, runtime and
-tools. It is not an Unreal plugin, wrapper or migration path. The active assignment is **G0 + G1
-only** (TDD §22). Do not start G2+ systems (asset import, PBR, physics, animation, combat,
-cinematics, networking) without an explicit new assignment.
+The full roadmap is not authorization to implement every future subsystem. Stop after the first gate report. Prioritize a real, reproducible edit-save-run loop over speculative abstractions or visual polish.
 
-## Hard boundaries (TDD §3)
+## Repository boundaries
 
-- Work only inside this repository. Never modify ProjectVelkorran, Origins, Battles of the Reach,
-  the MMO, GASPALS, Cinemafy, Holofy, Grungify, any Unreal installation, or production saves.
-- No Epic engine code, no Unreal headers/modules/tools, no `.uasset`/`.umap` ingestion.
-  `ctest -R static.no_unreal_dependency` enforces the code side.
-- No paid services, public remotes, releases, telemetry or licence choices on Matthew's behalf.
-- Original content only (primitives + original shaders). No downloaded art.
-- No placeholder success: a CPU Vulkan device, a dry run, a mocked path or a skipped test is
-  reported as exactly that. Never mark a GPU gate complete from a software-rendered result.
-- Stop and report for: production edits, paid resources, unclear third-party rights, a second
-  graphics backend, major contract changes, publication.
+Work only inside the isolated engine repository and its approved build/output directories. Never edit a production game, Unreal installation, unrelated repository, source asset library, or existing save. Resolve paths before filesystem writes. Preserve existing changes and commit history.
 
-## Build and test
+No paid services, public publishing, external telemetry, or asset upload without explicit authorization. Do not commit credentials, personal paths, downloaded source content, or entitlement evidence into a public branch.
 
-```
-cmake --preset dev-headless && cmake --build --preset dev-headless && ctest --preset dev-headless
-cmake --preset dev-vulkan   && cmake --build --preset dev-vulkan   && ctest --preset dev-vulkan
-ctest --preset gpu-qualify            # physical-GPU qualification: refuses CPU Vulkan devices
-cmake --preset dev-headless-asan ...  # ASan + UBSan (GCC/Clang)
-```
+## Independent code and dependencies
 
-`dev-headless` never needs a display, SDL or Vulkan (`static.headless_*_has_no_graphics` checks
-the binaries). `dev-vulkan` on Linux needs DXC built from source once:
-`scripts/build_dxc_from_source.sh` (ADR-015). Window tests run on a real display, else in a private
-Xvfb+openbox display, else they are **skipped** (exit 77), never passed.
+No copied Epic engine implementation. No hidden Unreal/Godot/Unity dependency or embedded complete renderer presented as our own.
 
-## Where things are
+Pin independent upstream dependencies by immutable revision/checksum and preserve their notices. Keep a dependency lock with build settings. Do not add a second package manager or floating `latest` fetch.
 
-| Path | Module |
-|---|---|
-| `engine/core` | errors, UUID, SHA-256, logging, durable file I/O + writer lock, strict JSON, math, PNG |
-| `engine/world` | scene document model, reflection descriptors, strict reader/writer, diff, EnTT `World`, primitives |
-| `engine/commands` | typed operations, staging, `SceneSession` (revisions, idempotency, undo/redo), `SceneStore` (journal, lock, atomic commit, recovery) |
-| `engine/runtime` | fixed-step `Simulation`, game-module seam; `app/` = `sovereign-runtime` |
-| `engine/platform` | SDL3 window, events, input action map |
-| `engine/rhi/vulkan` | Vulkan device/swapchain/resources (volk + VMA) |
-| `engine/renderer` | R0 renderer (public API has no Vulkan types), HLSL shaders |
-| `editor/authoring` | `EditorDocument`: the only service GUI panels call |
-| `editor/application`, `editor/panels` | `sovereign-editor` (Dear ImGui tool UI) |
-| `tools/cli` | `sovereign-cli` |
-| `games/sandbox` | original sandbox game module used by play mode and the runtime |
-| `content/authoring`, `content/source` | First Light scene and the batch that builds it |
-| `schemas/`, `examples/` | wire contracts and the example batch |
-| `tests/` | `sovereign-tests` (headless), `sovereign-render-tests` (Vulkan), automation scripts |
+Use original primitives and shaders for G1. Third-party/production assets are quarantined until their rights and source format are reviewed. Owning a plugin project does not automatically make its Unreal dependencies portable.
 
-## Rules of the road
+## Architecture rules
 
-- **One authoring path.** GUI, CLI and agents mutate scenes only through `cmd::SceneSession`
-  (via `SceneStore` or `editor::EditorDocument`). Never edit scene JSON or ECS storage directly.
-- **Reflection descriptors are the field allowlist.** Add a field once in
-  `engine/world/src/reflection.cpp`; parsing, writing, the inspector and command permissions follow.
-  Update `schemas/scene.schema.json` too; `scene.schema_files_match_reflection_descriptors` fails otherwise.
-- **Conventions are fixed** (docs/architecture/conventions.md): right-handed, +Y up, meters,
-  cameras look down -Z, M = T*R*S with column vectors, quaternions `[x, y, z, w]`, reversed-Z
-  Vulkan depth with the Y flip in the projection only, linear colour with one sRGB encode at output.
-- **Evidence vocabulary** (TDD §1.3): specified, implemented, compiled, headless-tested,
-  GPU-tested, human-reviewed, qualified, blocked/not run. Use it in every report.
-- **Every capture names its source.** Use `render::CaptureProvenance`; PNGs carry tEXt chunks with
-  source, device, evidence class, validation state and commit.
-- Validation layers + synchronization validation stay on in tests. A new validation message is a
-  bug to fix or a documented waiver (exact message, cause, owner), never a suppression.
-- Small commits on `research/first-ignition`; message bodies say what was verified.
+- Core/world/validation tests must run without a graphics device.
+- Editor, CLI, and agent edits use the same typed authoring services.
+- Renderer receives immutable snapshots, not writable gameplay state.
+- Persistent UUIDs are not ECS slots, physics IDs, or GPU handles.
+- No Vulkan types in gameplay or persisted contracts.
+- One owner writes world state; workers return results for controlled application.
+- One character movement authority; cameras and animation cannot independently move actors.
+- Scene documents, derived cooked data, save games, and recorded takes are distinct formats.
+- API/schema changes require versioning, fixtures, and a decision record.
+- Do not add empty modules or success-returning stubs to suggest progress.
+
+## Command safety
+
+Validate complete batches before mutation. Reject stale revisions and unknown fields. Keep revisions monotonic, including undo/redo. Bind idempotency keys to request content. A dry run must not write, increment revision, or masquerade as an applied edit.
+
+Offline CLI writes acquire an exclusive scene lock. No unrestricted shell/eval endpoint. Localhost does not constitute authentication. Long cook/render/package jobs are not atomic scene transactions.
+
+Use platform-appropriate atomic single-file replacement and a tested durability/recovery design. Do not call several independent writes atomic.
+
+## Implementation defaults
+
+C++20, CMake/Ninja/CTest, SDL3 platform/input, EnTT behind our world API, strict JSON authoring, Dear ImGui tool UI, HLSL/DXC, one native Vulkan backend with volk/VMA. Implement only dependencies needed by the current gate.
+
+No C++ modules, general hot reload, custom lock-free scheduler, physics, motion matching, multiplayer, or mobile rendering in G1. Future requirements should influence boundaries, not force premature feature implementation.
+
+## Verification and truthful reporting
+
+Separate specified, implemented, compiled, headless-tested, GPU-tested, human-reviewed, and qualified states. Failed, blocked, and not-run checks remain visible.
+
+Never claim a Null backend, software Vulkan renderer, mock, generated artwork, or static background as physical-GPU engine evidence. Never skip validation layers or weaken a test merely to obtain a pass.
+
+Record exact commands, exit results, host/toolchain/GPU, dependency and content hashes, logs, and evidence paths. If a test cannot run, say why. Only mark a gate complete after all required checks pass for the claimed platform.
+
+## Working method
+
+Use small compilable changes and one integrating owner. Parallel work must respect declared file/module ownership. Shared contracts are not edited independently by multiple agents.
+
+For each task: define the observable result, add a fixture/test, implement, execute the checks, inspect the output, document limitations, commit. Do not substitute another design essay for an implementation task.
+
+Do not delete failing tests, erase work, force-push, or publish to solve a local development problem. Stop/report when blocked by an actual authority, licensing, platform, or scope boundary. Ordinary implementation choices inside scope do not require repeated questions.

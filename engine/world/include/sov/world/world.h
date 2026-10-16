@@ -72,7 +72,7 @@ class World {
 
   EntityHandle ActiveCamera() const { return active_camera_; }
   void SetActiveCamera(EntityHandle h) { active_camera_ = h; }
-  const scene::Environment& environment() const { return environment_; }
+  const Vec3& background_linear_rgb() const { return background_; }
 
   // Immutable render-facing copy of the current state (TDD §10.9). Fills pick_table with
   // index -> Uuid for this snapshot only.
@@ -89,7 +89,7 @@ class World {
   std::uint32_t id_;
   WorldKind kind_;
   EntityHandle active_camera_{};
-  scene::Environment environment_{};
+  Vec3 background_{0.02, 0.02, 0.025};
 };
 
 }  // namespace sov

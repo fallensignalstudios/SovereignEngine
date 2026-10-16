@@ -52,14 +52,15 @@ std::filesystem::path StageFirstLight(sov::test::Context& ctx) {
   return dir;
 }
 
-// The example as an explicitly committed request with its own request id and key.
+// The owner's example as an explicitly committed request with its own request id and key.
+// `dais_name` is the rename target (changing it changes the request content).
 void WriteCommittedVariant(const std::filesystem::path& dir, const char* out_name, const char* key,
-                           double emissive_strength = 3.2) {
+                           const char* dais_name = "First Light dais") {
   Json b = *ParseStrictJson(Read(dir / "place_banner.json"));
   b["dry_run"] = false;
   b["request_id"] = "0b1e0000-0000-4000-8000-00000000c001";
   b["idempotency_key"] = key;
-  b["operations"][2]["material"]["emissive_strength"] = emissive_strength;
+  b["operations"][1]["name"] = dais_name;
   if (!fs::AtomicWriteFile(dir / out_name, CanonicalJson(b))) throw std::runtime_error("write failed");
 }
 
@@ -95,7 +96,7 @@ SOV_TEST(cli, new_validate_inspect) {
   SOV_CHECK_EQ(inspect.exit_code, 0);
   SOV_CHECK(inspect.out.find("Main Camera") != std::string::npos);
   // A corrupted document is reported, not repaired.
-  SOV_REQUIRE_OK(fs::AtomicWriteFile(dir / "bad.scene.json", R"({"format":"sovereign.scene","schema_version":9})"));
+  SOV_REQUIRE_OK(fs::AtomicWriteFile(dir / "bad.scene.json", R"({"schema_version":9,"entities":[]})"));
   const Run bad = Cli("scene validate --scene bad.scene.json --json", dir);
   SOV_CHECK_EQ(bad.exit_code, 1);
   SOV_CHECK_EQ(bad.json["errors"][0]["code"].get<std::string>(), std::string("unknown_schema_version"));
@@ -107,9 +108,10 @@ SOV_TEST(cli, example_batch_is_a_dry_run_and_changes_nothing) {
   const Run r = Cli("scene apply --scene first_light.scene.json --commands place_banner.json --result dry.json", dir);
   SOV_CHECK_EQ(r.exit_code, 0);
   SOV_CHECK_EQ(r.json["status"].get<std::string>(), std::string("dry_run"));
-  SOV_CHECK_EQ(r.json["revision_after"].get<int>(), 1);
-  SOV_CHECK_EQ(r.json["diff"]["entities_created"].size(), std::size_t{2});
-  SOV_CHECK_EQ(r.json["diff"]["entities_modified"].size(), std::size_t{1});
+  SOV_CHECK_EQ(r.json["revision_after"].get<int>(), 0);
+  SOV_CHECK_EQ(r.json["diff"]["entities_created"].size(), std::size_t{1});   // "Test banner"
+  SOV_CHECK_EQ(r.json["diff"]["entities_modified"].size(), std::size_t{1});  // dais renamed
+  for (const auto& op : r.json["operations"]) SOV_CHECK_EQ(op["status"].get<std::string>(), std::string("valid"));
   SOV_CHECK_EQ(Read(dir / "first_light.scene.json"), before);
   // Read-only path: no journal, lock or backup files were created by the dry run.
   SOV_CHECK(!std::filesystem::exists(cmd::SceneStore::JournalPath(dir / "first_light.scene.json")));
@@ -123,7 +125,7 @@ SOV_TEST(cli, committed_request_then_retry_then_changed_content) {
   const Run first = Cli("scene apply --scene first_light.scene.json --commands commit.json", dir);
   SOV_CHECK_EQ(first.exit_code, 0);
   SOV_CHECK_EQ(first.json["status"].get<std::string>(), std::string("committed"));
-  SOV_CHECK_EQ(first.json["revision_after"].get<int>(), 2);
+  SOV_CHECK_EQ(first.json["revision_after"].get<int>(), 1);
   const std::string after = Read(dir / "first_light.scene.json");
 
   const Run retry = Cli("scene apply --scene first_light.scene.json --commands commit.json", dir);
@@ -132,7 +134,7 @@ SOV_TEST(cli, committed_request_then_retry_then_changed_content) {
   SOV_CHECK_EQ(retry.json["commit_id"], first.json["commit_id"]);
   SOV_CHECK_EQ(Read(dir / "first_light.scene.json"), after);
 
-  WriteCommittedVariant(dir, "changed.json", "place-banner-commit-0001", 9.0);
+  WriteCommittedVariant(dir, "changed.json", "place-banner-commit-0001", "A different dais name");
   const Run changed = Cli("scene apply --scene first_light.scene.json --commands changed.json", dir);
   SOV_CHECK_EQ(changed.exit_code, 1);
   SOV_CHECK_EQ(changed.json["errors"][0]["code"].get<std::string>(), std::string("idempotency_conflict"));
@@ -143,11 +145,11 @@ SOV_TEST(cli, stale_revision_is_rejected_with_conflict) {
   const auto dir = StageFirstLight(ctx);
   WriteCommittedVariant(dir, "commit.json", "k-1");
   SOV_REQUIRE(Cli("scene apply --scene first_light.scene.json --commands commit.json", dir).exit_code == 0);
-  WriteCommittedVariant(dir, "stale.json", "k-2");  // still claims base_revision 1
+  WriteCommittedVariant(dir, "stale.json", "k-2");  // still claims base_revision 0
   const Run r = Cli("scene apply --scene first_light.scene.json --commands stale.json", dir);
   SOV_CHECK_EQ(r.exit_code, 1);
   SOV_CHECK_EQ(r.json["errors"][0]["code"].get<std::string>(), std::string("stale_revision"));
-  SOV_CHECK_EQ(r.json["conflict"]["current_revision"].get<int>(), 2);
+  SOV_CHECK_EQ(r.json["conflict"]["current_revision"].get<int>(), 1);
 }
 
 SOV_TEST(cli, offline_write_refused_while_another_writer_holds_the_lock) {
@@ -165,7 +167,7 @@ SOV_TEST(cli, offline_write_refused_while_another_writer_holds_the_lock) {
     // Dry runs remain available to readers.
     const Run dry = Cli("scene apply --scene first_light.scene.json --commands place_banner.json", dir);
     SOV_CHECK_EQ(dry.exit_code, 0);
-    SOV_CHECK_EQ(Cli("scene undo --scene first_light.scene.json --base-revision 1", dir).exit_code, 3);
+    SOV_CHECK_EQ(Cli("scene undo --scene first_light.scene.json --base-revision 0", dir).exit_code, 3);
   }
   SOV_CHECK_EQ(Read(dir / "first_light.scene.json"), before);
   SOV_CHECK_EQ(Cli("scene apply --scene first_light.scene.json --commands commit.json", dir).exit_code, 0);
@@ -176,24 +178,24 @@ SOV_TEST(cli, undo_redo_and_history) {
   const std::string original = Read(dir / "first_light.scene.json");
   WriteCommittedVariant(dir, "commit.json", "k-undo");
   SOV_REQUIRE(Cli("scene apply --scene first_light.scene.json --commands commit.json", dir).exit_code == 0);
-  const Run undo = Cli("scene undo --scene first_light.scene.json --base-revision 2", dir);
+  const Run undo = Cli("scene undo --scene first_light.scene.json --base-revision 1", dir);
   SOV_CHECK_EQ(undo.exit_code, 0);
   SOV_CHECK_EQ(undo.json["kind"].get<std::string>(), std::string("undo"));
-  SOV_CHECK_EQ(undo.json["revision_after"].get<int>(), 3);
+  SOV_CHECK_EQ(undo.json["revision_after"].get<int>(), 2);
   // Content equals the original except for the revision counter.
   auto now = scene::ParseSceneText(Read(dir / "first_light.scene.json"));
   auto orig = scene::ParseSceneText(original);
   SOV_REQUIRE_OK(now);
   SOV_REQUIRE_OK(orig);
   SOV_CHECK_EQ(scene::ContentHash(*now), scene::ContentHash(*orig));
-  SOV_CHECK_EQ(now->revision, std::uint64_t{3});
-  SOV_CHECK_EQ(Cli("scene undo --scene first_light.scene.json --base-revision 2", dir).exit_code, 1);  // stale
-  const Run redo = Cli("scene redo --scene first_light.scene.json --base-revision 3", dir);
+  SOV_CHECK_EQ(now->revision, std::uint64_t{2});
+  SOV_CHECK_EQ(Cli("scene undo --scene first_light.scene.json --base-revision 1", dir).exit_code, 1);  // stale
+  const Run redo = Cli("scene redo --scene first_light.scene.json --base-revision 2", dir);
   SOV_CHECK_EQ(redo.exit_code, 0);
-  SOV_CHECK_EQ(redo.json["revision_after"].get<int>(), 4);
+  SOV_CHECK_EQ(redo.json["revision_after"].get<int>(), 3);
   const Run history = Cli("scene history --scene first_light.scene.json --json", dir);
   SOV_CHECK_EQ(history.exit_code, 0);
-  // The journal began at revision 1 (the checked-in scene), so it holds edit, undo and redo.
+  // The journal began at revision 0 (the checked-in scene), so it holds edit, undo and redo.
   SOV_CHECK_EQ(history.json["transactions"].size(), std::size_t{3});
 }
 
@@ -203,13 +205,15 @@ SOV_TEST(cli, invalid_batch_rejected_scene_untouched) {
   Json b = *ParseStrictJson(Read(dir / "place_banner.json"));
   b["dry_run"] = false;
   b["idempotency_key"] = "bad-1";
-  b["operations"][1]["entity_id"] = b["operations"][0]["entity_id"];  // duplicate create in one batch
+  b["operations"].push_back(b["operations"][0]);  // the same create again, after a valid rename
   SOV_REQUIRE_OK(fs::AtomicWriteFile(dir / "bad.json", CanonicalJson(b)));
   const Run r = Cli("scene apply --scene first_light.scene.json --commands bad.json", dir);
   SOV_CHECK_EQ(r.exit_code, 1);
   SOV_CHECK_EQ(r.json["status"].get<std::string>(), std::string("rejected"));
   SOV_CHECK_EQ(r.json["errors"][0]["code"].get<std::string>(), std::string("duplicate_entity"));
-  SOV_CHECK_EQ(r.json["errors"][0]["op_index"].get<int>(), 1);
+  SOV_CHECK_EQ(r.json["errors"][0]["op_index"].get<int>(), 2);
+  SOV_CHECK_EQ(r.json["operations"][0]["status"].get<std::string>(), std::string("valid"));  // nothing applied
+  SOV_CHECK_EQ(r.json["revision_after"].get<int>(), 0);
   SOV_CHECK_EQ(Read(dir / "first_light.scene.json"), before);
   SOV_REQUIRE_OK(fs::AtomicWriteFile(dir / "garbage.json", "{ not json"));
   SOV_CHECK_EQ(Cli("scene apply --scene first_light.scene.json --commands garbage.json", dir).exit_code, 1);

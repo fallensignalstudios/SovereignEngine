@@ -60,42 +60,51 @@ SOV_TEST(editor, open_holds_writer_lock_until_closed) {
 }
 
 SOV_TEST(editor, move_column_undo_material_save_close_reopen) {
-  // The TDD §2.4 first-success sequence, through the editor's authoring services.
+  // The TDD §2.4 first-success sequence, through the editor's authoring services, on the packet's
+  // First Light (revision 0).
   const auto path = StageScene(ctx.TempDir());
   const std::string original_bytes = Read(path);
-  Uuid column, altar;
+  Uuid column, platform, cap;
   scene::TransformComponent original_column;
+  const Vec3 glow{0.9, 0.3, 0.05};
   {
     auto opened = EditorDocument::Open(path, "editor:test");
     SOV_REQUIRE_OK(opened);
     EditorDocument& doc = **opened;
-    const auto* c = FindByName(doc.document(), "Column W3");
-    const auto* a = FindByName(doc.document(), "Altar");
-    SOV_REQUIRE(c && a);
+    const auto* c = FindByName(doc.document(), "Column 2");
+    const auto* p = FindByName(doc.document(), "Raised platform");
+    SOV_REQUIRE(c && p);
     column = c->id;
-    altar = a->id;
+    platform = p->id;
     original_column = c->transform;
+
+    // A cap parented to the column (create + reparent through transform.set, both from the editor).
+    SOV_REQUIRE(doc.CreatePrimitive(scene::PrimitiveShape::Box, {0, 0, 0}, "Column 2 Cap").status ==
+                cmd::ResultStatus::Committed);
+    cap = *doc.selection();
+    scene::TransformComponent cap_t = doc.document().Find(cap)->transform;
+    cap_t.parent = column;
+    cap_t.position = {0.0, 0.55, 0.0};
+    SOV_REQUIRE(doc.SetTransform(cap, cap_t).status == cmd::ResultStatus::Committed);
 
     doc.Select(column);
     SOV_CHECK(doc.selection() == column);
     scene::TransformComponent moved = original_column;
     moved.position.x += 1.25;
-    SOV_REQUIRE(doc.SetTransform(column, moved, false).status == cmd::ResultStatus::Committed);
+    SOV_REQUIRE(doc.SetTransform(column, moved).status == cmd::ResultStatus::Committed);
     SOV_CHECK_EQ(doc.document().Find(column)->transform.position.x, original_column.position.x + 1.25);
-    // The column's children follow it in the authoring world (hierarchy).
-    const auto* shaft = FindByName(doc.document(), "Column W3 Shaft");
-    SOV_REQUIRE(shaft);
-    const auto wm = doc.authoring_world().GetWorldMatrix(doc.authoring_world().Find(shaft->id));
+    // The child follows its parent in the authoring world (parent-before-child propagation).
+    const auto wm = doc.authoring_world().GetWorldMatrix(doc.authoring_world().Find(cap));
     SOV_REQUIRE(wm.has_value());
     SOV_CHECK(NearlyEqual(GetTranslation(*wm).x, original_column.position.x + 1.25, 1e-9));
 
     SOV_REQUIRE(doc.Undo().status == cmd::ResultStatus::Committed);
     SOV_CHECK(doc.document().Find(column)->transform == original_column);
 
-    const auto* rough = scene::FindField(scene::MaterialDescriptor(), "roughness");
-    SOV_REQUIRE(doc.SetMaterialField(altar, *rough, 0.12).status == cmd::ResultStatus::Committed);
+    const auto* emissive = scene::FindField(scene::MaterialDescriptor(), "emissive_rgb");
+    SOV_REQUIRE(doc.SetMaterialField(platform, *emissive, glow).status == cmd::ResultStatus::Committed);
     SOV_CHECK(doc.dirty());
-    SOV_CHECK_EQ(doc.revision(), std::uint64_t{4});  // move, undo, material: three new revisions
+    SOV_CHECK_EQ(doc.revision(), std::uint64_t{5});  // create, reparent, move, undo, material
     SOV_REQUIRE_OK(doc.Save());
     SOV_CHECK(!doc.dirty());
   }
@@ -104,12 +113,13 @@ SOV_TEST(editor, move_column_undo_material_save_close_reopen) {
   auto reopened = EditorDocument::Open(path, "editor:test");
   SOV_REQUIRE_OK(reopened);
   EditorDocument& doc = **reopened;
-  SOV_CHECK_EQ(doc.revision(), std::uint64_t{4});
-  SOV_CHECK_EQ(doc.document().Find(altar)->material->roughness, 0.12);
+  SOV_CHECK_EQ(doc.revision(), std::uint64_t{5});
+  SOV_CHECK(doc.document().Find(platform)->material->emissive_rgb == glow);
   SOV_CHECK(doc.document().Find(column)->transform == original_column);
-  SOV_CHECK_EQ(doc.session().history().size(), std::size_t{3});
+  SOV_CHECK(doc.document().Find(cap)->transform.parent == column);
+  SOV_CHECK_EQ(doc.session().history().size(), std::size_t{5});
   SOV_REQUIRE(doc.Undo().status == cmd::ResultStatus::Committed);  // undoes the material change
-  SOV_CHECK(doc.document().Find(altar)->material->roughness != 0.12);
+  SOV_CHECK(doc.document().Find(platform)->material->emissive_rgb == Vec3(0, 0, 0));
 }
 
 SOV_TEST(editor, unsaved_edits_are_not_written) {
@@ -118,8 +128,8 @@ SOV_TEST(editor, unsaved_edits_are_not_written) {
   {
     auto doc = EditorDocument::Open(path);
     SOV_REQUIRE_OK(doc);
-    const auto* altar = FindByName((*doc)->document(), "Altar");
-    SOV_REQUIRE((*doc)->Rename(altar->id, "Renamed Altar").ok());
+    const auto* platform = FindByName((*doc)->document(), "Raised platform");
+    SOV_REQUIRE((*doc)->Rename(platform->id, "Renamed platform").ok());
     SOV_CHECK((*doc)->dirty());
   }
   SOV_CHECK_EQ(Read(path), before);
@@ -140,10 +150,16 @@ SOV_TEST(editor, selection_is_by_uuid_and_cleared_when_entity_deleted) {
   SOV_CHECK(doc.selection() == id);
   SOV_REQUIRE(doc.Delete(id).status == cmd::ResultStatus::Committed);
   SOV_CHECK(!doc.selection().has_value());
-  // Deleting a column pivot with children is refused, as in the CLI.
-  const auto* pivot = FindByName(doc.document(), "Column E2");
-  SOV_REQUIRE(pivot);
-  const auto refused = doc.Delete(pivot->id);
+  // Deleting an entity that still has children is refused, as in the CLI (no cascading delete).
+  // Copy the id: every committed edit replaces the document, so entity pointers do not survive it.
+  const auto* pivot_entity = FindByName(doc.document(), "Column 5");
+  SOV_REQUIRE(pivot_entity);
+  const Uuid pivot = pivot_entity->id;
+  SOV_REQUIRE(doc.CreatePrimitive(scene::PrimitiveShape::Box, {0, 0, 0}, "Column 5 Cap").ok());
+  scene::TransformComponent child_t = doc.document().Find(*doc.selection())->transform;
+  child_t.parent = pivot;
+  SOV_REQUIRE(doc.SetTransform(*doc.selection(), child_t).ok());
+  const auto refused = doc.Delete(pivot);
   SOV_CHECK(refused.status == cmd::ResultStatus::Rejected);
   SOV_CHECK_EQ(refused.errors[0].code, ErrorCode::MissingDependency);
 }
@@ -153,23 +169,25 @@ SOV_TEST(editor, gui_edit_and_cli_edit_produce_identical_authored_state) {
   // Path A: the editor's authoring services (what the inspector widgets call), then Save.
   const auto a = StageScene(ctx.TempDir() / "gui");
   scene::TransformComponent target;
-  Uuid column, altar;
+  scene::MaterialComponent platform_material;
+  Uuid column, platform;
+  const Vec4 bronze{0.6, 0.35, 0.15, 1.0};
   {
     auto opened = EditorDocument::Open(a, "editor:matthew");
     SOV_REQUIRE_OK(opened);
     EditorDocument& doc = **opened;
-    const auto* c = FindByName(doc.document(), "Column W3");
-    const auto* al = FindByName(doc.document(), "Altar");
-    SOV_REQUIRE(c && al);
+    const auto* c = FindByName(doc.document(), "Column 2");
+    const auto* p = FindByName(doc.document(), "Raised platform");
+    SOV_REQUIRE(c && p);
     column = c->id;
-    altar = al->id;
+    platform = p->id;
     target = c->transform;
-    target.position = {-6.0, 0.0, 2.5};
+    target.position = {-6.0, 3.5, 2.5};
     target.rotation = QuatFromEulerDegrees({0, 15, 0});
-    SOV_REQUIRE(doc.SetTransform(column, target, false).status == cmd::ResultStatus::Committed);
-    SOV_REQUIRE(doc.SetMaterialField(altar, *scene::FindField(scene::MaterialDescriptor(), "base_color"),
-                                     Vec3{0.6, 0.35, 0.15})
+    SOV_REQUIRE(doc.SetTransform(column, target).status == cmd::ResultStatus::Committed);
+    SOV_REQUIRE(doc.SetMaterialField(platform, *scene::FindField(scene::MaterialDescriptor(), "base_color_rgba"), bronze)
                     .status == cmd::ResultStatus::Committed);
+    platform_material = *doc.document().Find(platform)->material;
     SOV_REQUIRE_OK(doc.Save());
   }
 
@@ -179,7 +197,7 @@ SOV_TEST(editor, gui_edit_and_cli_edit_produce_identical_authored_state) {
     cmd::CommandBatch batch;
     batch.request_id = GenerateUuid();
     batch.actor = "agent:equivalence";
-    batch.scene_id = *Uuid::Parse("8d4684d6-93cd-5d04-a868-b4d839bafda7");
+    batch.scene_id = *Uuid::Parse("10000000-0000-4000-8000-000000000001");
     batch.base_revision = base;
     batch.idempotency_key = key;
     batch.dry_run = false;
@@ -188,11 +206,9 @@ SOV_TEST(editor, gui_edit_and_cli_edit_produce_identical_authored_state) {
     if (!fs::AtomicWriteFile(p, CanonicalJson(cmd::CommandBatchToJson(batch)))) throw std::runtime_error("write");
     return p;
   };
-  const auto b1 = write_batch("move.json", 1, cmd::Operation::SetTransform(column, target, false), "eq-move");
-  const auto b2 = write_batch("color.json", 2,
-                              cmd::Operation::SetMaterial(altar, {{scene::FindField(scene::MaterialDescriptor(), "base_color"),
-                                                                   Vec3{0.6, 0.35, 0.15}}}),
-                              "eq-color");
+  const auto b1 = write_batch("move.json", 0, cmd::Operation::SetTransform(column, target), "eq-move");
+  const auto b2 = write_batch("color.json", 1, cmd::Operation::SetMaterial(platform, platform_material), "eq-color");
+  SOV_CHECK(platform_material.base_color_rgba == bronze);
   SOV_REQUIRE(RunCli(std::format("scene apply --scene '{}' --commands '{}'", b.string(), b1.string())) == 0);
   SOV_REQUIRE(RunCli(std::format("scene apply --scene '{}' --commands '{}'", b.string(), b2.string())) == 0);
 
@@ -207,8 +223,10 @@ SOV_TEST(editor, batch_file_applies_through_same_service) {
   auto opened = EditorDocument::Open(path);
   SOV_REQUIRE_OK(opened);
   const auto r = (*opened)->ApplyBatchFile(ctx.SourceDir() / "examples/place_banner.command_batch.json");
-  SOV_CHECK(r.status == cmd::ResultStatus::DryRun);  // the example is a dry run
-  SOV_CHECK_EQ((*opened)->revision(), std::uint64_t{1});
+  SOV_CHECK(r.status == cmd::ResultStatus::DryRun);  // the packet example is a dry run
+  SOV_CHECK_EQ(r.ToJson()["diff"]["entities_created"].size(), std::size_t{1});
+  SOV_CHECK_EQ(r.ToJson()["diff"]["entities_modified"].size(), std::size_t{1});
+  SOV_CHECK_EQ((*opened)->revision(), std::uint64_t{0});
   SOV_CHECK(!(*opened)->dirty());
 }
 
@@ -218,11 +236,11 @@ SOV_TEST(editor, edits_disabled_while_playing) {
   SOV_REQUIRE_OK(opened);
   EditorDocument& doc = **opened;
   SOV_REQUIRE_OK(doc.BeginPlay(games::MakeSandboxGame()));
-  const auto* altar = FindByName(doc.document(), "Altar");
-  const auto r = doc.Rename(altar->id, "During Play");
+  const Uuid platform = FindByName(doc.document(), "Raised platform")->id;
+  const auto r = doc.Rename(platform, "During Play");
   SOV_CHECK(r.status == cmd::ResultStatus::Rejected);
   SOV_CHECK_EQ(r.errors[0].code, ErrorCode::InvalidState);
   SOV_CHECK_EQ(doc.Undo().errors[0].code, ErrorCode::InvalidState);
   doc.EndPlay();
-  SOV_CHECK(doc.Rename(altar->id, "After Play").ok());
+  SOV_CHECK(doc.Rename(platform, "After Play").ok());
 }

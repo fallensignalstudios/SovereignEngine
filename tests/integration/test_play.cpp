@@ -40,7 +40,7 @@ SOV_TEST(play, modifies_only_the_runtime_world) {
   const std::string content_before = scene::ContentHash(doc.document());
   const auto revision_before = doc.revision();
   const std::size_t authored_entities = doc.document().entities.size();
-  const Uuid camera_id = *doc.document().active_camera;
+  const Uuid camera_id = doc.document().active_camera_id;
   const Vec3 authored_camera = doc.document().Find(camera_id)->transform.position;
 
   SOV_REQUIRE_OK(doc.BeginPlay(games::MakeSandboxGame()));

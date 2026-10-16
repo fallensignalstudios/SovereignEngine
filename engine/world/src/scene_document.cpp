@@ -14,7 +14,6 @@
 namespace sov::scene {
 namespace {
 
-constexpr std::string_view kFormat = "sovereign.scene";
 constexpr std::size_t kMaxErrors = 100;
 
 JsonLimits SceneJsonLimits() {
@@ -70,45 +69,6 @@ std::optional<Vec3> ReadVec3(const Json& j, double min, double max, const std::s
   return Vec3{v[0], v[1], v[2]};
 }
 
-std::optional<double> ReadNumber(const Json& j, double min, double max, const std::string& path, Diagnostics& d) {
-  if (!j.is_number() || !std::isfinite(j.get<double>())) {
-    d.Add(MakeError(ErrorCode::SchemaError, "expected a finite number", path));
-    return std::nullopt;
-  }
-  const double v = j.get<double>();
-  if (v < min || v > max) {
-    d.Add(MakeError(ErrorCode::InvalidValue, std::format("{} is outside [{}, {}]", v, min, max), path));
-    return std::nullopt;
-  }
-  return v;
-}
-
-void ReadEnvironment(const Json& j, const std::string& path, Environment& env, Diagnostics& d) {
-  if (!j.is_object()) {
-    d.Add(MakeError(ErrorCode::SchemaError, "expected an object", path));
-    return;
-  }
-  RejectUnknownKeys(j,
-                    {"ambient_color", "ambient_intensity", "background_color", "fog_color", "fog_density", "exposure"},
-                    path, d);
-  const auto vec = [&](std::string_view key, Vec3& out) {
-    if (const Json* m = Member(j, key, path, d)) {
-      if (auto v = ReadVec3(*m, 0.0, 1.0, JsonPointerAppend(path, key), d)) out = *v;
-    }
-  };
-  const auto num = [&](std::string_view key, double lo, double hi, double& out) {
-    if (const Json* m = Member(j, key, path, d)) {
-      if (auto v = ReadNumber(*m, lo, hi, JsonPointerAppend(path, key), d)) out = *v;
-    }
-  };
-  vec("ambient_color", env.ambient_color);
-  num("ambient_intensity", 0.0, 10.0, env.ambient_intensity);
-  vec("background_color", env.background_color);
-  vec("fog_color", env.fog_color);
-  num("fog_density", 0.0, 1.0, env.fog_density);
-  num("exposure", 0.01, 100.0, env.exposure);
-}
-
 void ReadComponents(const Json& j, const std::string& path, EntityData& e, Diagnostics& d) {
   if (!j.is_object()) {
     d.Add(MakeError(ErrorCode::SchemaError, "expected an object", path));
@@ -153,8 +113,18 @@ void ReadComponents(const Json& j, const std::string& path, EntityData& e, Diagn
       d.Add(MakeError(ErrorCode::SchemaError, std::format("missing required component \"{}\"", c.key), path));
     }
   }
-  if (e.camera && e.camera->far_clip <= e.camera->near_clip) {
-    d.Add(MakeError(ErrorCode::InvalidValue, "camera far_clip must exceed near_clip", JsonPointerAppend(path, "camera")));
+  // Contract v1 dependentRequired: geometry and its material come together.
+  if (e.primitive_mesh.has_value() != e.material.has_value()) {
+    d.Add(MakeError(ErrorCode::SchemaError,
+                    e.primitive_mesh ? "PrimitiveMesh requires MaterialParameters" : "MaterialParameters requires PrimitiveMesh",
+                    path));
+  }
+  if (e.camera && e.camera->far_m <= e.camera->near_m) {
+    d.Add(MakeError(ErrorCode::InvalidValue, "Camera far_m must be greater than near_m", JsonPointerAppend(path, "Camera")));
+  }
+  if (e.material && e.material->base_color_rgba.w < 1.0) {
+    d.warnings.push_back(std::format("{}: base_color_rgba alpha {} is stored but G1 renders opaque",
+                                     JsonPointerAppend(path, "MaterialParameters"), e.material->base_color_rgba.w));
   }
 }
 
@@ -187,6 +157,21 @@ void ReadEntity(const Json& j, const std::string& path, EntityData& e, Diagnosti
 }
 
 }  // namespace
+
+std::optional<std::size_t> Utf8CodePoints(std::string_view text) {
+  std::size_t count = 0;
+  for (std::size_t i = 0; i < text.size();) {
+    const auto c = static_cast<unsigned char>(text[i]);
+    std::size_t len = c < 0x80 ? 1 : (c >> 5) == 0x6 ? 2 : (c >> 4) == 0xe ? 3 : (c >> 3) == 0x1e ? 4 : 0;
+    if (len == 0 || i + len > text.size()) return std::nullopt;
+    for (std::size_t k = 1; k < len; ++k) {
+      if ((static_cast<unsigned char>(text[i + k]) >> 6) != 0x2) return std::nullopt;
+    }
+    i += len;
+    ++count;
+  }
+  return count;
+}
 
 // ---------------------------------------------------------------------------------------------
 
@@ -241,8 +226,10 @@ std::optional<PrimitiveShape> ParsePrimitiveShape(std::string_view text) {
 
 std::optional<std::string> ValidateName(std::string_view name) {
   if (name.empty()) return std::string("name must not be empty");
-  if (name.size() > SceneLimits::kMaxNameBytes) {
-    return std::format("name is {} bytes; limit is {}", name.size(), SceneLimits::kMaxNameBytes);
+  const auto chars = Utf8CodePoints(name);
+  if (!chars) return std::string("name is not valid UTF-8");
+  if (*chars > SceneLimits::kMaxNameChars) {
+    return std::format("name is {} characters; limit is {}", *chars, SceneLimits::kMaxNameChars);
   }
   for (unsigned char c : name) {
     if (c < 0x20 || c == 0x7f) return std::string("name must not contain control characters");
@@ -268,6 +255,9 @@ void ValidateStructure(const SceneDocument& doc, Diagnostics& d) {
     d.Add(MakeError(ErrorCode::LimitExceeded,
                     std::format("{} entities; limit is {}", doc.entities.size(), SceneLimits::kMaxEntities), "/entities"));
   }
+  if (doc.entities.empty()) {
+    d.Add(MakeError(ErrorCode::SchemaError, "a scene needs at least one entity (its active camera)", "/entities"));
+  }
   for (std::size_t i = 1; i < doc.entities.size(); ++i) {
     if (doc.entities[i - 1].id == doc.entities[i].id) {
       Error e = MakeError(ErrorCode::DuplicateEntity,
@@ -276,9 +266,7 @@ void ValidateStructure(const SceneDocument& doc, Diagnostics& d) {
       d.Add(std::move(e));
     }
   }
-  std::size_t lights = 0;
   for (const auto& e : doc.entities) {
-    if (e.directional_light) ++lights;
     if (e.transform.parent) {
       if (*e.transform.parent == e.id) {
         Error err = MakeError(ErrorCode::CycleDetected, "entity cannot be its own parent");
@@ -306,20 +294,15 @@ void ValidateStructure(const SceneDocument& doc, Diagnostics& d) {
       }
     }
   }
-  if (lights > 1) {
-    d.Add(MakeError(ErrorCode::LimitExceeded,
-                    std::format("{} directional lights; G1 supports at most one per scene", lights), "/entities"));
-  }
-  if (doc.active_camera) {
-    const EntityData* cam = doc.Find(*doc.active_camera);
-    if (!cam) {
-      d.Add(MakeError(ErrorCode::MissingDependency,
-                      std::format("active_camera {} does not exist", doc.active_camera->ToString()), "/active_camera"));
-    } else if (!cam->camera) {
-      d.Add(MakeError(ErrorCode::MissingDependency,
-                      std::format("active_camera {} has no camera component", doc.active_camera->ToString()),
-                      "/active_camera"));
-    }
+  const EntityData* cam = doc.Find(doc.active_camera_id);
+  if (!cam) {
+    d.Add(MakeError(ErrorCode::MissingDependency,
+                    std::format("active_camera_id {} does not name an entity in this scene", doc.active_camera_id.ToString()),
+                    "/active_camera_id"));
+  } else if (!cam->camera) {
+    d.Add(MakeError(ErrorCode::MissingDependency,
+                    std::format("active_camera_id {} has no Camera component", doc.active_camera_id.ToString()),
+                    "/active_camera_id"));
   }
 }
 
@@ -333,12 +316,7 @@ Result<SceneDocument> ParseSceneDocument(const Json& j, Diagnostics* diagnostics
     return d.First();
   }
 
-  // Format and version first: a document we cannot interpret must not be partially read.
-  const auto fmt = j.find("format");
-  if (fmt == j.end() || !fmt->is_string() || fmt->get_ref<const std::string&>() != kFormat) {
-    d.Add(MakeError(ErrorCode::SchemaError, std::format("\"format\" must be \"{}\"", kFormat), "/format"));
-    return d.First();
-  }
+  // Version first: a document we cannot interpret must not be partially read.
   const auto ver = j.find("schema_version");
   if (ver == j.end() || !ver->is_number_integer()) {
     d.Add(MakeError(ErrorCode::SchemaError, "\"schema_version\" must be an integer", "/schema_version"));
@@ -353,19 +331,22 @@ Result<SceneDocument> ParseSceneDocument(const Json& j, Diagnostics* diagnostics
   }
   doc.schema_version = 1;
 
-  RejectUnknownKeys(j,
-                    {"format", "schema_version", "scene_id", "name", "revision", "region", "asset_references",
-                     "active_camera", "environment", "entities"},
+  RejectUnknownKeys(j, {"schema_version", "scene_id", "name", "revision", "active_camera_id", "background_linear_rgb",
+                        "entities"},
                     "", d);
 
-  if (const Json* id = Member(j, "scene_id", "", d)) {
-    auto parsed = id->is_string() ? Uuid::Parse(id->get_ref<const std::string&>()) : std::nullopt;
-    if (!parsed || parsed->IsNil()) {
-      d.Add(MakeError(ErrorCode::SchemaError, "scene_id must be a non-nil canonical lowercase UUID", "/scene_id"));
-    } else {
-      doc.scene_id = *parsed;
+  const auto uuid_member = [&](std::string_view key, Uuid& out) {
+    if (const Json* id = Member(j, key, "", d)) {
+      auto parsed = id->is_string() ? Uuid::Parse(id->get_ref<const std::string&>()) : std::nullopt;
+      if (!parsed || parsed->IsNil()) {
+        d.Add(MakeError(ErrorCode::SchemaError, std::format("{} must be a non-nil canonical lowercase UUID", key),
+                        JsonPointerAppend("", key)));
+      } else {
+        out = *parsed;
+      }
     }
-  }
+  };
+  uuid_member("scene_id", doc.scene_id);
   if (const Json* name = Member(j, "name", "", d)) {
     if (!name->is_string()) {
       d.Add(MakeError(ErrorCode::SchemaError, "name must be a string", "/name"));
@@ -382,45 +363,10 @@ Result<SceneDocument> ParseSceneDocument(const Json& j, Diagnostics* diagnostics
       doc.revision = rev->get<std::uint64_t>();
     }
   }
-  if (const Json* region = Member(j, "region", "", d)) {
-    if (!region->is_object()) {
-      d.Add(MakeError(ErrorCode::SchemaError, "region must be an object", "/region"));
-    } else {
-      RejectUnknownKeys(*region, {"cell"}, "/region", d);
-      const auto cell = region->find("cell");
-      bool ok = cell != region->end() && cell->is_array() && cell->size() == 3;
-      for (std::size_t i = 0; ok && i < 3; ++i) ok = (*cell)[i].is_number_integer();
-      if (!ok) {
-        d.Add(MakeError(ErrorCode::SchemaError, "region.cell must be an array of 3 integers", "/region/cell"));
-      } else {
-        for (std::size_t i = 0; i < 3; ++i) doc.region_cell[i] = (*cell)[i].get<std::int64_t>();
-        if (doc.region_cell != std::array<std::int64_t, 3>{0, 0, 0}) {
-          d.Add(MakeError(ErrorCode::InvalidValue,
-                          "region.cell is reserved; G1 supports only [0, 0, 0] (large-world regions are not implemented)",
-                          "/region/cell"));
-        }
-      }
-    }
+  uuid_member("active_camera_id", doc.active_camera_id);
+  if (const Json* bg = Member(j, "background_linear_rgb", "", d)) {
+    if (auto v = ReadVec3(*bg, 0.0, 1.0, "/background_linear_rgb", d)) doc.background_linear_rgb = *v;
   }
-  if (const Json* assets = Member(j, "asset_references", "", d)) {
-    if (!assets->is_array()) {
-      d.Add(MakeError(ErrorCode::SchemaError, "asset_references must be an array", "/asset_references"));
-    } else if (!assets->empty()) {
-      d.Add(MakeError(ErrorCode::UnsupportedComponent,
-                      "asset references are not supported before G2; G1 scenes use built-in primitives only",
-                      "/asset_references"));
-    }
-  }
-  if (const Json* cam = Member(j, "active_camera", "", d)) {
-    if (cam->is_null()) {
-      doc.active_camera.reset();
-    } else if (auto parsed = cam->is_string() ? Uuid::Parse(cam->get_ref<const std::string&>()) : std::nullopt) {
-      doc.active_camera = *parsed;
-    } else {
-      d.Add(MakeError(ErrorCode::SchemaError, "active_camera must be null or a canonical UUID", "/active_camera"));
-    }
-  }
-  if (const Json* env = Member(j, "environment", "", d)) ReadEnvironment(*env, "/environment", doc.environment, d);
 
   bool was_sorted = true;
   if (const Json* entities = Member(j, "entities", "", d)) {
@@ -448,12 +394,12 @@ Result<SceneDocument> ParseSceneDocument(const Json& j, Diagnostics* diagnostics
   return doc;
 }
 
-Result<Environment> ParseEnvironment(const Json& json) {
+Result<EntityData> ParseEntity(const Json& json, const std::string& path) {
   Diagnostics d;
-  Environment env;
-  ReadEnvironment(json, "/environment", env, d);
+  EntityData e;
+  ReadEntity(json, path, e, d);
   if (!d.ok()) return d.First();
-  return env;
+  return e;
 }
 
 Result<SceneDocument> ParseSceneText(std::string_view text, Diagnostics* diagnostics) {
@@ -488,23 +434,13 @@ Json EntityToJson(const EntityData& e) {
 
 Json SceneToJson(const SceneDocument& doc) {
   Json j = Json::object();
-  j["format"] = kFormat;
   j["schema_version"] = doc.schema_version;
   j["scene_id"] = doc.scene_id.ToString();
   j["name"] = doc.name;
   j["revision"] = doc.revision;
-  j["region"] = Json{{"cell", Json::array({doc.region_cell[0], doc.region_cell[1], doc.region_cell[2]})}};
-  j["asset_references"] = Json::array();
-  j["active_camera"] = doc.active_camera ? Json(doc.active_camera->ToString()) : Json(nullptr);
-  const auto& env = doc.environment;
-  j["environment"] = Json{
-      {"ambient_color", Json::array({env.ambient_color.x, env.ambient_color.y, env.ambient_color.z})},
-      {"ambient_intensity", env.ambient_intensity},
-      {"background_color", Json::array({env.background_color.x, env.background_color.y, env.background_color.z})},
-      {"fog_color", Json::array({env.fog_color.x, env.fog_color.y, env.fog_color.z})},
-      {"fog_density", env.fog_density},
-      {"exposure", env.exposure},
-  };
+  j["active_camera_id"] = doc.active_camera_id.ToString();
+  const auto& bg = doc.background_linear_rgb;
+  j["background_linear_rgb"] = Json::array({bg.x, bg.y, bg.z});
   Json entities = Json::array();
   for (const auto& e : doc.entities) entities.push_back(EntityToJson(e));
   j["entities"] = std::move(entities);
@@ -546,7 +482,7 @@ SceneDocument MakeNewScene(const Uuid& scene_id, std::string name, const Uuid& c
   cam.transform.position = {0, 2, 8};
   cam.camera.emplace();
   doc.Insert(std::move(cam));
-  doc.active_camera = camera_id;
+  doc.active_camera_id = camera_id;
   return doc;
 }
 

@@ -126,7 +126,6 @@ Result<EntityHandle> World::CreateEntity(const scene::EntityData& data) {
   if (data.primitive_mesh) reg.emplace<scene::PrimitiveMeshComponent>(e, *data.primitive_mesh);
   if (data.material) reg.emplace<scene::MaterialComponent>(e, *data.material);
   if (data.camera) reg.emplace<scene::CameraComponent>(e, *data.camera);
-  if (data.directional_light) reg.emplace<scene::DirectionalLightComponent>(e, *data.directional_light);
   impl_->by_uuid.emplace(data.id, e);
   impl_->order_dirty = true;
   return EntityHandle{id_, static_cast<std::uint32_t>(entt::to_integral(e))};
@@ -207,7 +206,7 @@ RenderSnapshot World::ExtractRenderSnapshot() const {
   if (impl_->order_dirty) impl_->RebuildOrder();
   const auto& reg = impl_->reg;
   RenderSnapshot snap;
-  snap.environment = environment_;
+  snap.background_linear_rgb = background_;
   for (auto e : impl_->order) {
     const auto& wm = reg.get<WorldMatrixC>(e).m;
     if (const auto* prim = reg.try_get<scene::PrimitiveMeshComponent>(e)) {
@@ -221,23 +220,15 @@ RenderSnapshot World::ExtractRenderSnapshot() const {
       snap.triangle_count += PrimitiveTriangleCount(prim->shape);
       snap.instances.push_back(inst);
     }
-    if (!snap.light) {
-      if (const auto* light = reg.try_get<scene::DirectionalLightComponent>(e)) {
-        RenderLight l;
-        l.direction = Normalize(TransformDirection(wm, {0, 0, -1}));
-        l.radiance = light->color * light->intensity;
-        snap.light = l;
-      }
-    }
   }
   if (IsValid(active_camera_)) {
     const entt::entity cam = ToEntt(active_camera_);
     if (const auto* c = reg.try_get<scene::CameraComponent>(cam)) {
       RenderCamera rc;
       rc.world = reg.get<WorldMatrixC>(cam).m;
-      rc.vertical_fov_radians = DegToRad(c->vertical_fov_degrees);
-      rc.near_clip = c->near_clip;
-      rc.far_clip = c->far_clip;
+      rc.vertical_fov_radians = DegToRad(c->fov_y_degrees);
+      rc.near_clip = c->near_m;
+      rc.far_clip = c->far_m;
       snap.active_camera = rc;
     }
   }
@@ -246,7 +237,7 @@ RenderSnapshot World::ExtractRenderSnapshot() const {
 
 Result<std::unique_ptr<World>> World::FromDocument(const scene::SceneDocument& doc, WorldKind kind) {
   auto world = std::make_unique<World>(kind);
-  world->environment_ = doc.environment;
+  world->background_ = doc.background_linear_rgb;
   // Two passes so parents may appear after children in canonical (id) order.
   for (const auto& e : doc.entities) {
     scene::EntityData unparented = e;
@@ -266,7 +257,7 @@ Result<std::unique_ptr<World>> World::FromDocument(const scene::SceneDocument& d
     world->impl_->reg.get<scene::TransformComponent>(child->second).parent = e.transform.parent;
   }
   world->impl_->order_dirty = true;
-  if (doc.active_camera) world->active_camera_ = world->Find(*doc.active_camera);
+  world->active_camera_ = world->Find(doc.active_camera_id);
   world->UpdateTransforms();
   return world;
 }

@@ -35,6 +35,7 @@ struct ViewportState {
   render::ViewHandle view;
   std::uint32_t width = 0, height = 0;          // current view size
   std::uint32_t desired_w = 960, desired_h = 540;  // panel content size, applied between frames
+  float origin_x = 0, origin_y = 0;              // image position in window pixels (last layout)
   bool hovered = false;
   bool flying = false;                          // RMB held: camera/look capture
   std::optional<std::array<std::uint32_t, 2>> pending_click;  // pixel in view to pick next frame
@@ -58,6 +59,27 @@ struct InspectorState {
   bool editing = false;
 };
 
+// Test hook for out-of-process GUI tests (scripts/gui_real_input_check.sh). When SOV_UI_ANCHORS
+// names a file, every few frames the editor atomically writes where its widgets are (window pixel
+// rectangles) and what state the UI shows, so a test can drive the real widgets with real input
+// events and check what is visible. A no-op when disabled; it never changes editor behaviour.
+class UiAnchors {
+ public:
+  void Enable(std::filesystem::path path) { path_ = std::move(path); }
+  bool enabled() const { return !path_.empty(); }
+  void BeginFrame();
+  // Rectangle of the last ImGui item, as [x0, y0, x1, y1] under group/key.
+  void Item(std::string_view group, std::string_view key);
+  void Rect(std::string_view group, std::string_view key, float x0, float y0, float x1, float y1);
+  void Point(std::string_view group, std::string_view key, float x, float y);
+  void State(std::string_view key, Json value);
+  void Flush(std::uint64_t frame);
+
+ private:
+  std::filesystem::path path_;
+  Json data_ = Json::object();
+};
+
 class EditorApp {
  public:
   EditorApp(platform::Window& window, render::Renderer& renderer, ImGuiLayer& ui,
@@ -76,6 +98,7 @@ class EditorApp {
   EditorCamera& camera() { return camera_; }
   ViewportState& viewport() { return viewport_; }
   InspectorState& inspector() { return inspector_; }
+  UiAnchors& anchors() { return anchors_; }
   const std::deque<LogLine>& log() const { return log_; }
   const RenderSnapshot& last_snapshot() const { return last_snapshot_; }
 
@@ -100,6 +123,7 @@ class EditorApp {
   void RenderScene();
   void ProcessPicks();
   void ProcessCaptures();
+  void RecordAnchorState();
 
   platform::Window& window_;
   render::Renderer& renderer_;
@@ -109,6 +133,7 @@ class EditorApp {
   EditorCamera camera_;
   ViewportState viewport_;
   InspectorState inspector_;
+  UiAnchors anchors_;
   platform::ActionMapper input_;
   std::deque<LogLine> log_;
   int log_sink_ = 0;

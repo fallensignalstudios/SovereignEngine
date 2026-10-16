@@ -119,7 +119,7 @@ bool AutomationRunner::Step(EditorApp& app, const Json& step) {
     scene::TransformComponent t = e->transform;
     const auto& d = step["delta"];
     t.position = t.position + Vec3{d[0].get<double>(), d[1].get<double>(), d[2].get<double>()};
-    const auto r = doc.SetTransform(e->id, t, false);  // same call as the inspector's commit
+    const auto r = doc.SetTransform(e->id, t);  // same call as the inspector's commit
     Record(step, r.status == cmd::ResultStatus::Committed, std::format("revision {} -> {}", r.revision_before, r.revision_after));
     return true;
   }

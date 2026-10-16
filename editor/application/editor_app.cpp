@@ -7,6 +7,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
+#include "sov/core/fs.h"
 #include "sov/core/png.h"
 #include "sov/games/sandbox.h"
 
@@ -51,6 +52,10 @@ EditorApp::EditorApp(platform::Window& window, render::Renderer& renderer, ImGui
   viewport_.width = viewport_.desired_w;
   viewport_.height = viewport_.desired_h;
   ResetCameraToSceneCamera();
+  if (const char* anchors = std::getenv("SOV_UI_ANCHORS"); anchors && *anchors) {
+    anchors_.Enable(anchors);
+    LogInfo("editor", "UI anchors enabled (test hook): {}", anchors);
+  }
 }
 
 EditorApp::~EditorApp() {
@@ -265,8 +270,13 @@ bool EditorApp::Frame(double dt) {
   }
 
   ui_.NewFrame();
+  anchors_.BeginFrame();
   BuildUi();
   ui_.Render();
+  if (anchors_.enabled()) {
+    RecordAnchorState();
+    if (frame_ % 3 == 0) anchors_.Flush(frame_);
+  }
 
   last_rendered_ = renderer_.BeginFrame();
   if (last_rendered_) {
@@ -280,6 +290,75 @@ bool EditorApp::Frame(double dt) {
   if (last_rendered_ || !window_capture_inflight_) ProcessCaptures();
   ++frame_;
   return !quit_;
+}
+
+// --- UI anchors (test hook) -----------------------------------------------------------------
+
+void UiAnchors::BeginFrame() {
+  if (enabled()) data_ = Json::object();
+}
+
+void UiAnchors::Item(std::string_view group, std::string_view key) {
+  if (!enabled()) return;
+  const ImVec2 a = ImGui::GetItemRectMin(), b = ImGui::GetItemRectMax();
+  Rect(group, key, a.x, a.y, b.x, b.y);
+}
+
+void UiAnchors::Rect(std::string_view group, std::string_view key, float x0, float y0, float x1, float y1) {
+  if (!enabled()) return;
+  data_[std::string(group)][std::string(key)] = Json::array({x0, y0, x1, y1});
+}
+
+void UiAnchors::Point(std::string_view group, std::string_view key, float x, float y) {
+  if (!enabled()) return;
+  data_[std::string(group)][std::string(key)] = Json::array({x, y});
+}
+
+void UiAnchors::State(std::string_view key, Json value) {
+  if (!enabled()) return;
+  data_["state"][std::string(key)] = std::move(value);
+}
+
+void UiAnchors::Flush(std::uint64_t frame) {
+  if (!enabled()) return;
+  data_["frame"] = frame;
+  if (auto r = fs::AtomicWriteFile(path_, CompactJson(data_) + "\n"); !r) {
+    LogWarn("editor", "cannot write UI anchors: {}", r.error().Describe());
+  }
+}
+
+void EditorApp::RecordAnchorState() {
+  const auto& d = doc_->document();
+  anchors_.State("revision", doc_->revision());
+  anchors_.State("dirty", doc_->dirty());
+  anchors_.State("playing", playing());
+  anchors_.State("entity_count", d.entities.size());
+  anchors_.State("history_size", doc_->session().history().size());
+  int ww = 0, wh = 0;
+  window_.PixelSize(ww, wh);
+  anchors_.State("window", Json::array({ww, wh}));
+  Json selected = nullptr;
+  if (doc_->selection()) {
+    if (const scene::EntityData* e = d.Find(*doc_->selection())) {
+      selected = Json{{"id", e->id.ToString()}, {"name", e->name}, {"components", scene::ComponentsToJson(*e)}};
+    }
+  }
+  anchors_.State("selected", std::move(selected));
+  // Projected centres of rendered entities, in window pixels, so a test can click them.
+  if (viewport_.width == 0 || viewport_.height == 0) return;
+  const render::ViewCamera cam = camera_.View();
+  const Mat4 vp = cam.Projection(double(viewport_.width) / double(viewport_.height)) * cam.ViewMatrix();
+  World& w = doc_->authoring_world();
+  for (const auto& e : d.entities) {
+    if (!e.primitive_mesh) continue;
+    const auto wm = w.GetWorldMatrix(w.Find(e.id));
+    if (!wm) continue;
+    Vec3 ndc;
+    if (!ProjectToNdc(vp, GetTranslation(*wm), ndc) || std::abs(ndc.x) > 1 || std::abs(ndc.y) > 1) continue;
+    const Vec2 px = NdcToPixel(ndc, viewport_.width, viewport_.height);
+    anchors_.Point("viewport_entities", e.name, viewport_.origin_x + static_cast<float>(px.x),
+                   viewport_.origin_y + static_cast<float>(px.y));
+  }
 }
 
 }  // namespace sov::editor_app

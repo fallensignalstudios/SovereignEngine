@@ -9,7 +9,7 @@
 namespace sov::scene {
 
 struct FieldChange {
-  std::string path;  // e.g. "components.transform.position", "name", "environment.exposure"
+  std::string path;  // e.g. "components.Transform.position", "name", "background_linear_rgb"
   Json before;       // null when the field/component did not exist
   Json after;        // null when the field/component was removed
 };
@@ -28,7 +28,7 @@ struct SceneDiff {
   std::vector<EntityChange> created;   // `changes` lists every initial field
   std::vector<EntityChange> deleted;   // `changes` lists every removed field
   std::vector<EntityChange> modified;
-  std::vector<FieldChange> scene;      // scene-level fields (name, active_camera, environment.*)
+  std::vector<FieldChange> scene;      // scene-level fields (name, active_camera_id, background_linear_rgb)
 
   bool empty() const { return created.empty() && deleted.empty() && modified.empty() && scene.empty(); }
 };

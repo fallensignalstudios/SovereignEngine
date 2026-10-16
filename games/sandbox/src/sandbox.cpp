@@ -34,7 +34,7 @@ class SandboxGame final : public runtime::GameModule {
     probe.transform.position = origin + forward * config_.probe_distance_m;
     probe.transform.scale = {0.6, 0.6, 0.6};
     probe.primitive_mesh = scene::PrimitiveMeshComponent{scene::PrimitiveShape::Box};
-    probe.material = scene::MaterialComponent{{0.1, 0.1, 0.1}, 0.4, 0.0, {0.25, 0.85, 1.0}, 3.0};
+    probe.material = scene::MaterialComponent{{0.1, 0.1, 0.1, 1.0}, {0.75, 2.55, 3.0}};
     probe_base_ = probe.transform.position;
     if (auto h = world.CreateEntity(probe)) {
       probe_ = *h;
