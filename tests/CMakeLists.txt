@@ -8,12 +8,16 @@ target_compile_definitions(sov_test_harness PRIVATE
 
 set(SOV_HEADLESS_TEST_SOURCES
   unit/test_core.cpp
-  unit/test_math.cpp)
-set(SOV_HEADLESS_SUITES core math)
+  unit/test_math.cpp
+  unit/test_scene.cpp
+  unit/test_world.cpp
+  unit/test_commands.cpp
+  unit/test_store.cpp)
+set(SOV_HEADLESS_SUITES core math scene world commands store)
 
 add_executable(sovereign-tests support/test_main.cpp ${SOV_HEADLESS_TEST_SOURCES})
 sov_configure_target(sovereign-tests)
-target_link_libraries(sovereign-tests PRIVATE sov_test_harness sov::core)
+target_link_libraries(sovereign-tests PRIVATE sov_test_harness sov::core sov::world sov::commands)
 
 foreach(suite IN LISTS SOV_HEADLESS_SUITES)
   add_test(NAME headless.${suite} COMMAND sovereign-tests --suite ${suite})

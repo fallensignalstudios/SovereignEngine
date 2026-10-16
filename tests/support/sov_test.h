@@ -89,8 +89,8 @@ int RunAll(int argc, char** argv);
 
 #define SOV_CHECK_EQ(a, b)                                                                                \
   do {                                                                                                    \
-    const auto& sov_a_ = (a);                                                                             \
-    const auto& sov_b_ = (b);                                                                             \
+    const auto sov_a_ = (a);                                                                              \
+    const auto sov_b_ = (b);                                                                              \
     if (!(sov_a_ == sov_b_))                                                                              \
       ctx.Fail(__FILE__, __LINE__,                                                                          \
              "CHECK_EQ(" #a ", " #b ") failed: " + ::sov::test::Show(sov_a_) + " != " + ::sov::test::Show(sov_b_)); \

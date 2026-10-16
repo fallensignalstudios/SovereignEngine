@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.invalid/schemas/scene.schema.json",
+  "title": "Sovereign Engine authoring scene (sovereign.scene v1)",
+  "description": "Contract document for G1 scene files. RECONSTRUCTED from TDD v0.1 sections 6, 8 and 21 because the original packet fixture was not supplied; reconcile with Matthew's original if it exists. This schema describes the wire shape only; the engine's own validator (engine/world) is authoritative and additionally enforces structure (unique ids, parents exist, no cycles, depth <= 64, at most one directional light, active_camera references a camera, canonical entity order on write). tests/unit/test_scene.cpp checks that component property sets here match the engine's reflection descriptors.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schema_version", "scene_id", "name", "revision", "region", "asset_references", "active_camera", "environment", "entities"],
+  "properties": {
+    "format": { "const": "sovereign.scene" },
+    "schema_version": { "const": 1 },
+    "scene_id": { "$ref": "#/$defs/uuid" },
+    "name": { "$ref": "#/$defs/name" },
+    "revision": { "type": "integer", "minimum": 0, "description": "Authoring revision. Increments once per committed non-empty transaction (including undo/redo); never decreases." },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cell"],
+      "description": "Reserved region identity for future large-world support. G1 accepts only [0, 0, 0].",
+      "properties": { "cell": { "type": "array", "items": { "type": "integer" }, "minItems": 3, "maxItems": 3 } }
+    },
+    "asset_references": { "type": "array", "maxItems": 0, "description": "Explicit asset references. Empty in G1 (built-in primitives only); asset-backed meshes arrive in G2." },
+    "active_camera": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/uuid" }] },
+    "environment": { "$ref": "#/$defs/environment" },
+    "entities": { "type": "array", "maxItems": 10000, "items": { "$ref": "#/$defs/entity" }, "description": "Written in ascending id order." }
+  },
+  "$defs": {
+    "uuid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", "description": "Canonical lowercase UUID; the nil UUID is not a valid entity or scene id." },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128, "description": "Label only, never a key. Duplicates allowed. Max 128 UTF-8 bytes, no control characters." },
+    "vec3": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+    "color": { "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 }, "minItems": 3, "maxItems": 3, "description": "Linear RGB." },
+    "quat": { "type": "array", "items": { "type": "number" }, "minItems": 4, "maxItems": 4, "description": "Unit quaternion [x, y, z, w]; |q| must be within 1e-3 of 1." },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ambient_color", "ambient_intensity", "background_color", "fog_color", "fog_density", "exposure"],
+      "properties": {
+        "ambient_color": { "$ref": "#/$defs/color" },
+        "ambient_intensity": { "type": "number", "minimum": 0, "maximum": 10 },
+        "background_color": { "$ref": "#/$defs/color" },
+        "fog_color": { "$ref": "#/$defs/color" },
+        "fog_density": { "type": "number", "minimum": 0, "maximum": 1, "description": "Exponential fog density per meter." },
+        "exposure": { "type": "number", "minimum": 0.01, "maximum": 100 }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "components"],
+      "properties": {
+        "id": { "$ref": "#/$defs/uuid" },
+        "name": { "$ref": "#/$defs/name" },
+        "components": { "$ref": "#/$defs/components" }
+      }
+    },
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transform"],
+      "description": "Unknown component types are rejected (unsupported_component), never dropped.",
+      "properties": {
+        "transform": { "$ref": "#/$defs/transform" },
+        "primitive_mesh": { "$ref": "#/$defs/primitive_mesh" },
+        "material": { "$ref": "#/$defs/material" },
+        "camera": { "$ref": "#/$defs/camera" },
+        "directional_light": { "$ref": "#/$defs/directional_light" }
+      }
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent", "position", "rotation", "scale"],
+      "description": "Local to the parent. M = T * R * S, column vectors; right-handed, +Y up, meters.",
+      "properties": {
+        "parent": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/uuid" }] },
+        "position": { "allOf": [{ "$ref": "#/$defs/vec3" }, { "items": { "minimum": -100000, "maximum": 100000 } }] },
+        "rotation": { "$ref": "#/$defs/quat" },
+        "scale": { "allOf": [{ "$ref": "#/$defs/vec3" }, { "items": { "minimum": 0.0001, "maximum": 10000 } }] }
+      }
+    },
+    "primitive_mesh": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shape"],
+      "properties": { "shape": { "enum": ["box", "plane", "cylinder"] } }
+    },
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_color", "roughness", "metallic", "emissive", "emissive_strength"],
+      "properties": {
+        "base_color": { "$ref": "#/$defs/color" },
+        "roughness": { "type": "number", "minimum": 0.02, "maximum": 1 },
+        "metallic": { "type": "number", "minimum": 0, "maximum": 1 },
+        "emissive": { "$ref": "#/$defs/color" },
+        "emissive_strength": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vertical_fov_degrees", "near_clip", "far_clip"],
+      "description": "Looks along local -Z with +Y up. Reversed-Z: near maps to depth 1, far to 0. far_clip must exceed near_clip.",
+      "properties": {
+        "vertical_fov_degrees": { "type": "number", "minimum": 10, "maximum": 120 },
+        "near_clip": { "type": "number", "minimum": 0.01, "maximum": 10 },
+        "far_clip": { "type": "number", "minimum": 1, "maximum": 1000000 }
+      }
+    },
+    "directional_light": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["color", "intensity"],
+      "description": "Light travels along local -Z. At most one per scene in G1.",
+      "properties": {
+        "color": { "$ref": "#/$defs/color" },
+        "intensity": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    }
+  }
+}
