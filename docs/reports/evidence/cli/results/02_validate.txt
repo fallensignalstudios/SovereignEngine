@@ -1,1 +1,0 @@
-valid: "First Light" scene_id=8d4684d6-93cd-5d04-a868-b4d839bafda7 revision=1 entities=96

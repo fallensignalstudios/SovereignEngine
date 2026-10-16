@@ -1,7 +1,0 @@
-clean_dev_headless_1_configure exit 0 (4s)
-clean_dev_headless_2_build exit 0 (34s)
-clean_dev_headless_3_test exit 0 (2s)
-clean_dev_vulkan_1_configure exit 0 (52s)
-clean_dev_vulkan_2_build exit 0 (56s)
-clean_dev_vulkan_3_test exit 0 (60s)
-ALL DONE

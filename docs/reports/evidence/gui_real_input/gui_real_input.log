@@ -1,8 +1,0 @@
-[gui-real-input] editor pid 2714 window 4194350
-[gui-real-input] viewport origin (289, 78) size 955x568
-[gui-real-input] sovereign-cli commit while editor open: exit 3 (expected 3)
-[gui-real-input] clicked viewport at window (766, 345)
-[gui-real-input] sent Delete, ctrl+z, ctrl+s
-[gui-real-input] editor exit code 0
-[gui-real-input] journal kinds=['edit', 'undo'] revision=3 content_equals_original=True -> PASS
-[gui-real-input] PASS
