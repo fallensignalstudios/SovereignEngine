@@ -30,7 +30,22 @@ log() { echo "[gui-real-input] $*" | tee -a "$OUT/gui_real_input.log"; }
 "$BIN/sovereign-editor" --scene first_light.scene.json --width 1600 --height 900 > "$OUT/editor_stdout.log" 2>&1 &
 editor_pid=$!
 trap 'kill $editor_pid 2>/dev/null || true' EXIT
-wid=$(xdotool search --sync --onlyvisible --name "Sovereign Editor" | head -1)
+# Wait for the window, but fail fast if the editor exits first (e.g. no acceptable Vulkan device
+# under gpu-qualify); `xdotool search --sync` would wait forever.
+wid=""
+for _ in $(seq 1 300); do
+  if ! kill -0 $editor_pid 2>/dev/null; then
+    set +e; wait $editor_pid; rc=$?; set -e
+    trap - EXIT
+    log "FAIL: editor exited with code $rc before showing a window (see editor_stdout.log)"
+    tail -5 "$OUT/editor_stdout.log" | tee -a "$OUT/gui_real_input.log"
+    exit 1
+  fi
+  wid=$(xdotool search --onlyvisible --name "Sovereign Editor" 2>/dev/null | head -1 || true)
+  [ -n "$wid" ] && break
+  sleep 0.2
+done
+[ -n "$wid" ] || { log "FAIL: no editor window after 60 s"; exit 1; }
 log "editor pid $editor_pid window $wid"
 for _ in $(seq 1 100); do grep -q 'viewport image at window' "$OUT/editor_stdout.log" && break; sleep 0.2; done
 sleep 2  # let the layout settle at its final size
