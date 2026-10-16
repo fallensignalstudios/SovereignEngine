@@ -43,6 +43,11 @@ two boundaries that matter most for G1.
   Vulkan, SDL or X11 library; `dev-headless` configures without fetching any graphics dependency.
 - `static.no_unreal_dependency`: no Unreal headers, module rules, `.uplugin/.uproject`, or Unreal
   include paths anywhere in the tree.
+- `static.<exe>_link_dependencies`: every executable's `DT_NEEDED` entries are only the C/C++
+  runtime (plus sanitizer runtimes in sanitizer builds), with no RPATH/RUNPATH and no Unreal symbols.
+- `vulkan.loaded_libraries_are_system_only`: the runtime and editor, run with `LD_DEBUG=files`,
+  load only objects from the system library directories (Vulkan loader, ICDs, layers, X11 via
+  `dlopen`).
 
 ## Differences from the TDD §5.1 proposed layout
 

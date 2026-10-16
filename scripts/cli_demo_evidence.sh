@@ -150,7 +150,7 @@ note "## 7. Writer lock: offline write refused while another writer holds the sc
 note "Here the lock is held by util-linux \`flock\` on the same lock file (same flock(2) lock the editor takes). The real-editor variant is \`vulkan.editor_real_x11_input\` (evidence/gui_real_input)."
 s4=$(sha "$WORK")
 flock "$WORK.lock" sleep 6 & HOLDER=$!; sleep 1
-STDOUT_FILE="$OUT/results/17_locked.result.json" step "committing apply while lock is held" 3 \
+STDOUT_FILE="$OUT/results/17_locked.error.json" step "committing apply while lock is held (error envelope, no batch evaluated)" 3 \
   "$CLI" scene apply --scene "$WORK" --commands "$REQ/place_banner.stale_base_revision.command_batch.json"
 STDOUT_FILE="$OUT/results/18_locked_read.txt" step "read-only validate while lock is held" 0 "$CLI" scene validate --scene "$WORK"
 wait $HOLDER

@@ -4,8 +4,10 @@ A separate, independent research engine: native editor, renderer, runtime and to
 single Vulkan 1.3 backend. It is not an Unreal plugin and depends on no Unreal code. Private research;
 no licence has been chosen (ADR-009).
 
-Status: **G0 + G1 implemented; GPU qualification blocked** on the build host (no physical GPU).
-Read `docs/reports/G0_G1_REPORT.md` for exactly what was verified and how.
+Status: **G0 + G1 implemented against the owner's First Ignition contracts; G1 not complete:
+physical-GPU qualification is blocked** on the build host (no physical GPU; every rendering result
+here is software-rendered). Read `docs/reports/G0_G1_REPORT.md` for exactly what was verified and how,
+by validation-matrix ID.
 
 ## Quick start
 
@@ -42,6 +44,7 @@ $B/sovereign-cli scene apply --scene content/authoring/first_light.scene.json \
 V=build/dev-vulkan/bin
 $V/sovereign-editor  --scene content/authoring/first_light.scene.json
 $V/sovereign-runtime --scene content/authoring/first_light.scene.json
+$V/sovereign-runtime --scene content/authoring/first_light.scene.json --no-vsync --perf-report perf.json
 ```
 
 To commit an edit, copy the example batch, give it a new `idempotency_key` and `request_id`, set
@@ -51,8 +54,10 @@ While the editor has a scene open, CLI writes to it are refused (exit 3).
 
 ## Map
 
-- `AGENTS.md`: rules for agents working here.
+- `AGENTS.md`: rules for agents (the owner's, verbatim); `docs/DEVELOPING.md`: repository guide.
+- `docs/packet/`: the First Ignition packet as supplied; `schemas/`, `examples/` are verbatim copies.
 - `docs/architecture/`: conventions, command protocol and durability, logging/errors, modules.
 - `docs/decisions/`: ADRs.
-- `docs/VALIDATION_MATRIX.md`: what G0/G1 must prove; `docs/reports/`: what was proven.
+- `docs/VALIDATION_MATRIX.md`: what G0/G1 must prove; `docs/reports/`: what was proven, and
+  `docs/reports/GPU_TEST_PROCEDURE.md` for the physical-GPU run.
 - `third_party_notices/`: upstream licences of the pinned dependencies.

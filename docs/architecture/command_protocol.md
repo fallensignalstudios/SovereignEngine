@@ -1,7 +1,8 @@
 # Command protocol, history and durability
 
-Wire contracts: `schemas/command_batch.schema.json`, `schemas/command_result.schema.json` (both
-reconstructed from TDD §19.2-19.3, ADR-014). Implementation: `engine/commands`. The schemas describe
+Wire contracts: `schemas/command_batch.schema.json` (the owner's, verbatim from the First Ignition
+packet; ADR-017) and `schemas/command_result.schema.json` (engine-defined: the packet has no result
+contract). Implementation: `engine/commands`. The schemas describe
 shape only; the guarantees below are enforced by `cmd::SceneSession` and `cmd::SceneStore` and
 proven by `tests/unit/test_commands.cpp`, `tests/unit/test_store.cpp`, `tests/integration/test_cli.cpp`
 and `tests/integration/test_editor.cpp`.
@@ -18,12 +19,21 @@ future agent transport ──┘                                                
 Nothing else mutates a `SceneDocument`. The editor's ECS world is rebuilt from the document after
 each accepted edit. Play mode copies the document into a separate world and never writes back.
 
-## Batch semantics (`sovereign.command_batch` v1)
+## Batch semantics (command batch contract v1)
 
-A batch carries `request_id`, `actor`, `scene_id`, `base_revision`, `idempotency_key`, optional
-`dry_run` (**default `true`**) and 1-512 operations (`entity.create`, `entity.rename`, `transform.set`,
-`material.set`, `entity.delete`). Requests are limited to 1 MiB and JSON nesting depth 12; actors to 64 bytes and keys to
-128 bytes; duplicate JSON keys, non-finite numbers and unknown fields are rejected.
+A batch carries `protocol_version` (1), `request_id` (UUID), `actor` (1-128 characters),
+`scene_id`, `base_revision`, `idempotency_key` (`[A-Za-z0-9_.:-]`, 1-128), **required** `dry_run`
+and 1-128 operations. Requests are limited to 1 MiB and JSON nesting depth 12; duplicate JSON keys,
+non-finite numbers and unknown fields are rejected. The CLI never assumes a commit: a batch commits
+only when it says `"dry_run": false`.
+
+| Operation | Wire shape | Effect |
+|---|---|---|
+| `entity.create` | `{op, entity}` with a complete scene-schema entity | adds the entity (id, name, components) |
+| `entity.rename` | `{op, entity_id, name}` | replaces the label |
+| `transform.set` | `{op, entity_id, transform}` with a complete `Transform` | replaces position, rotation, scale and `parent_id` |
+| `material.set` | `{op, entity_id, material}` with complete `MaterialParameters` | replaces base colour and emissive; needs a `PrimitiveMesh` entity |
+| `entity.delete` | `{op, entity_id}` | removes the entity if nothing depends on it |
 
 Evaluation order, first failure wins:
 
@@ -50,6 +60,19 @@ and `dry_run` are excluded, so a retry may carry a new `request_id`.
 Reference rules: no cascading deletes; deleting an entity with children or the scene's active camera
 fails with `missing_dependency`; parents must exist (possibly created earlier in the batch);
 re-parenting checks cycles; `material.set` needs a material component (`component_missing`).
+
+## Results and the CLI error envelope
+
+An evaluated batch, undo or redo always returns a command result (`status` committed, dry_run,
+no_change or rejected; per-operation `valid`/`applied`/`failed`/`not_evaluated`; diff; conflict).
+A failure that happens **before** any batch is evaluated (writer lock unavailable, I/O failure,
+unreadable or oversized request file, usage error with `--json`) prints the error envelope instead:
+
+```
+{"ok": false, "error": {"code": "lock_unavailable", "message": "...", "path": null, "op_index": null, "entity_id": null}}
+```
+
+with the exit code from the table below. Clients distinguish the two by the presence of `ok`.
 
 ## History: undo and redo
 

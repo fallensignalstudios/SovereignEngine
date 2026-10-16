@@ -1,6 +1,7 @@
 # ADR-014: Reconstructed packet files
 
-Status: Provisional until Matthew supplies the originals. Date: 2026-10-16.
+Status: **Superseded** by [ADR-017](ADR-017-adopt-first-ignition-packet.md) (the owner supplied the
+packet; its originals replaced every file below). Date: 2026-10-16. Kept for the record.
 
 The handoff's read order and CLI examples name files that were not attached: `AGENTS.md`,
 `docs/VALIDATION_MATRIX.md`, `schemas/command_batch.schema.json` (+ result schema),

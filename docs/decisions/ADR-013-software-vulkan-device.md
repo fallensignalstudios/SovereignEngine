@@ -27,4 +27,5 @@ Shows: the code is valid Vulkan usage as far as the validation layers can tell; 
 picking, outline, captures and lifecycle behave correctly on a conformant implementation.
 
 Does not show: behaviour on any physical GPU driver (different tiling, memory types, timing, driver
-bugs, present modes), performance, or visual review on a real display. G1-GPU items stay **BLOCKED**.
+bugs, present modes), performance, or visual review on a real display. G1-R01 and G1-R13 stay
+**BLOCKED**, and every G1-R result from this host carries the software-rendered evidence class.

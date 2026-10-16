@@ -13,10 +13,10 @@ Implemented in `engine/core/include/sov/core/math.h`, `engine/renderer`, `engine
 | Transform | Column vectors, `v' = M v`, `M = T * R * S`, local to parent | `math.trs_compose_order_is_t_r_s` |
 | Hierarchy | World = parent world * local, evaluated parent-before-child (breadth-first from roots) | `world.builds_from_document_with_parent_before_child_propagation` |
 | Matrix storage | `Mat4` is column-major: element (r, c) at `m[c*4 + r]`; CPU math is double | same |
-| Rotation | Unit quaternion serialized `[x, y, z, w]` (|q| within 1e-3 of 1). The editor shows Euler degrees applied yaw(Y) then pitch(X) then roll(Z): `q = qY * qX * qZ` | `math.quaternion_serialized_order_and_euler_display` |
+| Rotation | Unit quaternion `rotation_xyzw` = `[x, y, z, w]`, each component in [-1, 1], |q|² within 1e-6 of 1 (the packet checker's rule). The editor shows Euler degrees applied yaw(Y) then pitch(X) then roll(Z): `q = qY * qX * qZ` | `math.quaternion_serialized_order_and_euler_display` |
 | Normals | Inverse-transpose of the model's upper 3x3 (`NormalMatrix`) | `math.inverse_and_normal_matrix` |
 | Scale | Strictly positive in G1 (`[1e-4, 1e4]`); negative-determinant transforms are a G2 import topic | `scene.value_validation_rejects_bad_numbers` |
-| Coordinates | G1 uses local doubles within ±100 km; `region.cell` is reserved and must be `[0,0,0]` | same |
+| Coordinates | Local doubles; `position` within ±1e6 m (contract v1). No region/cell origin shifting in G1 | same |
 
 ## Projection, depth, culling (Vulkan)
 
@@ -33,13 +33,27 @@ Implemented in `engine/core/include/sov/core/math.h`, `engine/renderer`, `engine
 
 ## Colour
 
-- CPU material values and lights are **linear RGB**.
+- Material values (`base_color_rgba`, `emissive_rgb` up to 1000), `background_linear_rgb` and the R0
+  light are **linear RGB**.
 - The forward pass writes linear HDR (`R16G16B16A16_SFLOAT`); the tone-map pass applies exposure and
   a fitted ACES curve and writes to an **sRGB** target (`*_SRGB` swapchain or view image). The
   hardware sRGB encode on store is the **single** output encoding step.
 - Tool-UI (Dear ImGui) colours are authored in sRGB and converted to linear once at theme setup so
   they display as authored on the sRGB swapchain.
 - Captures are the encoded bytes read back from the sRGB image (no further conversion).
+
+## R0 lighting and materials (contract v1 has no lights)
+
+Every scene is lit the same way (ADR-017), so a scene file fully determines its image:
+
+| Term | Value |
+|---|---|
+| Key light | directional, direction `normalize(0.35, -1, -0.55)` (travelling down, toward -Z), radiance `(3.2, 3.0, 2.8)` |
+| Ambient | hemispheric `(0.10, 0.10, 0.12)` |
+| Surface | dielectric, roughness 0.6, Lambert + normalized Blinn-Phong specular; `emissive_rgb` added unlit |
+| Exposure | 1.0, then fitted ACES, then the sRGB encode |
+| Background | `background_linear_rgb` clear colour; no sky or fog |
+| Alpha | `base_color_rgba[3]` stored and edited but rendered **opaque**; loading a scene with alpha < 1 warns |
 
 ## Shader interface
 

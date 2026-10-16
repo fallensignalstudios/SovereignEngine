@@ -5,8 +5,10 @@ packet) with an independent validator (jsonschema), so engine-written files are 
 something other than the engine.
 
 Usage: check_contracts.py [FILE_OR_DIR ...]   (default: the repository's scenes and batches)
-Files ending in .scene.json are scenes; files ending in .command_batch.json are batches; for a
-directory, both kinds are collected recursively. Exit 0 if all conform, 1 if any does not,
+Files ending in .scene.json are scenes; files ending in .command_batch.json are batches; files
+ending in .result.json are command results, checked against the engine-defined
+schemas/command_result.schema.json (the packet defines no result contract). For a directory,
+all three kinds are collected recursively. Exit 0 if all conform, 1 if any does not,
 77 if jsonschema is not installed (CTest reports that as skipped, never passed).
 """
 import json
@@ -36,11 +38,13 @@ def load(path):
 
 scene_schema = load(ROOT / "schemas/scene.schema.json")
 batch_schema = load(ROOT / "schemas/command_batch.schema.json")
+result_schema = load(ROOT / "schemas/command_result.schema.json")
 registry = Registry().with_resources([(scene_schema["$id"], Resource.from_contents(scene_schema)),
                                       (batch_schema["$id"], Resource.from_contents(batch_schema))])
 validators = {
     "scene": Draft202012Validator(scene_schema, registry=registry, format_checker=FormatChecker()),
     "batch": Draft202012Validator(batch_schema, registry=registry, format_checker=FormatChecker()),
+    "result": Draft202012Validator(result_schema, registry=registry, format_checker=FormatChecker()),
 }
 
 
@@ -50,6 +54,8 @@ def kind_of(path):
         return "scene"
     if name.endswith(".command_batch.json"):
         return "batch"
+    if name.endswith(".result.json"):
+        return "result"
     return None
 
 
@@ -100,10 +106,10 @@ for path in files:
         errors = [str(exc)]
     if errors:
         failures += 1
-        print(f"FAIL {kind:5} {rel}")
+        print(f"FAIL {kind:6} {rel}")
         for e in errors[:10]:
             print(f"       {e}")
     else:
-        print(f"ok   {kind:5} {rel}")
+        print(f"ok   {kind:6} {rel}")
 print(f"{len(files)} file(s), {failures} failure(s)")
 sys.exit(1 if failures or not files else 0)

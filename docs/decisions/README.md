@@ -18,6 +18,7 @@ G0/G1 had to settle, plus decisions this assignment raised (ADR-013 onward). Sta
 | 009 | Engine publication/licence | Not decided, by design: private research, no licence chosen for Matthew |
 | 010-012 | Advanced GI, mobile route, native Cinemafy format | Not opened in G0/G1 |
 | [013](ADR-013-software-vulkan-device.md) | lavapipe as supplementary software-rendered evidence | Accepted, with limits |
-| [014](ADR-014-reconstructed-packet-files.md) | Reconstructed packet files (AGENTS.md, matrix, schemas, batch) | Provisional until originals are supplied |
+| [014](ADR-014-reconstructed-packet-files.md) | Reconstructed packet files (AGENTS.md, matrix, schemas, batch) | Superseded by ADR-017 |
 | [015](ADR-015-dxc-source-build.md) | Build DXC from source on non-Windows hosts | Accepted, **needs Matthew's review** |
 | [016](ADR-016-backend-boundary.md) | Backend boundary at the renderer API; no Null RHI | Accepted for G1 |
+| [017](ADR-017-adopt-first-ignition-packet.md) | Adopt the owner's First Ignition packet as the contract; R0 fixed lighting; alpha stored, rendered opaque | Accepted |

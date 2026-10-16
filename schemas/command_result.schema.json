@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://sovereign.invalid/schemas/command_result.schema.json",
   "title": "Sovereign Engine command result (sovereign.command_result v1)",
-  "description": "Result returned for batches, undo and redo (TDD v0.1 section 19.3). RECONSTRUCTED from the TDD. A duplicate delivery returns the originally recorded result verbatim with delivery = \"replayed\".",
+  "description": "Result returned for batches, undo and redo (TDD v0.1 section 19.3). Engine-defined (the owner's First Ignition packet defines no result contract; ADR-017). A duplicate delivery returns the originally recorded result verbatim with delivery = \"replayed\".",
   "type": "object",
   "required": ["protocol", "protocol_version", "request_id", "status", "delivery", "kind", "actor", "scene_id", "revision_before", "revision_after", "commit_id", "operations", "errors", "warnings", "diff", "conflict"],
   "properties": {
