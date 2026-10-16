@@ -1,0 +1,34 @@
+[gui-real-input] editor pid 3634 window 6291502
+[gui-real-input] ok: scene open at revision 0
+[gui-real-input] sovereign-cli commit while editor open: exit 3 (expected 3)
+[gui-real-input] captured x11_01_opened.png
+[gui-real-input] ok: hierarchy click selected Column 2
+[gui-real-input] ok: inspector shows Column 2
+[gui-real-input] ok: typed Position X = -5.5 committed as revision 1
+[gui-real-input] captured x11_02_position_typed.png
+[gui-real-input] ok: hierarchy click selected Platform light strip
+[gui-real-input] ok: typed Emissive R = 3 committed as revision 2
+[gui-real-input] captured x11_03_material_typed.png
+[gui-real-input] ok: viewport click picked Raised platform
+[gui-real-input] captured x11_04_viewport_pick.png
+[gui-real-input] ok: Delete key removed Raised platform (revision 3)
+[gui-real-input] ok: History panel showing
+[gui-real-input] ok: Undo button restored the platform (revision 4)
+[gui-real-input] ok: Redo button deleted it again (revision 5)
+[gui-real-input] ok: Ctrl+Z restored it (revision 6)
+[gui-real-input] captured x11_05_history.png
+[gui-real-input] ok: Diagnostics panel showing
+[gui-real-input] ok: Validation tab shows layer on, 0 errors
+[gui-real-input] captured x11_06_diagnostics_validation.png
+[gui-real-input] ok: Commands tab lists the session's command results
+[gui-real-input] ok: Ctrl+S saved (not dirty)
+[gui-real-input] captured x11_07_saved.png
+[gui-real-input] editor exit code 0
+[gui-real-input] journal kinds=['edit', 'edit', 'edit', 'undo', 'redo', 'undo'] revision=6 column2.x=-5.5 strip.emissive=[3.0, 0.45, 0.06] platform_present=True other_entities_unchanged=True -> PASS
+[gui-real-input] editor pid 3894 window 4194350
+[gui-real-input] ok: reopened editor: revision 6, 6 history records, clean
+[gui-real-input] ok: reopened editor shows Column 2 at x = -5.5
+[gui-real-input] captured x11_08_reopened.png
+[gui-real-input] editor exit code 0
+[gui-real-input] runtime opened the GUI-saved scene and presented frames
+[gui-real-input] PASS

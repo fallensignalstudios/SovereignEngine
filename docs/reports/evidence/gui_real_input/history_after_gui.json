@@ -1,0 +1,72 @@
+{
+  "revision": 6,
+  "next_undo": "daa20632-156a-4cc3-aef8-c3ad9ab2f4c4",
+  "next_redo": "e81da82b-987f-48a2-8249-9e98a915cbac",
+  "journal": {
+    "present": true,
+    "consistent": true,
+    "notes": []
+  },
+  "transactions": [
+    {
+      "commit_id": "c46d3c17-46a3-4dcd-b908-965d137b8469",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 0,
+      "new_revision": 1,
+      "label": "Set transform",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "daa20632-156a-4cc3-aef8-c3ad9ab2f4c4",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 1,
+      "new_revision": 2,
+      "label": "Set Emissive",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "e81da82b-987f-48a2-8249-9e98a915cbac",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 2,
+      "new_revision": 3,
+      "label": "Delete",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "2817ceab-f521-4057-a9ca-4cdb371a289e",
+      "kind": "undo",
+      "actor": "editor:local",
+      "base_revision": 3,
+      "new_revision": 4,
+      "label": "Undo: Delete",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "86fc923b-bd67-44f5-97d9-fda5221f7633",
+      "kind": "redo",
+      "actor": "editor:local",
+      "base_revision": 4,
+      "new_revision": 5,
+      "label": "Redo: Delete",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "6cd2d27b-1a94-4109-a26e-3bcf3f068f15",
+      "kind": "undo",
+      "actor": "editor:local",
+      "base_revision": 5,
+      "new_revision": 6,
+      "label": "Undo: Delete",
+      "idempotency_key": "",
+      "operations": 1
+    }
+  ]
+}

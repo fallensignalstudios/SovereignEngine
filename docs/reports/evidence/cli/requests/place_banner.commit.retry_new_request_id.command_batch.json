@@ -1,0 +1,60 @@
+{
+  "protocol_version": 1,
+  "request_id": "47bd0afb-6a24-4c63-a716-bc292b64694c",
+  "actor": "caelis",
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "base_revision": 0,
+  "idempotency_key": "place-banner-commit-0001",
+  "dry_run": false,
+  "operations": [
+    {
+      "op": "entity.create",
+      "entity": {
+        "id": "10000000-0000-4000-8000-000000000140",
+        "name": "Test banner",
+        "components": {
+          "Transform": {
+            "position": [
+              0,
+              6,
+              -8.75
+            ],
+            "rotation_xyzw": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "scale": [
+              4,
+              5,
+              0.05
+            ],
+            "parent_id": null
+          },
+          "PrimitiveMesh": {
+            "primitive": "box"
+          },
+          "MaterialParameters": {
+            "base_color_rgba": [
+              0.24,
+              0.022,
+              0.016,
+              1
+            ],
+            "emissive_rgb": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    },
+    {
+      "op": "entity.rename",
+      "entity_id": "10000000-0000-4000-8000-000000000103",
+      "name": "First Light dais"
+    }
+  ]
+}

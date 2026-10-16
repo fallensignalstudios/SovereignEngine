@@ -1,0 +1,6 @@
+sovereign-cli 0.1.0
+commit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+dependency-lock: sha256:c2ad80e256bb24a21da9321f9c562a1a2cb1d2393845987f493e1e80cb5a1065
+build: Debug | GNU 13.3.0 | Linux x86_64
+contracts: sovereign.scene schema v1, sovereign.command_batch protocol v1, journal format v1
+graphics: sovereign-cli never initializes a graphics device

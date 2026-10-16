@@ -1,0 +1,133 @@
+# 2026-10-16T23:35:16Z
+$ git clone --no-local <repo> <fresh-clone>
+Cloning into '<fresh-clone>'...
+# exit 0
+$ git log -1 --format=clone HEAD %H %s HEAD
+clone HEAD fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 Clean-build evidence for the packet-contract build (both presets, fresh fetches)
+# exit 0
+$ git status --porcelain
+# exit 0
+$ cmake --preset dev-headless
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+  FETCHCONTENT_UPDATES_DISCONNECTED="ON"
+  SOV_ENABLE_GRAPHICS="OFF"
+  SOV_WARNINGS_AS_ERRORS="ON"
+
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.43.0") 
+-- Using the multi-header code from <fresh-clone>/build/dev-headless/_deps/nlohmann_json-src/include/
+-- Dependency nlohmann_json: https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz (sha256 42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
+-- Dependency EnTT: v3.15.0 @ d4014c74dc3793aba95ae354d6e23a026c2796db (verified)
+-- Found Python3: /usr/bin/python3 (found version "3.13.16") found components: Interpreter 
+-- Configuring done (4.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: <fresh-clone>/build/dev-headless
+# exit 0
+$ cmake --build --preset dev-headless
+[1/45] Updating build information
+[2/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/result.cpp.o
+[3/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/math.cpp.o
+[4/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/sha256.cpp.o
+[5/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/uuid.cpp.o
+[6/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/log.cpp.o
+[7/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/process.cpp.o
+[8/45] Building CXX object tests/CMakeFiles/sov_test_harness.dir/support/sov_test.cpp.o
+[9/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/build_info.cpp.o
+[10/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/png.cpp.o
+[11/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/fs.cpp.o
+[12/45] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/primitive_geometry.cpp.o
+[13/45] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/json.cpp.o
+[14/45] Linking CXX static library lib/libsov_core.a
+[15/45] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/scene_diff.cpp.o
+[16/45] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/reflection.cpp.o
+[17/45] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/scene_document.cpp.o
+[18/45] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/command_batch.cpp.o
+[19/45] Building CXX object engine/runtime/CMakeFiles/sov_runtime.dir/src/simulation.cpp.o
+[20/45] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/operation.cpp.o
+[21/45] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/transaction.cpp.o
+[22/45] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/scene_store.cpp.o
+[23/45] Linking CXX static library lib/libsov_test_harness.a
+[24/45] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/scene_session.cpp.o
+[25/45] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/world.cpp.o
+[26/45] Linking CXX static library lib/libsov_world.a
+[27/45] Linking CXX static library lib/libsov_runtime.a
+[28/45] Linking CXX static library lib/libsov_commands.a
+[29/45] Building CXX object games/sandbox/CMakeFiles/sov_game_sandbox.dir/src/sandbox.cpp.o
+[30/45] Linking CXX static library lib/libsov_game_sandbox.a
+[31/45] Building CXX object editor/CMakeFiles/sov_editor_authoring.dir/authoring/src/editor_document.cpp.o
+[32/45] Linking CXX static library lib/libsov_editor_authoring.a
+[33/45] Building CXX object tools/cli/CMakeFiles/sovereign-cli.dir/main.cpp.o
+[34/45] Linking CXX executable bin/sovereign-cli
+[35/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/support/test_main.cpp.o
+[36/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_math.cpp.o
+[37/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_world.cpp.o
+[38/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_core.cpp.o
+[39/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_commands.cpp.o
+[40/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_store.cpp.o
+[41/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_scene.cpp.o
+[42/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_cli.cpp.o
+[43/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_editor.cpp.o
+[44/45] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_play.cpp.o
+[45/45] Linking CXX executable bin/sovereign-tests
+# exit 0
+$ ctest --preset dev-headless
+Test project <fresh-clone>/build/dev-headless
+      Start  1: headless.core
+      Start  2: headless.math
+      Start  3: headless.scene
+      Start  4: headless.world
+ 1/18 Test  #2: headless.math ......................................   Passed    0.01 sec
+      Start  5: headless.commands
+ 2/18 Test  #4: headless.world .....................................   Passed    0.00 sec
+      Start  6: headless.store
+ 3/18 Test  #5: headless.commands ..................................   Passed    0.04 sec
+      Start  7: headless.cli
+ 4/18 Test  #3: headless.scene .....................................   Passed    0.05 sec
+      Start  8: headless.editor
+ 5/18 Test  #1: headless.core ......................................   Passed    0.13 sec
+      Start  9: headless.play
+ 6/18 Test  #8: headless.editor ....................................   Passed    0.13 sec
+      Start 10: static.no_unreal_dependency
+ 7/18 Test #10: static.no_unreal_dependency ........................   Passed    0.04 sec
+      Start 11: static.headless_sovereign-cli_has_no_graphics
+ 8/18 Test  #9: headless.play ......................................   Passed    0.12 sec
+      Start 12: static.headless_sovereign-tests_has_no_graphics
+ 9/18 Test  #7: headless.cli .......................................   Passed    0.29 sec
+      Start 13: static.sovereign-cli_link_dependencies
+10/18 Test #11: static.headless_sovereign-cli_has_no_graphics ......   Passed    0.23 sec
+      Start 14: static.sovereign-tests_link_dependencies
+11/18 Test #12: static.headless_sovereign-tests_has_no_graphics ....   Passed    0.31 sec
+      Start 15: static.license_notices_match_lock
+12/18 Test #15: static.license_notices_match_lock ..................   Passed    0.03 sec
+      Start 16: static.packet_files_verbatim
+13/18 Test #16: static.packet_files_verbatim .......................   Passed    0.01 sec
+      Start 17: static.packet_contract_checker
+14/18 Test #13: static.sovereign-cli_link_dependencies .............   Passed    0.28 sec
+      Start 18: static.repository_files_conform_to_owner_schemas
+15/18 Test #18: static.repository_files_conform_to_owner_schemas ...   Passed    0.16 sec
+16/18 Test #14: static.sovereign-tests_link_dependencies ...........   Passed    0.36 sec
+17/18 Test #17: static.packet_contract_checker .....................   Passed    0.25 sec
+18/18 Test  #6: headless.store .....................................   Passed    1.13 sec
+
+100% tests passed, 0 tests failed out of 18
+
+Label Time Summary:
+headless    =   3.58 sec*proc (18 tests)
+static      =   1.67 sec*proc (9 tests)
+
+Total Test time (real) =   1.14 sec
+# exit 0

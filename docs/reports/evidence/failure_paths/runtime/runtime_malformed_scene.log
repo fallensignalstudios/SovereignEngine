@@ -1,0 +1,4 @@
+$ build/dev-vulkan/bin/sovereign-runtime --scene build/dev-vulkan/test-artifacts/failure_paths/work/malformed.scene.json --frames 5
+# expected exit 1, diagnostic /cannot open scene.*(parse|JSON|json)/
+2026-10-16T23:24:27.277Z [error] [runtime] cannot open scene build/dev-vulkan/test-artifacts/failure_paths/work/malformed.scene.json: schema_error: invalid JSON: [json.exception.parse_error.101] parse error at line 1, column 36: syntax error while parsing value - unexpected end of input; expected '[', '{', or a literal
+# exit 1 after 0.01s: passed 

@@ -1,0 +1,52 @@
+{
+  "protocol": "sovereign.command_result",
+  "protocol_version": 1,
+  "request_id": null,
+  "status": "rejected",
+  "delivery": "original",
+  "kind": "undo",
+  "actor": "cli",
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "revision_before": 3,
+  "revision_after": 3,
+  "commit_id": null,
+  "target_commit": "2ad228ec-a0e6-4857-a01e-be4b1ca182fa",
+  "request_hash": null,
+  "operations": [],
+  "errors": [
+    {
+      "code": "stale_revision",
+      "message": "base_revision 1 is stale; the scene is at revision 3. Re-read the scene and resubmit against the current revision.",
+      "path": "/base_revision",
+      "op_index": null,
+      "entity_id": null
+    }
+  ],
+  "warnings": [],
+  "diff": null,
+  "conflict": {
+    "base_revision": 1,
+    "current_revision": 3,
+    "commits_since_base": [
+      {
+        "commit_id": "cf3ada30-4de6-44a1-b82f-0e3408e378b6",
+        "kind": "undo",
+        "actor": "cli:demo",
+        "base_revision": 1,
+        "new_revision": 2,
+        "label": "Undo: batch 0061ed85-ee00-4f76-86e2-375d447ec198 (2 operation(s))",
+        "entities": ["10000000-0000-4000-8000-000000000103", "10000000-0000-4000-8000-000000000140"]
+      },
+      {
+        "commit_id": "4787cd00-7bc2-4c3d-9471-d80d6aa0a4f9",
+        "kind": "redo",
+        "actor": "cli:demo",
+        "base_revision": 2,
+        "new_revision": 3,
+        "label": "Redo: batch 0061ed85-ee00-4f76-86e2-375d447ec198 (2 operation(s))",
+        "entities": ["10000000-0000-4000-8000-000000000103", "10000000-0000-4000-8000-000000000140"]
+      }
+    ],
+    "history_complete": true
+  }
+}

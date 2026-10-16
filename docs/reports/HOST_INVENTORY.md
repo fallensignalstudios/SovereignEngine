@@ -1,4 +1,4 @@
-# Host inventory (G0-01)
+# Host inventory (G0-02)
 
 Collected 2026-10-16 on the machine that produced every result in this repository. Raw output:
 `docs/reports/evidence/host/` (`host.txt`, `toolchain.txt`, `vulkaninfo_summary.txt`,
@@ -38,7 +38,7 @@ Evidence class for every graphics result: **software-rendered (CPU Vulkan implem
 | CMake | 3.28.3 | presets v6 |
 | Ninja | 1.11.1 | |
 | GNU ld | 2.42 | |
-| Python | 3.13.16 | scripts, independent checks |
+| Python | 3.13.16, with `jsonschema` 4.26.0 (preinstalled in the image) | scripts, independent contract checks |
 | git | 2.43.0 | FetchContent, revision checks |
 | DXC | v1.8.2505.1 built from source @ b106a961d092 (`libdxcompiler.so: 1.9(dev;1-b106a961)`) | shaders (ADR-015) |
 | xdotool / ImageMagick | 3.20160805.1 / 6.9.12-98 | real X11 input, X server captures |
@@ -50,6 +50,8 @@ vulkan-validationlayers, vulkan-tools, xvfb, xauth, xdotool, x11-utils, imagemag
 X11 development headers SDL3 needs (libx11-dev, libxext-dev, libxrandr-dev, libxcursor-dev,
 libxfixes-dev, libxi-dev, libxss-dev, libxtst-dev, libxkbcommon-dev). DXC was built into the
 repository's ignored `build/tools/`. Nothing outside the container and this repository was changed.
+
+Isolation probes before and after evidence collection (G0-01): `docs/reports/evidence/isolation/`.
 
 ## Not available (no inference)
 

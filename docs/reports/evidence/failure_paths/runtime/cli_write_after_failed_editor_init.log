@@ -1,0 +1,51 @@
+$ build/dev-vulkan/bin/sovereign-cli scene apply --scene build/dev-vulkan/test-artifacts/failure_paths/work/editor.scene.json --commands build/dev-vulkan/test-artifacts/failure_paths/work/rename.command_batch.json
+# expected exit 0, diagnostic /"status": "committed"/
+committed: revision 0 -> 1 (commit 0b719701-8684-4401-ba34-ee5f3765beeb)
+{
+  "protocol": "sovereign.command_result",
+  "protocol_version": 1,
+  "request_id": "10000000-0000-4000-8000-00000000f001",
+  "status": "committed",
+  "delivery": "original",
+  "kind": "edit",
+  "actor": "cli:failure-paths",
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "revision_before": 0,
+  "revision_after": 1,
+  "commit_id": "0b719701-8684-4401-ba34-ee5f3765beeb",
+  "target_commit": null,
+  "request_hash": "38089e8690046d21591c58b0a5046c21ac8e8987882985e36eb08225615e1753",
+  "operations": [
+    {
+      "index": 0,
+      "op": "entity.rename",
+      "entity_id": "10000000-0000-4000-8000-000000000102",
+      "status": "applied"
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "diff": {
+    "revision_before": 0,
+    "revision_after": 1,
+    "entities_created": [],
+    "entities_deleted": [],
+    "entities_modified": [
+      {
+        "entity_id": "10000000-0000-4000-8000-000000000102",
+        "name": "Renamed after failed editor init",
+        "changes": [
+          {
+            "path": "name",
+            "before": "Central walkway",
+            "after": "Renamed after failed editor init"
+          }
+        ]
+      }
+    ],
+    "scene_fields": [],
+    "summary": "0 created, 0 deleted, 1 modified, 0 scene field(s) changed"
+  },
+  "conflict": null
+}
+# exit 0 after 0.02s: passed 

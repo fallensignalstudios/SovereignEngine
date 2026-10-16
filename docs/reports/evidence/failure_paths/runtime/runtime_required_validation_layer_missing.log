@@ -1,0 +1,6 @@
+$ env VK_LAYER_PATH=build/dev-vulkan/test-artifacts/failure_paths/work/no-layers SOV_REQUIRE_VALIDATION=1 build/dev-vulkan/bin/sovereign-runtime --scene content/authoring/first_light.scene.json --frames 5
+# expected exit 4, diagnostic /VK_LAYER_KHRONOS_validation is required/
+2026-10-16T23:24:27.409Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+2026-10-16T23:24:27.420Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:24:27.449Z [error] [runtime] unsupported_component: VK_LAYER_KHRONOS_validation is required (SOV_REQUIRE_VALIDATION=1) but is not installed; install the Vulkan validation layers or unset SOV_REQUIRE_VALIDATION
+# exit 4 after 0.06s: passed 

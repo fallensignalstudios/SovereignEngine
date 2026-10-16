@@ -1,0 +1,128 @@
+$ ctest --preset gpu-qualify --output-on-failure
+# 2026-10-16T23:30:51Z commit fcbc52cc6b0f55680a40c99ca5f41266d5ce2630
+Test project build/dev-vulkan
+      Start 10: vulkan.rendering
+ 1/10 Test #10: vulkan.rendering ..........................***Failed    0.70 sec
+2026-10-16T23:30:51.146Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.device_startup_with_validation (83.3 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.213Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.shader_matrix_packing_matches_cpu_math (58.1 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.281Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.axis_lab_orientation_depth_culling_hierarchy_and_pick_ids (68.2 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.347Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.projection_matches_analytic_fov_and_aspect (65.9 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.415Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.request_pick_resolves_entity_with_frame_table (67.5 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.481Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.pick_resolves_with_the_drawn_snapshot_not_a_stale_table (65.8 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.546Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.selection_outline_changes_only_the_selected_edge (64.7 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.611Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.first_light_renders_from_scene_data (65.4 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.677Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.view_resize_and_recreate_cycles_return_to_resource_baseline (65.9 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:51.743Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+[FAIL] rendering.zz_validation_summary_after_suite (66.3 ms)
+       tests/rendering/test_rendering.cpp:36: renderer creation failed: unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+10 test(s) run, 10 failed
+
+      Start 12: static.runtime_has_no_editor_code
+ 2/10 Test #12: static.runtime_has_no_editor_code .........   Passed    0.30 sec
+      Start 13: vulkan.runtime_first_light
+ 3/10 Test #13: vulkan.runtime_first_light ................***Failed    0.77 sec
+2026-10-16T23:30:52.694Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+2026-10-16T23:30:52.708Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:30:52.806Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:52.816Z [error] [runtime] unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+
+      Start 14: vulkan.runtime_window_lifecycle_stress
+ 4/10 Test #14: vulkan.runtime_window_lifecycle_stress ....***Failed    0.76 sec
+2026-10-16T23:30:53.461Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+2026-10-16T23:30:53.472Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:30:53.563Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:53.573Z [error] [runtime] unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+
+      Start 17: vulkan.editor_clean_stage
+ 5/10 Test #17: vulkan.editor_clean_stage .................   Passed    0.01 sec
+      Start 16: vulkan.editor_stage_scene
+ 6/10 Test #16: vulkan.editor_stage_scene .................   Passed    0.01 sec
+      Start 15: vulkan.editor_first_success_automation
+ 7/10 Test #15: vulkan.editor_first_success_automation ....***Failed    0.71 sec
+2026-10-16T23:30:54.193Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:30:54.292Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:54.302Z [error] [editor] unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+
+      Start 18: vulkan.editor_real_x11_input
+ 8/10 Test #18: vulkan.editor_real_x11_input ..............***Failed    0.78 sec
+[gui-real-input] FAIL: editor exited with code 4 before showing a window (see editor_stdout.log)
+2026-10-16T23:30:54.909Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:30:54.994Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+2026-10-16T23:30:55.003Z [error] [editor] unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: CPU/software implementation refused (physical GPU required)
+
+      Start 19: vulkan.failure_paths_unwind_cleanly
+ 9/10 Test #19: vulkan.failure_paths_unwind_cleanly .......***Failed    2.31 sec
+runtime_normal_close                             exit 4   failed exit 4, expected 0
+runtime_missing_scene                            exit 1   passed 
+runtime_malformed_scene                          exit 1   passed 
+editor_missing_scene                             exit 1   passed 
+runtime_no_display                               exit 4   passed 
+ctest_launcher_without_display_or_xvfb           exit 77  passed 
+runtime_no_vulkan_driver                         exit 4   passed 
+runtime_required_validation_layer_missing        exit 4   passed 
+runtime_requested_device_absent                  exit 4   failed diagnostic /does not match the requested device/ not found
+runtime_physical_gpu_required_on_gpu_host        exit 4   failed exit 4, expected 0
+runtime_missing_shaders_after_device_init        exit 4   failed diagnostic /\.spv/ not found
+editor_requested_device_absent                   exit 4   failed diagnostic /does not match the requested device/ not found
+editor_missing_shaders_after_device_init         exit 4   failed diagnostic /\.spv/ not found
+editor_failed_init_left_scene_unchanged          exit 0   passed 
+cli_write_after_failed_editor_init               exit 0   passed 
+failure paths: 9/15 passed; summary build/dev-vulkan/test-artifacts/failure_paths/failure_paths.json
+
+      Start 25: vulkan.loaded_libraries_are_system_only
+10/10 Test #25: vulkan.loaded_libraries_are_system_only ...***Failed    0.86 sec
+runtime: exit 4 (see build/dev-vulkan/test-artifacts/loaded_libraries/runtime.log)
+editor: exit 4 (see build/dev-vulkan/test-artifacts/loaded_libraries/editor.log)
+
+
+30% tests passed, 7 tests failed out of 10
+
+Label Time Summary:
+display    =   6.21 sec*proc (8 tests)
+static     =   1.16 sec*proc (2 tests)
+vulkan     =   7.21 sec*proc (10 tests)
+
+Total Test time (real) =   7.22 sec
+
+The following tests FAILED:
+	 10 - vulkan.rendering (Failed)
+	 13 - vulkan.runtime_first_light (Failed)
+	 14 - vulkan.runtime_window_lifecycle_stress (Failed)
+	 15 - vulkan.editor_first_success_automation (Failed)
+	 18 - vulkan.editor_real_x11_input (Failed)
+	 19 - vulkan.failure_paths_unwind_cleanly (Failed)
+	 25 - vulkan.loaded_libraries_are_system_only (Failed)
+Errors while running CTest
+# exit 8 at 2026-10-16T23:30:58Z

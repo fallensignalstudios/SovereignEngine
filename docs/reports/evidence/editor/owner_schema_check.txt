@@ -1,0 +1,4 @@
+ok   scene  docs/reports/evidence/editor/first_light.before_editor.scene.json
+ok   scene  docs/reports/evidence/editor/first_light.saved_by_editor.scene.json
+ok   scene  docs/reports/evidence/gui_real_input/first_light.saved_by_gui.scene.json
+3 file(s), 0 failure(s)

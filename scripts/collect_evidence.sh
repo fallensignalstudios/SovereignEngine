@@ -136,8 +136,11 @@ grep -h 'physical device:' build/dev-vulkan/Testing/Temporary/LastTest.log | sor
 
 # 9. Isolation, after.
 scripts/isolation_check.sh "$E/isolation/after.txt" "after evidence collection"
-diff <(sed '1,2d' "$E/isolation/before.txt") <(sed '1,2d' "$E/isolation/after.txt") > "$E/isolation/before_after.diff"
-record isolation_before_after_identical $?
+# Compare everything outside this repository (the repository's own build/ listing changes when
+# step 2 recreates the sanitizer tree).
+diff <(sed -n '/^## production/,$p' "$E/isolation/before.txt") <(sed -n '/^## production/,$p' "$E/isolation/after.txt") \
+  > "$E/isolation/before_after.diff"
+record isolation_outside_repository_identical $?
 
 scrub "$C/PROVENANCE.txt" "$E"/editor/*.json "$E"/editor/*.txt "$E"/gui_real_input/*.log "$E"/gui_real_input/*.json \
   "$E"/gui_real_input/*.txt "$E"/gui_real_input/*.stderr "$E"/failure_paths/*/* "$E"/dependencies/* \

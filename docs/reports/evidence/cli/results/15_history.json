@@ -1,0 +1,42 @@
+{
+  "revision": 3,
+  "next_undo": "2ad228ec-a0e6-4857-a01e-be4b1ca182fa",
+  "next_redo": null,
+  "journal": {
+    "present": true,
+    "consistent": true,
+    "notes": []
+  },
+  "transactions": [
+    {
+      "commit_id": "2ad228ec-a0e6-4857-a01e-be4b1ca182fa",
+      "kind": "edit",
+      "actor": "caelis",
+      "base_revision": 0,
+      "new_revision": 1,
+      "label": "batch 0061ed85-ee00-4f76-86e2-375d447ec198 (2 operation(s))",
+      "idempotency_key": "place-banner-commit-0001",
+      "operations": 2
+    },
+    {
+      "commit_id": "cf3ada30-4de6-44a1-b82f-0e3408e378b6",
+      "kind": "undo",
+      "actor": "cli:demo",
+      "base_revision": 1,
+      "new_revision": 2,
+      "label": "Undo: batch 0061ed85-ee00-4f76-86e2-375d447ec198 (2 operation(s))",
+      "idempotency_key": "",
+      "operations": 2
+    },
+    {
+      "commit_id": "4787cd00-7bc2-4c3d-9471-d80d6aa0a4f9",
+      "kind": "redo",
+      "actor": "cli:demo",
+      "base_revision": 2,
+      "new_revision": 3,
+      "label": "Redo: batch 0061ed85-ee00-4f76-86e2-375d447ec198 (2 operation(s))",
+      "idempotency_key": "",
+      "operations": 2
+    }
+  ]
+}

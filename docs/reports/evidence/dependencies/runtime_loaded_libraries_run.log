@@ -1,0 +1,15 @@
+2026-10-16T23:24:30.512Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+2026-10-16T23:24:30.526Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:24:30.645Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+2026-10-16T23:24:30.662Z [info ] [vulkan] device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] api 1.4.318 driver llvmpipe (Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) conformance 1.3.1.1
+2026-10-16T23:24:30.662Z [info ] [vulkan] requested features: apiVersion 1.3, dynamicRendering, synchronization2, timelineSemaphore; validation layer ON, synchronization validation ON
+2026-10-16T23:24:30.662Z [warn ] [vulkan] selected device is a CPU (software) Vulkan implementation: results are software-rendered and do NOT qualify physical-GPU behaviour or performance
+2026-10-16T23:24:30.668Z [info ] [renderer] R0 forward renderer ready on llvmpipe (LLVM 20.1.2, 256 bits) (software-rendered (CPU Vulkan implementation)); shaders from build/dev-vulkan/bin/shaders
+2026-10-16T23:24:30.669Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+2026-10-16T23:24:30.669Z [info ] [runtime] evidence class: software-rendered (CPU Vulkan implementation)
+2026-10-16T23:24:30.670Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+runtime summary: frames=10 skipped=0 ticks=11 dropped_sim_seconds=0.000
+device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+evidence class: software-rendered (CPU Vulkan implementation)
+validation: layer on, sync on, errors 0, warnings 0
+resources: buffers 8 images 3 views 3 vma allocations 11

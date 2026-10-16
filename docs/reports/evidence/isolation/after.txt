@@ -1,0 +1,22 @@
+# isolation probe: after evidence collection
+# 2026-10-16T23:30:58Z host vm user root
+
+## resolved paths
+repository: /home/user/SovereignEngine
+build dir:  build/dev-headless-asan
+build dir:  build/dev-headless
+build dir:  build/dev-vulkan
+build dir:  build/scratch
+build dir:  build/tools
+repository git dir: .git
+remotes: 0 configured
+
+## production projects and Unreal installations named in the handoff
+none found under: /home /root /opt /srv /mnt /media /usr/local /tmp (depth 6; /ProjectVelkorran|Velkorran|Battles ?of ?the ?Reach|BattlesOfTheReach|GASPALS|Cinemafy|Holofy|Grungify|UnrealEngine|UE_5[^/]*|UE_4[^/]*|Epic Games|UnrealEditor/ case-insensitive; 'Origins' exact)
+
+## git repositories on this host other than this one (status recorded, never modified)
+/opt/nvm: HEAD bab86d5de571015b63fd8fc30b47bbe072a1290e status entries 0
+/opt/rbenv: HEAD 07e9b1e297a5977298c6aadc9971ae0e9eb7f0dc status entries 0
+/opt/rbenv/plugins/ruby-build: HEAD db86e6ddd6d3b1d8715d005b65fab0c3f2804fdd status entries 0
+/root/.cache/uv/sdists-v9: HEAD none status entries 0
+<session-scratch>/dxc_src_meta: HEAD none status entries 0

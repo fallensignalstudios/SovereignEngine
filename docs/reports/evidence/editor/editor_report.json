@@ -1,0 +1,329 @@
+{
+  "scene": "first_light.scene.json",
+  "revision": 4,
+  "saved_revision": 4,
+  "dirty": false,
+  "file_sha256": "6226100c656b79cb00f8118a53e651d75a3560f34179f59131bf46358871747d",
+  "device": {
+    "name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "type": "cpu",
+    "driver": "llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)",
+    "evidence_class": "software-rendered (CPU Vulkan implementation)",
+    "swapchain": "1600x900 format 50 images 4 present mode 2"
+  },
+  "validation": {
+    "layer": true,
+    "synchronization": true,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  "resources": {
+    "buffers": 10,
+    "images": 7,
+    "image_views": 7,
+    "vma_allocations": 17,
+    "vma_bytes": 61202344
+  },
+  "frames": 1075,
+  "automation_failures": 0,
+  "transcript": [
+    {
+      "step": {
+        "do": "wait_frames",
+        "n": 10
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:43.366Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_01_opened.png"
+      },
+      "ok": true,
+      "detail": "editor_01_opened.png",
+      "at": "2026-10-16T23:23:44.018Z"
+    },
+    {
+      "step": {
+        "do": "pick",
+        "name": "Raised platform"
+      },
+      "ok": true,
+      "detail": "pixel (477, 248) -> pick index 3 -> 10000000-0000-4000-8000-000000000103",
+      "at": "2026-10-16T23:23:44.141Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "selected": "Raised platform",
+        "revision": 0,
+        "dirty": false
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:44.233Z"
+    },
+    {
+      "step": {
+        "do": "select",
+        "name": "Column 2"
+      },
+      "ok": true,
+      "detail": "10000000-0000-4000-8000-000000000111",
+      "at": "2026-10-16T23:23:44.324Z"
+    },
+    {
+      "step": {
+        "do": "move",
+        "name": "Column 2",
+        "delta": [1.5, 0.0, 0.0]
+      },
+      "ok": true,
+      "detail": "revision 0 -> 1",
+      "at": "2026-10-16T23:23:44.411Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 1,
+        "dirty": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:44.511Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_02_column_moved.png"
+      },
+      "ok": true,
+      "detail": "editor_02_column_moved.png",
+      "at": "2026-10-16T23:23:45.227Z"
+    },
+    {
+      "step": {
+        "do": "undo"
+      },
+      "ok": true,
+      "detail": "revision 1 -> 2",
+      "at": "2026-10-16T23:23:45.328Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 2
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:45.428Z"
+    },
+    {
+      "step": {
+        "do": "capture_viewport",
+        "path": "editor_03_move_undone_viewport.png"
+      },
+      "ok": true,
+      "detail": "editor_03_move_undone_viewport.png",
+      "at": "2026-10-16T23:23:45.756Z"
+    },
+    {
+      "step": {
+        "do": "set_material",
+        "name": "Raised platform",
+        "field": "base_color_rgba",
+        "value": [0.72, 0.4, 0.12, 1.0]
+      },
+      "ok": true,
+      "detail": "revision 2 -> 3",
+      "at": "2026-10-16T23:23:45.846Z"
+    },
+    {
+      "step": {
+        "do": "set_material",
+        "name": "Platform light strip",
+        "field": "emissive_rgb",
+        "value": [2.8, 0.9, 0.12]
+      },
+      "ok": true,
+      "detail": "revision 3 -> 4",
+      "at": "2026-10-16T23:23:45.945Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 4
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:46.035Z"
+    },
+    {
+      "step": {
+        "do": "select",
+        "name": "Raised platform"
+      },
+      "ok": true,
+      "detail": "10000000-0000-4000-8000-000000000103",
+      "at": "2026-10-16T23:23:46.127Z"
+    },
+    {
+      "step": {
+        "do": "save"
+      },
+      "ok": true,
+      "detail": "saved at revision 4",
+      "at": "2026-10-16T23:23:46.225Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "dirty": false,
+        "document_hash_equals_saved": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:46.315Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_04_material_saved.png"
+      },
+      "ok": true,
+      "detail": "editor_04_material_saved.png",
+      "at": "2026-10-16T23:23:46.982Z"
+    },
+    {
+      "step": {
+        "do": "play"
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:47.083Z"
+    },
+    {
+      "step": {
+        "do": "play_ticks",
+        "n": 120
+      },
+      "ok": true,
+      "detail": "120 ticks",
+      "at": "2026-10-16T23:23:49.087Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_05_playing.png"
+      },
+      "ok": true,
+      "detail": "editor_05_playing.png",
+      "at": "2026-10-16T23:23:49.762Z"
+    },
+    {
+      "step": {
+        "do": "stop"
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:49.825Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "playing": false,
+        "revision": 4,
+        "dirty": false,
+        "document_hash_equals_saved": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:49.915Z"
+    },
+    {
+      "step": {
+        "do": "reopen"
+      },
+      "ok": true,
+      "detail": "revision 4",
+      "at": "2026-10-16T23:23:50.009Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 4,
+        "dirty": false,
+        "document_hash_equals_saved": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T23:23:50.070Z"
+    },
+    {
+      "step": {
+        "do": "cycles",
+        "n": 50
+      },
+      "ok": true,
+      "detail": "50 save/play/stop/reopen cycles; buffers 10->10 images 7->7 allocations 17->17 vma bytes 61202344->61202344 validation errors 0->0 live worlds 1; process RSS 238.9 MiB (baseline) -> 238.9 MiB (after 10 cycles) -> 238.7 MiB (end), peak 239.1 MiB, settled growth -0.21 MiB (limit 16 MiB)",
+      "at": "2026-10-16T23:24:07.602Z"
+    },
+    {
+      "step": {
+        "do": "resize_window",
+        "w": 1280,
+        "h": 720
+      },
+      "ok": true,
+      "detail": "window now 1280x720",
+      "at": "2026-10-16T23:24:07.894Z"
+    },
+    {
+      "step": {
+        "do": "minimize"
+      },
+      "ok": true,
+      "detail": "frame rendered after step: false",
+      "at": "2026-10-16T23:24:08.052Z"
+    },
+    {
+      "step": {
+        "do": "restore"
+      },
+      "ok": true,
+      "detail": "frame rendered after step: true",
+      "at": "2026-10-16T23:24:08.356Z"
+    },
+    {
+      "step": {
+        "do": "resize_window",
+        "w": 1600,
+        "h": 900
+      },
+      "ok": true,
+      "detail": "window now 1600x900",
+      "at": "2026-10-16T23:24:08.691Z"
+    },
+    {
+      "step": {
+        "do": "select",
+        "name": "Column 5"
+      },
+      "ok": true,
+      "detail": "10000000-0000-4000-8000-000000000114",
+      "at": "2026-10-16T23:24:08.749Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_06_after_lifecycle.png"
+      },
+      "ok": true,
+      "detail": "editor_06_after_lifecycle.png",
+      "at": "2026-10-16T23:24:09.400Z"
+    }
+  ]
+}

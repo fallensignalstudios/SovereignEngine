@@ -1,0 +1,4 @@
+$ scripts/cli_demo_evidence.sh build/dev-headless/bin docs/reports/evidence/cli
+# 2026-10-16T23:23:20Z commit fcbc52cc6b0f55680a40c99ca5f41266d5ce2630
+CLI demo: 0 failure(s); transcript docs/reports/evidence/cli/transcript.md
+# exit 0 at 2026-10-16T23:23:27Z

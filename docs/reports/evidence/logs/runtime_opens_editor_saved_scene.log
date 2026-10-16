@@ -1,0 +1,19 @@
+$ scripts/with_virtual_display.sh build/dev-vulkan/bin/sovereign-runtime --scene build/dev-vulkan/test-artifacts/editor/first_light.scene.json --width 1280 --height 720 --frames 90 --screenshot docs/reports/evidence/captures/runtime_editor_saved_scene.png
+# 2026-10-16T23:24:31Z commit fcbc52cc6b0f55680a40c99ca5f41266d5ce2630
+2026-10-16T23:24:32.420Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 4, 12 entities, file sha256 6226100c656b79cb00f8118a53e651d75a3560f34179f59131bf46358871747d
+2026-10-16T23:24:32.431Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:24:32.519Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+2026-10-16T23:24:32.536Z [info ] [vulkan] device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] api 1.4.318 driver llvmpipe (Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) conformance 1.3.1.1
+2026-10-16T23:24:32.536Z [info ] [vulkan] requested features: apiVersion 1.3, dynamicRendering, synchronization2, timelineSemaphore; validation layer ON, synchronization validation ON
+2026-10-16T23:24:32.536Z [warn ] [vulkan] selected device is a CPU (software) Vulkan implementation: results are software-rendered and do NOT qualify physical-GPU behaviour or performance
+2026-10-16T23:24:32.542Z [info ] [renderer] R0 forward renderer ready on llvmpipe (LLVM 20.1.2, 256 bits) (software-rendered (CPU Vulkan implementation)); shaders from build/dev-vulkan/bin/shaders
+2026-10-16T23:24:32.543Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+2026-10-16T23:24:32.543Z [info ] [runtime] evidence class: software-rendered (CPU Vulkan implementation)
+2026-10-16T23:24:32.544Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+2026-10-16T23:24:33.894Z [info ] [runtime] screenshot written: docs/reports/evidence/captures/runtime_editor_saved_scene.png (1280x720)
+runtime summary: frames=90 skipped=0 ticks=56 dropped_sim_seconds=0.000
+device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+evidence class: software-rendered (CPU Vulkan implementation)
+validation: layer on, sync on, errors 0, warnings 0
+resources: buffers 9 images 3 views 3 vma allocations 12
+# exit 0 at 2026-10-16T23:24:33Z

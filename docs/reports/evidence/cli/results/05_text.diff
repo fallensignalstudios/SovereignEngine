@@ -1,0 +1,46 @@
+--- docs/reports/evidence/cli/scenes/first_light.rev0.before.scene.json	2026-10-16 23:23:20.843458735 +0000
++++ docs/reports/evidence/cli/scenes/first_light.rev1.after_commit.scene.json	2026-10-16 23:23:21.022142324 +0000
+@@ -2,7 +2,7 @@
+   "schema_version": 1,
+   "scene_id": "10000000-0000-4000-8000-000000000001",
+   "name": "First Light",
+-  "revision": 0,
++  "revision": 1,
+   "active_camera_id": "10000000-0000-4000-8000-000000000201",
+   "background_linear_rgb": [0.012, 0.014, 0.022],
+   "entities": [
+@@ -46,7 +46,7 @@
+     },
+     {
+       "id": "10000000-0000-4000-8000-000000000103",
+-      "name": "Raised platform",
++      "name": "First Light dais",
+       "components": {
+         "Transform": {
+           "position": [0.0, 0.5, -6.5],
+@@ -215,6 +215,25 @@
+         }
+       }
+     },
++    {
++      "id": "10000000-0000-4000-8000-000000000140",
++      "name": "Test banner",
++      "components": {
++        "Transform": {
++          "position": [0.0, 6.0, -8.75],
++          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
++          "scale": [4.0, 5.0, 0.05],
++          "parent_id": null
++        },
++        "PrimitiveMesh": {
++          "primitive": "box"
++        },
++        "MaterialParameters": {
++          "base_color_rgba": [0.24, 0.022, 0.016, 1.0],
++          "emissive_rgb": [0.0, 0.0, 0.0]
++        }
++      }
++    },
+     {
+       "id": "10000000-0000-4000-8000-000000000201",
+       "name": "First Light camera",

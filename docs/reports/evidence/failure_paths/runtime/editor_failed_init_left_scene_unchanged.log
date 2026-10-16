@@ -1,0 +1,4 @@
+$ /bin/echo f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+# expected exit 0, diagnostic /^f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3$/
+f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+# exit 0 after 0.01s: passed 

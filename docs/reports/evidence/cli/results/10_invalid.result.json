@@ -1,0 +1,41 @@
+{
+  "protocol": "sovereign.command_result",
+  "protocol_version": 1,
+  "request_id": "d2f3c2e4-69d3-4a69-994b-59df0e1702d0",
+  "status": "rejected",
+  "delivery": "original",
+  "kind": "edit",
+  "actor": "caelis",
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "revision_before": 1,
+  "revision_after": 1,
+  "commit_id": null,
+  "target_commit": null,
+  "request_hash": "857315b8100c52f5dbc30007449416bcaa532b1fe89379ade3c7c7388b51074c",
+  "operations": [
+    {
+      "index": 0,
+      "op": "entity.rename",
+      "entity_id": "10000000-0000-4000-8000-000000000140",
+      "status": "valid"
+    },
+    {
+      "index": 1,
+      "op": "entity.delete",
+      "entity_id": "00000000-0000-4000-8000-0000000000ff",
+      "status": "failed"
+    }
+  ],
+  "errors": [
+    {
+      "code": "unknown_entity",
+      "message": "entity 00000000-0000-4000-8000-0000000000ff does not exist",
+      "path": "/operations/1",
+      "op_index": 1,
+      "entity_id": "00000000-0000-4000-8000-0000000000ff"
+    }
+  ],
+  "warnings": [],
+  "diff": null,
+  "conflict": null
+}

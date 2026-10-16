@@ -1,0 +1,5 @@
+$ env -u DISPLAY -u WAYLAND_DISPLAY -u SDL_VIDEO_DRIVER build/dev-vulkan/bin/sovereign-runtime --scene content/authoring/first_light.scene.json --frames 5
+# expected exit 4, diagnostic /SDL_Init failed|video/
+2026-10-16T23:24:27.318Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+2026-10-16T23:24:27.320Z [error] [runtime] io_failure: SDL_Init failed: No available video device
+# exit 4 after 0.01s: passed 

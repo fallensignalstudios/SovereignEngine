@@ -1,0 +1,893 @@
+$ ctest --preset dev-vulkan -V
+# 2026-10-16T23:23:27Z commit fcbc52cc6b0f55680a40c99ca5f41266d5ce2630
+UpdateCTestConfiguration  from :DartConfiguration.tcl
+UpdateCTestConfiguration  from :build/dev-vulkan/DartConfiguration.tcl
+Test project build/dev-vulkan
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+      Start  1: headless.core
+
+1: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "core"
+1: Working Directory: build/dev-vulkan/tests
+1: Test timeout computed to be: 10000000
+1: [PASS] core.uuid_canonical_roundtrip (0.0 ms)
+1: [PASS] core.uuid_rejects_non_canonical_forms (0.0 ms)
+1: [PASS] core.uuid_generator_v4_unique_and_seedable (4.3 ms)
+1: [PASS] core.sha256_known_vectors (66.5 ms)
+1: [PASS] core.strict_json_rejects_duplicate_keys (0.2 ms)
+1: [PASS] core.strict_json_enforces_limits (0.1 ms)
+1: [PASS] core.strict_json_rejects_malformed_and_nonfinite (0.1 ms)
+1: [PASS] core.canonical_json_is_stable (0.1 ms)
+1: [PASS] core.atomic_write_replaces_and_preserves_on_failure (23.8 ms)
+1: [PASS] core.read_file_limit_checked_before_read (0.8 ms)
+1: [PASS] core.file_lock_is_exclusive_and_released (0.9 ms)
+1: [PASS] core.png_encoder_roundtrips_through_independent_decoder (21.9 ms)
+1: 12 test(s) run, 0 failed
+ 1/29 Test  #1: headless.core ......................................   Passed    0.12 sec
+test 2
+      Start  2: headless.math
+
+2: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "math"
+2: Working Directory: build/dev-vulkan/tests
+2: Test timeout computed to be: 10000000
+2: [PASS] math.right_handed_y_up_basis (0.0 ms)
+2: [PASS] math.trs_compose_order_is_t_r_s (0.0 ms)
+2: [PASS] math.inverse_and_normal_matrix (0.0 ms)
+2: [PASS] math.quaternion_serialized_order_and_euler_display (0.0 ms)
+2: [PASS] math.reversed_z_projection_maps_near_to_one_far_to_zero (0.0 ms)
+2: [PASS] math.vulkan_y_flip_puts_up_at_top_of_framebuffer (0.0 ms)
+2: [PASS] math.front_face_winding_is_counter_clockwise_on_screen (0.0 ms)
+2: 7 test(s) run, 0 failed
+ 2/29 Test  #2: headless.math ......................................   Passed    0.00 sec
+test 3
+      Start  3: headless.scene
+
+3: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "scene"
+3: Working Directory: build/dev-vulkan/tests
+3: Test timeout computed to be: 10000000
+3: [PASS] scene.roundtrip_is_byte_identical_and_idempotent (4.5 ms)
+3: [PASS] scene.packet_first_light_reads_and_is_the_canonical_scene (5.8 ms)
+3: [PASS] scene.entities_written_in_ascending_uuid_order_with_warning_on_unsorted_input (1.1 ms)
+3: [PASS] scene.unknown_fields_are_rejected_not_dropped (3.2 ms)
+3: [PASS] scene.unknown_component_types_are_rejected (0.7 ms)
+3: [PASS] scene.unknown_schema_version_fails_before_reading (0.3 ms)
+3: [PASS] scene.malformed_and_nonfinite_input_fail_with_location (1.2 ms)
+3: [PASS] scene.duplicate_uuid_rejected_duplicate_names_allowed (0.7 ms)
+3: [PASS] scene.hierarchy_missing_parent_and_cycles_rejected (0.0 ms)
+3: [PASS] scene.value_validation_rejects_bad_numbers (9.1 ms)
+3: [PASS] scene.missing_required_fields_rejected (2.9 ms)
+3: [PASS] scene.active_camera_must_reference_a_camera (0.0 ms)
+3: [PASS] scene.content_hash_ignores_revision_only (1.5 ms)
+3: [PASS] scene.diff_reports_field_level_changes (0.8 ms)
+3: [PASS] scene.reflection_descriptors_cover_every_component_field (0.0 ms)
+3: [PASS] scene.schema_files_match_reflection_descriptors (1.3 ms)
+3: 16 test(s) run, 0 failed
+ 3/29 Test  #3: headless.scene .....................................   Passed    0.04 sec
+test 4
+      Start  4: headless.world
+
+4: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "world"
+4: Working Directory: build/dev-vulkan/tests
+4: Test timeout computed to be: 10000000
+4: [PASS] world.builds_from_document_with_parent_before_child_propagation (0.5 ms)
+4: [PASS] world.moving_parent_moves_child_after_update (0.3 ms)
+4: [PASS] world.handles_are_generation_and_world_checked (0.5 ms)
+4: [PASS] world.destroy_refuses_while_children_exist (0.2 ms)
+4: [PASS] world.render_snapshot_contents (0.2 ms)
+4: [PASS] world.primitive_triangles_wound_ccw_from_outside (0.0 ms)
+4: 6 test(s) run, 0 failed
+ 4/29 Test  #4: headless.world .....................................   Passed    0.00 sec
+test 5
+      Start  5: headless.commands
+
+5: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "commands"
+5: Working Directory: build/dev-vulkan/tests
+5: Test timeout computed to be: 10000000
+5: [PASS] commands.each_operation_kind_applies (3.8 ms)
+5: [PASS] commands.batch_increments_revision_once_regardless_of_operation_count (1.8 ms)
+5: [PASS] commands.failed_batch_rolls_back_entirely (0.5 ms)
+5: [PASS] commands.stale_revision_rejected_with_conflict_details (1.0 ms)
+5: [PASS] commands.dry_run_changes_nothing_and_reserves_nothing (2.1 ms)
+5: [PASS] commands.dry_run_still_validates (0.1 ms)
+5: [PASS] commands.duplicate_delivery_returns_recorded_result_without_reapplying (1.2 ms)
+5: [PASS] commands.reused_key_with_changed_content_is_rejected (1.6 ms)
+5: [PASS] commands.expired_key_reports_explicit_status (0.7 ms)
+5: [PASS] commands.scene_mismatch_rejected (0.1 ms)
+5: [PASS] commands.delete_respects_dependencies_without_cascade (0.9 ms)
+5: [PASS] commands.create_validates_identity_parent_and_limits (1.1 ms)
+5: [PASS] commands.reparenting_rejects_cycles_and_inverse_restores_parent (1.2 ms)
+5: [PASS] commands.material_set_requires_material_component (0.0 ms)
+5: [PASS] commands.no_change_edit_does_not_bump_revision (0.4 ms)
+5: [PASS] commands.undo_redo_restore_content_and_revisions_stay_monotonic (8.4 ms)
+5: [PASS] commands.undo_requires_current_revision (0.7 ms)
+5: [PASS] commands.history_rebuilds_undo_stack_from_records (2.4 ms)
+5: [PASS] commands.batch_parsing_is_strict (4.6 ms)
+5: [PASS] commands.request_hash_binds_content_not_transport_fields (0.4 ms)
+5: [PASS] commands.schema_contracts_match_engine_codes_and_operations (2.3 ms)
+5: 21 test(s) run, 0 failed
+ 5/29 Test  #5: headless.commands ..................................   Passed    0.04 sec
+test 6
+      Start  6: headless.store
+
+6: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "store"
+6: Working Directory: build/dev-vulkan/tests
+6: Test timeout computed to be: 10000000
+6: [PASS] store.create_commit_reopen_preserves_document_and_history (23.9 ms)
+6: [PASS] store.retry_after_restart_replays_recorded_result (21.3 ms)
+6: [PASS] store.writer_lock_refuses_second_writer_but_allows_readers (7.3 ms)
+6: 2026-10-16T23:23:28.255Z [warn ] [fs] writer lock build/dev-vulkan/test-tmp/store.stale_lock_from_a_killed_writer_is_reclaimed_explicitly/small.scene.json.lock was left by "{"tool":"doomed-writer","pid":3343,"host":"vm","acquired_at":"2026-10-16T23:23:28.253Z"}", which ended without releasing it; the OS released its lock when it exited, so this writer now owns it (journal recovery decides any interrupted commit)
+6: [PASS] store.stale_lock_from_a_killed_writer_is_reclaimed_explicitly (8.5 ms)
+6: [PASS] store.crash_after_prepare_recovers_as_aborted (13.6 ms)
+6: [PASS] store.crash_after_replace_recovers_as_committed (11.0 ms)
+6: [PASS] store.failed_atomic_write_preserves_last_valid_scene (8.2 ms)
+6: [PASS] store.external_edit_invalidates_history_and_starts_new_epoch (16.0 ms)
+6: [PASS] store.unchanged_save_does_not_rewrite (4.3 ms)
+6: [PASS] store.torn_journal_tail_is_ignored (17.3 ms)
+6: [PASS] store.fifty_open_save_close_cycles (981.5 ms)
+6: [PASS] store.writer_refuses_symlinked_scene_path (5.4 ms)
+6: 12 test(s) run, 0 failed
+ 6/29 Test  #6: headless.store .....................................   Passed    1.12 sec
+test 7
+      Start  7: headless.cli
+
+7: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "cli"
+7: Working Directory: build/dev-vulkan/tests
+7: Test timeout computed to be: 10000000
+7: [PASS] cli.version_reports_build_identity (4.3 ms)
+7: [PASS] cli.usage_errors_exit_2 (7.7 ms)
+7: [PASS] cli.new_validate_inspect (28.1 ms)
+7: [PASS] cli.example_batch_is_a_dry_run_and_changes_nothing (12.2 ms)
+7: [PASS] cli.committed_request_then_retry_then_changed_content (42.1 ms)
+7: [PASS] cli.stale_revision_is_rejected_with_conflict (33.1 ms)
+7: [PASS] cli.offline_write_refused_while_another_writer_holds_the_lock (42.1 ms)
+7: [PASS] cli.undo_redo_and_history (84.5 ms)
+7: [PASS] cli.invalid_batch_rejected_scene_untouched (16.6 ms)
+7: [PASS] cli.project_root_confines_paths (22.2 ms)
+7: 10 test(s) run, 0 failed
+ 7/29 Test  #7: headless.cli .......................................   Passed    0.30 sec
+test 8
+      Start  8: headless.editor
+
+8: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "editor"
+8: Working Directory: build/dev-vulkan/tests
+8: Test timeout computed to be: 10000000
+8: [PASS] editor.open_holds_writer_lock_until_closed (8.3 ms)
+8: 2026-10-16T23:23:29.649Z [info ] [editor] saved build/dev-vulkan/test-tmp/editor.move_column_undo_material_save_close_reopen/first_light.scene.json at revision 5
+8: [PASS] editor.move_column_undo_material_save_close_reopen (35.8 ms)
+8: [PASS] editor.unsaved_edits_are_not_written (7.2 ms)
+8: 2026-10-16T23:23:29.681Z [warn ] [editor] edit rejected: missing_dependency at /operations/0 (operation 0): entity has 1 child(ren) (59f6d15f-b52c-4ba7-adff-b400949c911f); delete or re-parent them earlier in the same batch. No cascading delete is performed.
+8: [PASS] editor.selection_is_by_uuid_and_cleared_when_entity_deleted (14.2 ms)
+8: 2026-10-16T23:23:29.697Z [info ] [editor] saved build/dev-vulkan/test-tmp/editor.gui_edit_and_cli_edit_produce_identical_authored_state/gui/first_light.scene.json at revision 2
+8: [PASS] editor.gui_edit_and_cli_edit_produce_identical_authored_state (50.6 ms)
+8: [PASS] editor.batch_file_applies_through_same_service (6.5 ms)
+8: 2026-10-16T23:23:29.743Z [info ] [editor] play started (world 23, game sandbox)
+8: 2026-10-16T23:23:29.743Z [warn ] [editor] edit rejected: invalid_state: authoring edits are disabled while playing; stop play first
+8: 2026-10-16T23:23:29.743Z [warn ] [editor] edit rejected: invalid_state: undo is disabled while playing
+8: 2026-10-16T23:23:29.743Z [info ] [editor] play stopped after 0 ticks; runtime world discarded
+8: [PASS] editor.edits_disabled_while_playing (6.1 ms)
+8: 7 test(s) run, 0 failed
+ 8/29 Test  #8: headless.editor ....................................   Passed    0.13 sec
+test 9
+      Start  9: headless.play
+
+9: Test command: build/dev-vulkan/bin/sovereign-tests "--suite" "play"
+9: Working Directory: build/dev-vulkan/tests
+9: Test timeout computed to be: 10000000
+9: 2026-10-16T23:23:29.756Z [info ] [editor] play started (world 2, game sandbox)
+9: 2026-10-16T23:23:29.762Z [info ] [editor] play stopped after 120 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.764Z [info ] [editor] saved build/dev-vulkan/test-tmp/play.modifies_only_the_runtime_world/first_light.scene.json at revision 0
+9: [PASS] play.modifies_only_the_runtime_world (15.3 ms)
+9: 2026-10-16T23:23:29.771Z [info ] [editor] play started (world 4, game sandbox)
+9: 2026-10-16T23:23:29.772Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.773Z [info ] [editor] play started (world 5, game sandbox)
+9: 2026-10-16T23:23:29.774Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.774Z [info ] [editor] play started (world 6, game sandbox)
+9: 2026-10-16T23:23:29.775Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.776Z [info ] [editor] play started (world 7, game sandbox)
+9: 2026-10-16T23:23:29.777Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.777Z [info ] [editor] play started (world 8, game sandbox)
+9: 2026-10-16T23:23:29.778Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.779Z [info ] [editor] play started (world 9, game sandbox)
+9: 2026-10-16T23:23:29.780Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.780Z [info ] [editor] play started (world 10, game sandbox)
+9: 2026-10-16T23:23:29.782Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.782Z [info ] [editor] play started (world 11, game sandbox)
+9: 2026-10-16T23:23:29.783Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.783Z [info ] [editor] play started (world 12, game sandbox)
+9: 2026-10-16T23:23:29.785Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.785Z [info ] [editor] play started (world 13, game sandbox)
+9: 2026-10-16T23:23:29.786Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.787Z [info ] [editor] play started (world 14, game sandbox)
+9: 2026-10-16T23:23:29.788Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.788Z [info ] [editor] play started (world 15, game sandbox)
+9: 2026-10-16T23:23:29.789Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.790Z [info ] [editor] play started (world 16, game sandbox)
+9: 2026-10-16T23:23:29.791Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.791Z [info ] [editor] play started (world 17, game sandbox)
+9: 2026-10-16T23:23:29.792Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.793Z [info ] [editor] play started (world 18, game sandbox)
+9: 2026-10-16T23:23:29.794Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.794Z [info ] [editor] play started (world 19, game sandbox)
+9: 2026-10-16T23:23:29.796Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.796Z [info ] [editor] play started (world 20, game sandbox)
+9: 2026-10-16T23:23:29.797Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.798Z [info ] [editor] play started (world 21, game sandbox)
+9: 2026-10-16T23:23:29.799Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.799Z [info ] [editor] play started (world 22, game sandbox)
+9: 2026-10-16T23:23:29.800Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.801Z [info ] [editor] play started (world 23, game sandbox)
+9: 2026-10-16T23:23:29.802Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.802Z [info ] [editor] play started (world 24, game sandbox)
+9: 2026-10-16T23:23:29.804Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.804Z [info ] [editor] play started (world 25, game sandbox)
+9: 2026-10-16T23:23:29.805Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.805Z [info ] [editor] play started (world 26, game sandbox)
+9: 2026-10-16T23:23:29.807Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.807Z [info ] [editor] play started (world 27, game sandbox)
+9: 2026-10-16T23:23:29.808Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.809Z [info ] [editor] play started (world 28, game sandbox)
+9: 2026-10-16T23:23:29.810Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.810Z [info ] [editor] play started (world 29, game sandbox)
+9: 2026-10-16T23:23:29.811Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.812Z [info ] [editor] play started (world 30, game sandbox)
+9: 2026-10-16T23:23:29.813Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.813Z [info ] [editor] play started (world 31, game sandbox)
+9: 2026-10-16T23:23:29.814Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.815Z [info ] [editor] play started (world 32, game sandbox)
+9: 2026-10-16T23:23:29.816Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.816Z [info ] [editor] play started (world 33, game sandbox)
+9: 2026-10-16T23:23:29.818Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.818Z [info ] [editor] play started (world 34, game sandbox)
+9: 2026-10-16T23:23:29.819Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.819Z [info ] [editor] play started (world 35, game sandbox)
+9: 2026-10-16T23:23:29.821Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.821Z [info ] [editor] play started (world 36, game sandbox)
+9: 2026-10-16T23:23:29.822Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.822Z [info ] [editor] play started (world 37, game sandbox)
+9: 2026-10-16T23:23:29.824Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.824Z [info ] [editor] play started (world 38, game sandbox)
+9: 2026-10-16T23:23:29.825Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.825Z [info ] [editor] play started (world 39, game sandbox)
+9: 2026-10-16T23:23:29.826Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.827Z [info ] [editor] play started (world 40, game sandbox)
+9: 2026-10-16T23:23:29.828Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.828Z [info ] [editor] play started (world 41, game sandbox)
+9: 2026-10-16T23:23:29.830Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.830Z [info ] [editor] play started (world 42, game sandbox)
+9: 2026-10-16T23:23:29.831Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.832Z [info ] [editor] play started (world 43, game sandbox)
+9: 2026-10-16T23:23:29.833Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.833Z [info ] [editor] play started (world 44, game sandbox)
+9: 2026-10-16T23:23:29.835Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.835Z [info ] [editor] play started (world 45, game sandbox)
+9: 2026-10-16T23:23:29.836Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.837Z [info ] [editor] play started (world 46, game sandbox)
+9: 2026-10-16T23:23:29.838Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.838Z [info ] [editor] play started (world 47, game sandbox)
+9: 2026-10-16T23:23:29.840Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.840Z [info ] [editor] play started (world 48, game sandbox)
+9: 2026-10-16T23:23:29.841Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.841Z [info ] [editor] play started (world 49, game sandbox)
+9: 2026-10-16T23:23:29.843Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.843Z [info ] [editor] play started (world 50, game sandbox)
+9: 2026-10-16T23:23:29.844Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.845Z [info ] [editor] play started (world 51, game sandbox)
+9: 2026-10-16T23:23:29.846Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.846Z [info ] [editor] play started (world 52, game sandbox)
+9: 2026-10-16T23:23:29.847Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: 2026-10-16T23:23:29.848Z [info ] [editor] play started (world 53, game sandbox)
+9: 2026-10-16T23:23:29.849Z [info ] [editor] play stopped after 30 ticks; runtime world discarded
+9: [PASS] play.fifty_play_stop_cycles_return_to_baseline (86.0 ms)
+9: [PASS] play.repeated_runs_of_same_build_are_repeatable (10.7 ms)
+9: [PASS] play.fixed_step_clock_caps_catch_up (0.0 ms)
+9: 4 test(s) run, 0 failed
+ 9/29 Test  #9: headless.play ......................................   Passed    0.12 sec
+test 10
+      Start 10: vulkan.rendering
+
+10: Test command: build/dev-vulkan/bin/sovereign-render-tests "--suite" "rendering"
+10: Working Directory: build/dev-vulkan/tests
+10: Environment variables: 
+10:  SOV_REQUIRE_VALIDATION=1
+10: Test timeout computed to be: 10000000
+10: 2026-10-16T23:23:29.946Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+10: 2026-10-16T23:23:29.969Z [info ] [vulkan] device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] api 1.4.318 driver llvmpipe (Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) conformance 1.3.1.1
+10: 2026-10-16T23:23:29.969Z [info ] [vulkan] requested features: apiVersion 1.3, dynamicRendering, synchronization2, timelineSemaphore; validation layer ON, synchronization validation ON
+10: 2026-10-16T23:23:29.969Z [warn ] [vulkan] selected device is a CPU (software) Vulkan implementation: results are software-rendered and do NOT qualify physical-GPU behaviour or performance
+10: 2026-10-16T23:23:29.977Z [info ] [renderer] R0 forward renderer ready on llvmpipe (LLVM 20.1.2, 256 bits) (software-rendered (CPU Vulkan implementation)); shaders from build/dev-vulkan/bin/shaders
+10:     note: device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+10:     note: evidence class: software-rendered (CPU Vulkan implementation)
+10:     note: candidate: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+10: [PASS] rendering.device_startup_with_validation (111.5 ms)
+10: [PASS] rendering.shader_matrix_packing_matches_cpu_math (1.6 ms)
+10:     note: capture: build/dev-vulkan/test-tmp/rendering.axis_lab_orientation_depth_culling_hierarchy_and_pick_ids/axis_lab.png
+10: [PASS] rendering.axis_lab_orientation_depth_culling_hierarchy_and_pick_ids (151.2 ms)
+10:     note: wide 480x160 (aspect 3.000): X right edge 281 vs 282.20, Y top edge 38 vs 37.80
+10:     note: tall 240x360 (aspect 0.667): X right edge 214 vs 214.96, Y top edge 85 vs 85.04
+10:     note: resized 300x300 (aspect 1.000): X right edge 228 vs 229.13, Y top edge 71 vs 70.87
+10: [PASS] rendering.projection_matches_analytic_fov_and_aspect (19.2 ms)
+10: [PASS] rendering.request_pick_resolves_entity_with_frame_table (8.8 ms)
+10: [PASS] rendering.pick_resolves_with_the_drawn_snapshot_not_a_stale_table (11.9 ms)
+10:     note: capture: build/dev-vulkan/test-tmp/rendering.selection_outline_changes_only_the_selected_edge/axis_lab_selected.png
+10: [PASS] rendering.selection_outline_changes_only_the_selected_edge (110.1 ms)
+10:     note: capture: build/dev-vulkan/test-tmp/rendering.first_light_renders_from_scene_data/first_light.png
+10:     note: visible entities: 11 of 11 instances; 828 triangles submitted
+10: [PASS] rendering.first_light_renders_from_scene_data (495.2 ms)
+10:     note: resources before: 8 buffers 0 images 8 allocations; after: 8 0 8
+10: [PASS] rendering.view_resize_and_recreate_cycles_return_to_resource_baseline (183.1 ms)
+10:     note: validation layer ON, synchronization validation ON: 0 error(s), 0 warning(s)
+10: [PASS] rendering.zz_validation_summary_after_suite (10.9 ms)
+10: 10 test(s) run, 0 failed
+10/29 Test #10: vulkan.rendering ...................................   Passed    1.13 sec
+test 11
+      Start 11: static.no_unreal_dependency
+
+11: Test command: /usr/bin/cmake "-DSOURCE_DIR=<repo>" "-P" "cmake/CheckNoUnrealDependency.cmake"
+11: Working Directory: build/dev-vulkan/tests
+11: Test timeout computed to be: 10000000
+11: -- scanned 477 build/code files: no Unreal headers, modules, SDK paths or asset formats referenced
+11/29 Test #11: static.no_unreal_dependency ........................   Passed    0.44 sec
+test 12
+      Start 12: static.runtime_has_no_editor_code
+
+12: Test command: /usr/bin/cmake "-DBINARY=build/dev-vulkan/bin/sovereign-runtime" "-DFORBIDDEN=ImGui;sov::editor;sov::cmd::SceneSession;sov::cmd::SceneStore;EditorDocument" "-P" "cmake/CheckBinarySymbols.cmake"
+12: Working Directory: build/dev-vulkan/tests
+12: Test timeout computed to be: 10000000
+12: -- build/dev-vulkan/bin/sovereign-runtime: 8315694 bytes of symbol table scanned; no forbidden references
+12/29 Test #12: static.runtime_has_no_editor_code ..................   Passed    0.31 sec
+test 13
+      Start 13: vulkan.runtime_first_light
+
+13: Test command: scripts/ctest_display_launcher.sh "build/dev-vulkan/bin/sovereign-runtime" "--scene" "content/authoring/first_light.scene.json" "--width" "1280" "--height" "720" "--frames" "120" "--scripted-input" "--screenshot" "build/dev-vulkan/test-artifacts/runtime_first_light.png"
+13: Working Directory: build/dev-vulkan/tests
+13: Environment variables: 
+13:  SOV_REQUIRE_VALIDATION=1
+13: Test timeout computed to be: 900
+13: 2026-10-16T23:23:32.369Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+13: 2026-10-16T23:23:32.379Z [info ] [platform] SDL 3.2.30 video driver: x11
+13: 2026-10-16T23:23:32.466Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+13: 2026-10-16T23:23:32.483Z [info ] [vulkan] device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] api 1.4.318 driver llvmpipe (Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) conformance 1.3.1.1
+13: 2026-10-16T23:23:32.483Z [info ] [vulkan] requested features: apiVersion 1.3, dynamicRendering, synchronization2, timelineSemaphore; validation layer ON, synchronization validation ON
+13: 2026-10-16T23:23:32.483Z [warn ] [vulkan] selected device is a CPU (software) Vulkan implementation: results are software-rendered and do NOT qualify physical-GPU behaviour or performance
+13: 2026-10-16T23:23:32.489Z [info ] [renderer] R0 forward renderer ready on llvmpipe (LLVM 20.1.2, 256 bits) (software-rendered (CPU Vulkan implementation)); shaders from build/dev-vulkan/bin/shaders
+13: 2026-10-16T23:23:32.490Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+13: 2026-10-16T23:23:32.490Z [info ] [runtime] evidence class: software-rendered (CPU Vulkan implementation)
+13: 2026-10-16T23:23:32.491Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+13: 2026-10-16T23:23:34.415Z [info ] [runtime] screenshot written: build/dev-vulkan/test-artifacts/runtime_first_light.png (1280x720)
+13: runtime summary: frames=120 skipped=0 ticks=120 dropped_sim_seconds=0.000
+13: device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+13: evidence class: software-rendered (CPU Vulkan implementation)
+13: validation: layer on, sync on, errors 0, warnings 0
+13: resources: buffers 9 images 3 views 3 vma allocations 12
+13/29 Test #13: vulkan.runtime_first_light .........................   Passed    2.73 sec
+test 14
+      Start 14: vulkan.runtime_window_lifecycle_stress
+
+14: Test command: scripts/ctest_display_launcher.sh "build/dev-vulkan/bin/sovereign-runtime" "--scene" "content/authoring/first_light.scene.json" "--width" "1280" "--height" "720" "--frames" "500" "--scripted-input" "--stress-window"
+14: Working Directory: build/dev-vulkan/tests
+14: Environment variables: 
+14:  SOV_REQUIRE_VALIDATION=1
+14: Test timeout computed to be: 900
+14: 2026-10-16T23:23:35.105Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+14: 2026-10-16T23:23:35.116Z [info ] [platform] SDL 3.2.30 video driver: x11
+14: 2026-10-16T23:23:35.224Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+14: 2026-10-16T23:23:35.243Z [info ] [vulkan] device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] api 1.4.318 driver llvmpipe (Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) conformance 1.3.1.1
+14: 2026-10-16T23:23:35.243Z [info ] [vulkan] requested features: apiVersion 1.3, dynamicRendering, synchronization2, timelineSemaphore; validation layer ON, synchronization validation ON
+14: 2026-10-16T23:23:35.243Z [warn ] [vulkan] selected device is a CPU (software) Vulkan implementation: results are software-rendered and do NOT qualify physical-GPU behaviour or performance
+14: 2026-10-16T23:23:35.250Z [info ] [renderer] R0 forward renderer ready on llvmpipe (LLVM 20.1.2, 256 bits) (software-rendered (CPU Vulkan implementation)); shaders from build/dev-vulkan/bin/shaders
+14: 2026-10-16T23:23:35.251Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:35.251Z [info ] [runtime] evidence class: software-rendered (CPU Vulkan implementation)
+14: 2026-10-16T23:23:35.253Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:35.713Z [info ] [vulkan] swapchain 640x360 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:35.834Z [info ] [vulkan] swapchain 1920x1080 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:36.414Z [info ] [vulkan] swapchain 800x600 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:36.602Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:37.565Z [info ] [vulkan] swapchain 1920x1080 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:38.237Z [info ] [vulkan] swapchain 800x600 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:38.426Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:38.883Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:39.587Z [info ] [vulkan] swapchain 800x600 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:39.766Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:40.212Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:40.505Z [info ] [vulkan] swapchain 640x360 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:40.792Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:41.050Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:41.219Z [info ] [vulkan] swapchain 640x360 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:41.291Z [info ] [vulkan] swapchain 1920x1080 format 50 images 4 present mode 2 transfer_src true
+14: 2026-10-16T23:23:41.964Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+14: runtime summary: frames=500 skipped=80 ticks=500 dropped_sim_seconds=0.000
+14: device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+14: evidence class: software-rendered (CPU Vulkan implementation)
+14: validation: layer on, sync on, errors 0, warnings 0
+14: resources: buffers 8 images 3 views 3 vma allocations 11
+14: stress-window: 25 lifecycle steps; resources baseline 8/3/11 -> after 8/3/11 (buffers/images/allocations)
+14/29 Test #14: vulkan.runtime_window_lifecycle_stress .............   Passed    7.90 sec
+test 17
+      Start 17: vulkan.editor_clean_stage
+
+17: Test command: /usr/bin/cmake "-E" "rm" "-rf" "build/dev-vulkan/test-artifacts/editor"
+17: Working Directory: build/dev-vulkan/tests
+17: Test timeout computed to be: 10000000
+15/29 Test #17: vulkan.editor_clean_stage ..........................   Passed    0.01 sec
+test 16
+      Start 16: vulkan.editor_stage_scene
+
+16: Test command: /usr/bin/cmake "-E" "copy" "content/authoring/first_light.scene.json" "build/dev-vulkan/test-artifacts/editor/first_light.scene.json"
+16: Working Directory: build/dev-vulkan/tests
+16: Test timeout computed to be: 10000000
+16/29 Test #16: vulkan.editor_stage_scene ..........................   Passed    0.01 sec
+test 15
+      Start 15: vulkan.editor_first_success_automation
+
+15: Test command: /usr/bin/cmake "-E" "chdir" "build/dev-vulkan/test-artifacts/editor" "scripts/ctest_display_launcher.sh" "build/dev-vulkan/bin/sovereign-editor" "--scene" "first_light.scene.json" "--automation" "tests/editor/first_success.automation.json"
+15: Working Directory: build/dev-vulkan/tests
+15: Environment variables: 
+15:  SOV_REQUIRE_VALIDATION=1
+15: Test timeout computed to be: 900
+15: 2026-10-16T23:23:42.969Z [info ] [platform] SDL 3.2.30 video driver: x11
+15: 2026-10-16T23:23:43.063Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+15: 2026-10-16T23:23:43.080Z [info ] [vulkan] device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] api 1.4.318 driver llvmpipe (Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) conformance 1.3.1.1
+15: 2026-10-16T23:23:43.080Z [info ] [vulkan] requested features: apiVersion 1.3, dynamicRendering, synchronization2, timelineSemaphore; validation layer ON, synchronization validation ON
+15: 2026-10-16T23:23:43.080Z [warn ] [vulkan] selected device is a CPU (software) Vulkan implementation: results are software-rendered and do NOT qualify physical-GPU behaviour or performance
+15: 2026-10-16T23:23:43.087Z [info ] [renderer] R0 forward renderer ready on llvmpipe (LLVM 20.1.2, 256 bits) (software-rendered (CPU Vulkan implementation)); shaders from build/dev-vulkan/bin/shaders
+15: 2026-10-16T23:23:43.088Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+15: 2026-10-16T23:23:43.088Z [info ] [editor] evidence class: software-rendered (CPU Vulkan implementation)
+15: 2026-10-16T23:23:43.098Z [info ] [editor] viewport image at window (0, 55) size 960x540
+15: 2026-10-16T23:23:43.099Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+15: 2026-10-16T23:23:43.150Z [info ] [editor] viewport image at window (289, 78) size 64x64
+15: 2026-10-16T23:23:43.169Z [info ] [editor] viewport image at window (289, 78) size 955x568
+15: 2026-10-16T23:23:43.366Z [info ] [automation] ok   {"do":"wait_frames","n":10} 
+15: 2026-10-16T23:23:44.018Z [info ] [editor] window capture written: editor_01_opened.png
+15: 2026-10-16T23:23:44.018Z [info ] [automation] ok   {"do":"capture_window","path":"editor_01_opened.png"} editor_01_opened.png
+15: 2026-10-16T23:23:44.141Z [info ] [automation] ok   {"do":"pick","name":"Raised platform"} pixel (477, 248) -> pick index 3 -> 10000000-0000-4000-8000-000000000103
+15: 2026-10-16T23:23:44.233Z [info ] [automation] ok   {"do":"expect","selected":"Raised platform","revision":0,"dirty":false} 
+15: 2026-10-16T23:23:44.324Z [info ] [automation] ok   {"do":"select","name":"Column 2"} 10000000-0000-4000-8000-000000000111
+15: 2026-10-16T23:23:44.411Z [info ] [automation] ok   {"do":"move","name":"Column 2","delta":[1.5,0.0,0.0]} revision 0 -> 1
+15: 2026-10-16T23:23:44.511Z [info ] [automation] ok   {"do":"expect","revision":1,"dirty":true} 
+15: 2026-10-16T23:23:45.227Z [info ] [editor] window capture written: editor_02_column_moved.png
+15: 2026-10-16T23:23:45.227Z [info ] [automation] ok   {"do":"capture_window","path":"editor_02_column_moved.png"} editor_02_column_moved.png
+15: 2026-10-16T23:23:45.328Z [info ] [automation] ok   {"do":"undo"} revision 1 -> 2
+15: 2026-10-16T23:23:45.428Z [info ] [automation] ok   {"do":"expect","revision":2} 
+15: 2026-10-16T23:23:45.756Z [info ] [editor] viewport capture written: editor_03_move_undone_viewport.png
+15: 2026-10-16T23:23:45.756Z [info ] [automation] ok   {"do":"capture_viewport","path":"editor_03_move_undone_viewport.png"} editor_03_move_undone_viewport.png
+15: 2026-10-16T23:23:45.846Z [info ] [automation] ok   {"do":"set_material","name":"Raised platform","field":"base_color_rgba","value":[0.72,0.4,0.12,1.0]} revision 2 -> 3
+15: 2026-10-16T23:23:45.945Z [info ] [automation] ok   {"do":"set_material","name":"Platform light strip","field":"emissive_rgb","value":[2.8,0.9,0.12]} revision 3 -> 4
+15: 2026-10-16T23:23:46.035Z [info ] [automation] ok   {"do":"expect","revision":4} 
+15: 2026-10-16T23:23:46.127Z [info ] [automation] ok   {"do":"select","name":"Raised platform"} 10000000-0000-4000-8000-000000000103
+15: 2026-10-16T23:23:46.225Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:46.225Z [info ] [automation] ok   {"do":"save"} saved at revision 4
+15: 2026-10-16T23:23:46.315Z [info ] [automation] ok   {"do":"expect","dirty":false,"document_hash_equals_saved":true} 
+15: 2026-10-16T23:23:46.982Z [info ] [editor] window capture written: editor_04_material_saved.png
+15: 2026-10-16T23:23:46.982Z [info ] [automation] ok   {"do":"capture_window","path":"editor_04_material_saved.png"} editor_04_material_saved.png
+15: 2026-10-16T23:23:47.083Z [info ] [editor] play started (world 6, game sandbox)
+15: 2026-10-16T23:23:47.083Z [info ] [automation] ok   {"do":"play"} 
+15: 2026-10-16T23:23:49.087Z [info ] [automation] ok   {"do":"play_ticks","n":120} 120 ticks
+15: 2026-10-16T23:23:49.762Z [info ] [editor] window capture written: editor_05_playing.png
+15: 2026-10-16T23:23:49.762Z [info ] [automation] ok   {"do":"capture_window","path":"editor_05_playing.png"} editor_05_playing.png
+15: 2026-10-16T23:23:49.825Z [info ] [editor] play stopped after 132 ticks; runtime world discarded
+15: 2026-10-16T23:23:49.825Z [info ] [automation] ok   {"do":"stop"} 
+15: 2026-10-16T23:23:49.915Z [info ] [automation] ok   {"do":"expect","playing":false,"revision":4,"dirty":false,"document_hash_equals_saved":true} 
+15: 2026-10-16T23:23:50.008Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:50.008Z [info ] [automation] ok   {"do":"reopen"} revision 4
+15: 2026-10-16T23:23:50.070Z [info ] [automation] ok   {"do":"expect","revision":4,"dirty":false,"document_hash_equals_saved":true} 
+15: 2026-10-16T23:23:50.156Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:50.157Z [info ] [editor] play started (world 8, game sandbox)
+15: 2026-10-16T23:23:50.457Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:50.464Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:50.487Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:50.487Z [info ] [editor] play started (world 10, game sandbox)
+15: 2026-10-16T23:23:50.791Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:50.799Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:50.823Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:50.823Z [info ] [editor] play started (world 12, game sandbox)
+15: 2026-10-16T23:23:51.123Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:51.129Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:51.149Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:51.149Z [info ] [editor] play started (world 14, game sandbox)
+15: 2026-10-16T23:23:51.443Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:23:51.449Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:51.469Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:51.470Z [info ] [editor] play started (world 16, game sandbox)
+15: 2026-10-16T23:23:51.767Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:23:51.773Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:51.795Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:51.796Z [info ] [editor] play started (world 18, game sandbox)
+15: 2026-10-16T23:23:52.094Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:52.100Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:52.122Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:52.122Z [info ] [editor] play started (world 20, game sandbox)
+15: 2026-10-16T23:23:52.408Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:23:52.415Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:52.434Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:52.435Z [info ] [editor] play started (world 22, game sandbox)
+15: 2026-10-16T23:23:52.728Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:23:52.734Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:52.754Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:52.754Z [info ] [editor] play started (world 24, game sandbox)
+15: 2026-10-16T23:23:53.047Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:23:53.053Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:53.073Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:53.074Z [info ] [editor] play started (world 26, game sandbox)
+15: 2026-10-16T23:23:53.399Z [info ] [editor] play stopped after 19 ticks; runtime world discarded
+15: 2026-10-16T23:23:53.405Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:53.426Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:53.427Z [info ] [editor] play started (world 28, game sandbox)
+15: 2026-10-16T23:23:53.744Z [info ] [editor] play stopped after 19 ticks; runtime world discarded
+15: 2026-10-16T23:23:53.750Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:53.769Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:53.770Z [info ] [editor] play started (world 30, game sandbox)
+15: 2026-10-16T23:23:54.059Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:23:54.065Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:54.086Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:54.086Z [info ] [editor] play started (world 32, game sandbox)
+15: 2026-10-16T23:23:54.432Z [info ] [editor] play stopped after 20 ticks; runtime world discarded
+15: 2026-10-16T23:23:54.439Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:54.459Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:54.459Z [info ] [editor] play started (world 34, game sandbox)
+15: 2026-10-16T23:23:54.762Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:54.769Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:54.789Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:54.790Z [info ] [editor] play started (world 36, game sandbox)
+15: 2026-10-16T23:23:55.104Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:55.112Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:55.135Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:55.136Z [info ] [editor] play started (world 38, game sandbox)
+15: 2026-10-16T23:23:55.441Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:55.447Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:55.467Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:55.467Z [info ] [editor] play started (world 40, game sandbox)
+15: 2026-10-16T23:23:55.774Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:55.781Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:55.800Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:55.801Z [info ] [editor] play started (world 42, game sandbox)
+15: 2026-10-16T23:23:56.122Z [info ] [editor] play stopped after 19 ticks; runtime world discarded
+15: 2026-10-16T23:23:56.129Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:56.154Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:56.154Z [info ] [editor] play started (world 44, game sandbox)
+15: 2026-10-16T23:23:56.466Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:23:56.474Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:56.498Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:56.498Z [info ] [editor] play started (world 46, game sandbox)
+15: 2026-10-16T23:23:56.884Z [info ] [editor] play stopped after 23 ticks; runtime world discarded
+15: 2026-10-16T23:23:56.893Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:56.918Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:56.918Z [info ] [editor] play started (world 48, game sandbox)
+15: 2026-10-16T23:23:57.256Z [info ] [editor] play stopped after 20 ticks; runtime world discarded
+15: 2026-10-16T23:23:57.262Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:57.285Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:57.286Z [info ] [editor] play started (world 50, game sandbox)
+15: 2026-10-16T23:23:57.640Z [info ] [editor] play stopped after 21 ticks; runtime world discarded
+15: 2026-10-16T23:23:57.647Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:57.672Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:57.672Z [info ] [editor] play started (world 52, game sandbox)
+15: 2026-10-16T23:23:58.044Z [info ] [editor] play stopped after 22 ticks; runtime world discarded
+15: 2026-10-16T23:23:58.053Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:58.078Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:58.078Z [info ] [editor] play started (world 54, game sandbox)
+15: 2026-10-16T23:23:58.435Z [info ] [editor] play stopped after 21 ticks; runtime world discarded
+15: 2026-10-16T23:23:58.446Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:58.470Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:58.471Z [info ] [editor] play started (world 56, game sandbox)
+15: 2026-10-16T23:23:58.879Z [info ] [editor] play stopped after 24 ticks; runtime world discarded
+15: 2026-10-16T23:23:58.888Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:58.912Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:58.913Z [info ] [editor] play started (world 58, game sandbox)
+15: 2026-10-16T23:23:59.279Z [info ] [editor] play stopped after 21 ticks; runtime world discarded
+15: 2026-10-16T23:23:59.285Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:59.311Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:59.311Z [info ] [editor] play started (world 60, game sandbox)
+15: 2026-10-16T23:23:59.712Z [info ] [editor] play stopped after 24 ticks; runtime world discarded
+15: 2026-10-16T23:23:59.720Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:23:59.745Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:23:59.745Z [info ] [editor] play started (world 62, game sandbox)
+15: 2026-10-16T23:24:00.089Z [info ] [editor] play stopped after 20 ticks; runtime world discarded
+15: 2026-10-16T23:24:00.096Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:00.118Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:00.118Z [info ] [editor] play started (world 64, game sandbox)
+15: 2026-10-16T23:24:00.484Z [info ] [editor] play stopped after 21 ticks; runtime world discarded
+15: 2026-10-16T23:24:00.490Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:00.515Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:00.516Z [info ] [editor] play started (world 66, game sandbox)
+15: 2026-10-16T23:24:00.856Z [info ] [editor] play stopped after 20 ticks; runtime world discarded
+15: 2026-10-16T23:24:00.862Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:00.888Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:00.889Z [info ] [editor] play started (world 68, game sandbox)
+15: 2026-10-16T23:24:01.249Z [info ] [editor] play stopped after 21 ticks; runtime world discarded
+15: 2026-10-16T23:24:01.260Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:01.283Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:01.284Z [info ] [editor] play started (world 70, game sandbox)
+15: 2026-10-16T23:24:01.645Z [info ] [editor] play stopped after 21 ticks; runtime world discarded
+15: 2026-10-16T23:24:01.653Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:01.673Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:01.674Z [info ] [editor] play started (world 72, game sandbox)
+15: 2026-10-16T23:24:01.973Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:01.979Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.001Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.002Z [info ] [editor] play started (world 74, game sandbox)
+15: 2026-10-16T23:24:02.306Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:02.311Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.335Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.335Z [info ] [editor] play started (world 76, game sandbox)
+15: 2026-10-16T23:24:02.629Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:02.636Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.656Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.656Z [info ] [editor] play started (world 78, game sandbox)
+15: 2026-10-16T23:24:02.943Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:02.949Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.969Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:02.969Z [info ] [editor] play started (world 80, game sandbox)
+15: 2026-10-16T23:24:03.314Z [info ] [editor] play stopped after 20 ticks; runtime world discarded
+15: 2026-10-16T23:24:03.320Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:03.340Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:03.340Z [info ] [editor] play started (world 82, game sandbox)
+15: 2026-10-16T23:24:03.649Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:03.655Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:03.675Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:03.675Z [info ] [editor] play started (world 84, game sandbox)
+15: 2026-10-16T23:24:03.982Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:03.988Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.007Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.007Z [info ] [editor] play started (world 86, game sandbox)
+15: 2026-10-16T23:24:04.308Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:04.314Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.334Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.334Z [info ] [editor] play started (world 88, game sandbox)
+15: 2026-10-16T23:24:04.622Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:04.627Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.647Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.647Z [info ] [editor] play started (world 90, game sandbox)
+15: 2026-10-16T23:24:04.957Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:04.963Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.984Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:04.985Z [info ] [editor] play started (world 92, game sandbox)
+15: 2026-10-16T23:24:05.289Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:05.295Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:05.317Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:05.317Z [info ] [editor] play started (world 94, game sandbox)
+15: 2026-10-16T23:24:05.613Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:05.619Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:05.638Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:05.638Z [info ] [editor] play started (world 96, game sandbox)
+15: 2026-10-16T23:24:05.935Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:05.941Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:05.961Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:05.961Z [info ] [editor] play started (world 98, game sandbox)
+15: 2026-10-16T23:24:06.256Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:06.264Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:06.291Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:06.292Z [info ] [editor] play started (world 100, game sandbox)
+15: 2026-10-16T23:24:06.597Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:06.603Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:06.622Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:06.623Z [info ] [editor] play started (world 102, game sandbox)
+15: 2026-10-16T23:24:06.917Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:06.923Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:06.943Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:06.943Z [info ] [editor] play started (world 104, game sandbox)
+15: 2026-10-16T23:24:07.253Z [info ] [editor] play stopped after 18 ticks; runtime world discarded
+15: 2026-10-16T23:24:07.259Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:07.279Z [info ] [editor] saved first_light.scene.json at revision 4
+15: 2026-10-16T23:24:07.280Z [info ] [editor] play started (world 106, game sandbox)
+15: 2026-10-16T23:24:07.575Z [info ] [editor] play stopped after 17 ticks; runtime world discarded
+15: 2026-10-16T23:24:07.583Z [info ] [editor] reopened first_light.scene.json at revision 4
+15: 2026-10-16T23:24:07.602Z [info ] [automation] ok   {"do":"cycles","n":50} 50 save/play/stop/reopen cycles; buffers 10->10 images 7->7 allocations 17->17 vma bytes 61202344->61202344 validation errors 0->0 live worlds 1; process RSS 238.9 MiB (baseline) -> 238.9 MiB (after 10 cycles) -> 238.7 MiB (end), peak 239.1 MiB, settled growth -0.21 MiB (limit 16 MiB)
+15: 2026-10-16T23:24:07.687Z [info ] [vulkan] swapchain 1280x720 format 50 images 4 present mode 2 transfer_src true
+15: 2026-10-16T23:24:07.709Z [info ] [editor] viewport image at window (289, 78) size 635x388
+15: 2026-10-16T23:24:07.894Z [info ] [automation] ok   {"do":"resize_window","w":1280,"h":720} window now 1280x720
+15: 2026-10-16T23:24:07.952Z [info ] [editor] viewport image at window (18, 50) size 635x388
+15: 2026-10-16T23:24:07.959Z [info ] [editor] viewport image at window (25, 50) size 64x64
+15: 2026-10-16T23:24:08.052Z [info ] [automation] ok   {"do":"minimize"} frame rendered after step: false
+15: 2026-10-16T23:24:08.075Z [info ] [editor] viewport image at window (289, 78) size 64x64
+15: 2026-10-16T23:24:08.089Z [info ] [editor] viewport image at window (289, 78) size 635x388
+15: 2026-10-16T23:24:08.356Z [info ] [automation] ok   {"do":"restore"} frame rendered after step: true
+15: 2026-10-16T23:24:08.408Z [info ] [vulkan] swapchain 1600x900 format 50 images 4 present mode 2 transfer_src true
+15: 2026-10-16T23:24:08.432Z [info ] [editor] viewport image at window (289, 78) size 955x568
+15: 2026-10-16T23:24:08.691Z [info ] [automation] ok   {"do":"resize_window","w":1600,"h":900} window now 1600x900
+15: 2026-10-16T23:24:08.749Z [info ] [automation] ok   {"do":"select","name":"Column 5"} 10000000-0000-4000-8000-000000000114
+15: 2026-10-16T23:24:09.400Z [info ] [editor] window capture written: editor_06_after_lifecycle.png
+15: 2026-10-16T23:24:09.400Z [info ] [automation] ok   {"do":"capture_window","path":"editor_06_after_lifecycle.png"} editor_06_after_lifecycle.png
+15: 2026-10-16T23:24:09.494Z [info ] [automation] ok   {"do":"report","path":"editor_report.json"} editor_report.json
+15: 2026-10-16T23:24:09.589Z [info ] [automation] ok   {"do":"quit"} 
+15: 2026-10-16T23:24:09.591Z [info ] [editor] validation: layer on, synchronization on, 0 error(s), 0 warning(s)
+17/29 Test #15: vulkan.editor_first_success_automation .............   Passed   27.24 sec
+test 18
+      Start 18: vulkan.editor_real_x11_input
+
+18: Test command: scripts/ctest_display_launcher.sh "scripts/gui_real_input_check.sh" "build/dev-vulkan/bin" "build/dev-vulkan/test-artifacts/gui_real_input"
+18: Working Directory: build/dev-vulkan/tests
+18: Environment variables: 
+18:  SOV_REQUIRE_VALIDATION=1
+18:  SOV_CLI=build/dev-vulkan/bin/sovereign-cli
+18: Test timeout computed to be: 900
+18: [gui-real-input] editor pid 3634 window 6291502
+18: [gui-real-input] ok: scene open at revision 0
+18: [gui-real-input] sovereign-cli commit while editor open: exit 3 (expected 3)
+18: [gui-real-input] captured x11_01_opened.png
+18: [gui-real-input] ok: hierarchy click selected Column 2
+18: [gui-real-input] ok: inspector shows Column 2
+18: [gui-real-input] ok: typed Position X = -5.5 committed as revision 1
+18: [gui-real-input] captured x11_02_position_typed.png
+18: [gui-real-input] ok: hierarchy click selected Platform light strip
+18: [gui-real-input] ok: typed Emissive R = 3 committed as revision 2
+18: [gui-real-input] captured x11_03_material_typed.png
+18: [gui-real-input] ok: viewport click picked Raised platform
+18: [gui-real-input] captured x11_04_viewport_pick.png
+18: [gui-real-input] ok: Delete key removed Raised platform (revision 3)
+18: [gui-real-input] ok: History panel showing
+18: [gui-real-input] ok: Undo button restored the platform (revision 4)
+18: [gui-real-input] ok: Redo button deleted it again (revision 5)
+18: [gui-real-input] ok: Ctrl+Z restored it (revision 6)
+18: [gui-real-input] captured x11_05_history.png
+18: [gui-real-input] ok: Diagnostics panel showing
+18: [gui-real-input] ok: Validation tab shows layer on, 0 errors
+18: [gui-real-input] captured x11_06_diagnostics_validation.png
+18: [gui-real-input] ok: Commands tab lists the session's command results
+18: [gui-real-input] ok: Ctrl+S saved (not dirty)
+18: [gui-real-input] captured x11_07_saved.png
+18: [gui-real-input] editor exit code 0
+18: [gui-real-input] journal kinds=['edit', 'edit', 'edit', 'undo', 'redo', 'undo'] revision=6 column2.x=-5.5 strip.emissive=[3.0, 0.45, 0.06] platform_present=True other_entities_unchanged=True -> PASS
+18: [gui-real-input] editor pid 3894 window 4194350
+18: [gui-real-input] ok: reopened editor: revision 6, 6 history records, clean
+18: [gui-real-input] ok: reopened editor shows Column 2 at x = -5.5
+18: [gui-real-input] captured x11_08_reopened.png
+18: [gui-real-input] editor exit code 0
+18: [gui-real-input] runtime opened the GUI-saved scene and presented frames
+18: [gui-real-input] PASS
+18/29 Test #18: vulkan.editor_real_x11_input .......................   Passed   16.27 sec
+test 19
+      Start 19: vulkan.failure_paths_unwind_cleanly
+
+19: Test command: scripts/ctest_display_launcher.sh "scripts/failure_paths_check.sh" "build/dev-vulkan/bin" "build/dev-vulkan/test-artifacts/failure_paths"
+19: Working Directory: build/dev-vulkan/tests
+19: Environment variables: 
+19:  SOV_REQUIRE_VALIDATION=1
+19: Test timeout computed to be: 900
+19: runtime_normal_close                             exit 0   passed 
+19: runtime_missing_scene                            exit 1   passed 
+19: runtime_malformed_scene                          exit 1   passed 
+19: editor_missing_scene                             exit 1   passed 
+19: runtime_no_display                               exit 4   passed 
+19: ctest_launcher_without_display_or_xvfb           exit 77  passed 
+19: runtime_no_vulkan_driver                         exit 4   passed 
+19: runtime_required_validation_layer_missing        exit 4   passed 
+19: runtime_requested_device_absent                  exit 4   passed 
+19: runtime_physical_gpu_required_on_cpu_only_host   exit 4   passed 
+19: runtime_missing_shaders_after_device_init        exit 4   passed 
+19: editor_requested_device_absent                   exit 4   passed 
+19: editor_missing_shaders_after_device_init         exit 4   passed 
+19: editor_failed_init_left_scene_unchanged          exit 0   passed 
+19: cli_write_after_failed_editor_init               exit 0   passed 
+19: failure paths: 15/15 passed; summary build/dev-vulkan/test-artifacts/failure_paths/failure_paths.json
+19/29 Test #19: vulkan.failure_paths_unwind_cleanly ................   Passed    2.50 sec
+test 20
+      Start 20: static.sovereign-cli_link_dependencies
+
+20: Test command: /usr/bin/cmake "-DBINARY=build/dev-vulkan/bin/sovereign-cli" "-DSANITIZED=0" "-P" "cmake/CheckLinkedLibraries.cmake"
+20: Working Directory: build/dev-vulkan/tests
+20: Test timeout computed to be: 10000000
+20: -- build/dev-vulkan/bin/sovereign-cli: NEEDED = libstdc++.so.6, libm.so.6, libgcc_s.so.1, libc.so.6; no RPATH/RUNPATH; no Unreal symbols
+20/29 Test #20: static.sovereign-cli_link_dependencies .............   Passed    0.22 sec
+test 21
+      Start 21: static.sovereign-tests_link_dependencies
+
+21: Test command: /usr/bin/cmake "-DBINARY=build/dev-vulkan/bin/sovereign-tests" "-DSANITIZED=0" "-P" "cmake/CheckLinkedLibraries.cmake"
+21: Working Directory: build/dev-vulkan/tests
+21: Test timeout computed to be: 10000000
+21: -- build/dev-vulkan/bin/sovereign-tests: NEEDED = libstdc++.so.6, libm.so.6, libgcc_s.so.1, libc.so.6; no RPATH/RUNPATH; no Unreal symbols
+21/29 Test #21: static.sovereign-tests_link_dependencies ...........   Passed    0.32 sec
+test 22
+      Start 22: static.sovereign-runtime_link_dependencies
+
+22: Test command: /usr/bin/cmake "-DBINARY=build/dev-vulkan/bin/sovereign-runtime" "-DSANITIZED=0" "-P" "cmake/CheckLinkedLibraries.cmake"
+22: Working Directory: build/dev-vulkan/tests
+22: Test timeout computed to be: 10000000
+22: -- build/dev-vulkan/bin/sovereign-runtime: NEEDED = libstdc++.so.6, libm.so.6, libgcc_s.so.1, libc.so.6; no RPATH/RUNPATH; no Unreal symbols
+22/29 Test #22: static.sovereign-runtime_link_dependencies .........   Passed    0.35 sec
+test 23
+      Start 23: static.sovereign-editor_link_dependencies
+
+23: Test command: /usr/bin/cmake "-DBINARY=build/dev-vulkan/bin/sovereign-editor" "-DSANITIZED=0" "-P" "cmake/CheckLinkedLibraries.cmake"
+23: Working Directory: build/dev-vulkan/tests
+23: Test timeout computed to be: 10000000
+23: -- build/dev-vulkan/bin/sovereign-editor: NEEDED = libstdc++.so.6, libm.so.6, libgcc_s.so.1, libc.so.6; no RPATH/RUNPATH; no Unreal symbols
+23/29 Test #23: static.sovereign-editor_link_dependencies ..........   Passed    0.31 sec
+test 24
+      Start 24: static.sovereign-render-tests_link_dependencies
+
+24: Test command: /usr/bin/cmake "-DBINARY=build/dev-vulkan/bin/sovereign-render-tests" "-DSANITIZED=0" "-P" "cmake/CheckLinkedLibraries.cmake"
+24: Working Directory: build/dev-vulkan/tests
+24: Test timeout computed to be: 10000000
+24: -- build/dev-vulkan/bin/sovereign-render-tests: NEEDED = libstdc++.so.6, libm.so.6, libgcc_s.so.1, libc.so.6; no RPATH/RUNPATH; no Unreal symbols
+24/29 Test #24: static.sovereign-render-tests_link_dependencies ....   Passed    0.27 sec
+test 25
+      Start 25: vulkan.loaded_libraries_are_system_only
+
+25: Test command: scripts/ctest_display_launcher.sh "scripts/loaded_libraries_check.sh" "build/dev-vulkan/bin" "build/dev-vulkan/test-artifacts/loaded_libraries"
+25: Working Directory: build/dev-vulkan/tests
+25: Environment variables: 
+25:  SOV_REQUIRE_VALIDATION=1
+25: Test timeout computed to be: 300
+25: runtime: 52 shared objects loaded (17 via dlopen), all from system library directories, none from Unreal
+25: editor: 52 shared objects loaded (17 via dlopen), all from system library directories, none from Unreal
+25/29 Test #25: vulkan.loaded_libraries_are_system_only ............   Passed    1.43 sec
+test 26
+      Start 26: static.license_notices_match_lock
+
+26: Test command: /usr/bin/cmake "-DSOURCE_DIR=<repo>" "-DFETCHED=nlohmann_json=build/dev-vulkan/_deps/nlohmann_json-src;EnTT=build/dev-vulkan/_deps/entt-src;SDL3=build/dev-vulkan/_deps/sdl3-src;Vulkan-Headers=build/dev-vulkan/_deps/vulkan_headers-src;volk=build/dev-vulkan/_deps/volk-src;VulkanMemoryAllocator=build/dev-vulkan/_deps/vulkanmemoryallocator-src;imgui=build/dev-vulkan/_deps/imgui-src" "-P" "cmake/CheckLicenseNotices.cmake"
+26: Working Directory: build/dev-vulkan/tests
+26: Test timeout computed to be: 10000000
+26: -- nlohmann_json: fetched licence matches lock
+26: -- EnTT: fetched licence matches lock
+26: -- SDL3: fetched licence matches lock
+26: -- Vulkan-Headers: fetched licence matches lock
+26: -- volk: fetched licence matches lock
+26: -- VulkanMemoryAllocator: fetched licence matches lock
+26: -- imgui: fetched licence matches lock
+26: -- 8 dependency notices and 13 additional notice files match dependencies.lock.json
+26/29 Test #26: static.license_notices_match_lock ..................   Passed    0.02 sec
+test 27
+      Start 27: static.packet_files_verbatim
+
+27: Test command: /usr/bin/cmake "-DSOURCE_DIR=<repo>" "-P" "cmake/CheckPacketCopies.cmake"
+27: Working Directory: build/dev-vulkan/tests
+27: Test timeout computed to be: 10000000
+27: -- 12 packet files match MANIFEST.sha256.json; 7 repository copies are verbatim
+27/29 Test #27: static.packet_files_verbatim .......................   Passed    0.01 sec
+test 28
+      Start 28: static.packet_contract_checker
+
+28: Test command: /usr/bin/python3 "-I" "tools/validate_contract_examples.py"
+28: Working Directory: build/dev-vulkan/tests
+28: Test timeout computed to be: 10000000
+28: SOVEREIGN ENGINE DESIGN PACKET VALIDATION
+28: Scope: JSON schemas and example fixtures only. No native engine/GPU tests were run.
+28: 
+28: PASS | Both schemas satisfy Draft 2020-12
+28: PASS | Original First Light scene: structure and limited semantics
+28: PASS | Example command batch: structure and reference consistency
+28: PASS | Example request is explicitly a dry run
+28: PASS | Rejects unknown scene field
+28: PASS | Rejects duplicate entity UUID
+28: PASS | Rejects missing active camera
+28: PASS | Rejects self-parent cycle
+28: PASS | Rejects unnormalized quaternion
+28: PASS | Rejects non-finite numeric value
+28: PASS | Rejects unknown command operation
+28: PASS | Rejects unknown command field
+28: PASS | Rejects stale base revision
+28: PASS | Rejects missing per-operation target
+28: PASS | Rejects creating duplicate entity ID
+28: PASS | Rejects deleting the active camera
+28: 
+28: 16 packet checks passed.
+28: Not evaluated: C++ compilation, graphics, command persistence, locking, undo/redo, performance, or gameplay.
+28/29 Test #28: static.packet_contract_checker .....................   Passed    0.23 sec
+test 29
+      Start 29: static.repository_files_conform_to_owner_schemas
+
+29: Test command: /usr/bin/python3 "-I" "scripts/check_contracts.py"
+29: Working Directory: build/dev-vulkan/tests
+29: Test timeout computed to be: 10000000
+29: ok   scene  content/authoring/first_light.scene.json
+29: ok   scene  examples/first_light.scene.json
+29: ok   batch  examples/place_banner.command_batch.json
+29: ok   batch  tests/fixtures/axis_lab.build.command_batch.json
+29: ok   scene  tests/fixtures/axis_lab.scene.json
+29: 5 file(s), 0 failure(s)
+29/29 Test #29: static.repository_files_conform_to_owner_schemas ...   Passed    0.17 sec
+
+100% tests passed, 0 tests failed out of 29
+
+Label Time Summary:
+display     =  58.09 sec*proc (8 tests)
+headless    =   4.21 sec*proc (19 tests)
+static      =   4.09 sec*proc (12 tests)
+vulkan      =  59.54 sec*proc (10 tests)
+
+Total Test time (real) =  63.77 sec
+# exit 0 at 2026-10-16T23:24:31Z

@@ -1,0 +1,28 @@
+{
+  "protocol": "sovereign.command_result",
+  "protocol_version": 1,
+  "request_id": "c8924b12-5b36-430a-882b-68b1797a22da",
+  "status": "rejected",
+  "delivery": "original",
+  "kind": "edit",
+  "actor": "caelis",
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "revision_before": 1,
+  "revision_after": 1,
+  "commit_id": null,
+  "target_commit": null,
+  "request_hash": "ce4bba72783771a51ea19237f0dc9799db355b1c7aecafe0af585ab9fed982dc",
+  "operations": [],
+  "errors": [
+    {
+      "code": "idempotency_conflict",
+      "message": "idempotency key \"place-banner-commit-0001\" for actor \"caelis\" was already used by commit 2ad228ec-a0e6-4857-a01e-be4b1ca182fa with different request content (recorded hash b9c1625bbef03e28c01cd8ffebb293de9ec26a7080ab4cb360a85757426e3273, this request ce4bba72783771a51ea19237f0dc9799db355b1c7aecafe0af585ab9fed982dc). Use a new key for a new action.",
+      "path": "/idempotency_key",
+      "op_index": null,
+      "entity_id": null
+    }
+  ],
+  "warnings": [],
+  "diff": null,
+  "conflict": null
+}

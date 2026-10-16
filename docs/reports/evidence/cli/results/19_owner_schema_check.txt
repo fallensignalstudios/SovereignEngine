@@ -1,0 +1,11 @@
+ok   scene  docs/reports/evidence/cli/scenes/first_light.rev0.before.scene.json
+ok   scene  docs/reports/evidence/cli/scenes/first_light.rev1.after_commit.scene.json
+ok   scene  docs/reports/evidence/cli/scenes/first_light.rev2.after_undo.scene.json
+ok   scene  docs/reports/evidence/cli/scenes/first_light.rev3.after_redo.scene.json
+ok   batch  docs/reports/evidence/cli/requests/invalid_second_op_unknown_entity.command_batch.json
+ok   batch  docs/reports/evidence/cli/requests/place_banner.changed_content_same_key.command_batch.json
+ok   batch  docs/reports/evidence/cli/requests/place_banner.command_batch.json
+ok   batch  docs/reports/evidence/cli/requests/place_banner.commit.command_batch.json
+ok   batch  docs/reports/evidence/cli/requests/place_banner.commit.retry_new_request_id.command_batch.json
+ok   batch  docs/reports/evidence/cli/requests/place_banner.stale_base_revision.command_batch.json
+10 file(s), 0 failure(s)

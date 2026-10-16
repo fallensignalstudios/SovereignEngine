@@ -1,0 +1,19 @@
+$ scripts/with_virtual_display.sh build/dev-vulkan/bin/sovereign-runtime --scene content/authoring/first_light.scene.json --frames 720 --warmup 120 --perf-report docs/reports/evidence/performance/first_light_1920x1080_novsync_novalidation.json --width 1920 --height 1080 --no-vsync --no-validation
+# 2026-10-16T23:30:36Z commit fcbc52cc6b0f55680a40c99ca5f41266d5ce2630
+2026-10-16T23:30:36.891Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+2026-10-16T23:30:36.902Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:30:36.947Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> eligible (score 1)
+2026-10-16T23:30:36.963Z [info ] [vulkan] device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] api 1.4.318 driver llvmpipe (Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) conformance 1.3.1.1
+2026-10-16T23:30:36.963Z [info ] [vulkan] requested features: apiVersion 1.3, dynamicRendering, synchronization2, timelineSemaphore; validation layer OFF, synchronization validation OFF
+2026-10-16T23:30:36.963Z [warn ] [vulkan] selected device is a CPU (software) Vulkan implementation: results are software-rendered and do NOT qualify physical-GPU behaviour or performance
+2026-10-16T23:30:36.966Z [info ] [renderer] R0 forward renderer ready on llvmpipe (LLVM 20.1.2, 256 bits) (software-rendered (CPU Vulkan implementation)); shaders from build/dev-vulkan/bin/shaders
+2026-10-16T23:30:36.967Z [info ] [vulkan] swapchain 1918x1055 format 50 images 4 present mode 1 transfer_src true
+2026-10-16T23:30:36.967Z [info ] [runtime] evidence class: software-rendered (CPU Vulkan implementation)
+2026-10-16T23:30:36.968Z [info ] [vulkan] swapchain 1918x1055 format 50 images 4 present mode 1 transfer_src true
+2026-10-16T23:30:51.022Z [info ] [runtime] perf report written: docs/reports/evidence/performance/first_light_1920x1080_novsync_novalidation.json (599 measured frames)
+runtime summary: frames=720 skipped=0 ticks=841 dropped_sim_seconds=0.000
+device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu] driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+evidence class: software-rendered (CPU Vulkan implementation)
+validation: layer off, sync off, errors 0, warnings 0
+resources: buffers 8 images 3 views 3 vma allocations 11
+# exit 0 at 2026-10-16T23:30:51Z

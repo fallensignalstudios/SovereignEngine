@@ -1,0 +1,17 @@
+libVkLayer_MESA_device_select.so
+libVkLayer_khronos_validation.so
+libX11.so.6
+libXcursor.so.1
+libXext.so.6
+libXi.so.6
+libXrandr.so.2
+libXss.so.1
+libvulkan.so.1
+libvulkan_asahi.so
+libvulkan_gfxstream.so
+libvulkan_intel.so
+libvulkan_intel_hasvk.so
+libvulkan_lvp.so
+libvulkan_nouveau.so
+libvulkan_radeon.so
+libvulkan_virtio.so

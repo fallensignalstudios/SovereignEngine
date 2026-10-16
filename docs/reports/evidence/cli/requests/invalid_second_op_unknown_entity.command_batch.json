@@ -1,0 +1,20 @@
+{
+  "protocol_version": 1,
+  "request_id": "d2f3c2e4-69d3-4a69-994b-59df0e1702d0",
+  "actor": "caelis",
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "base_revision": 1,
+  "idempotency_key": "invalid-batch-0001",
+  "dry_run": false,
+  "operations": [
+    {
+      "op": "entity.rename",
+      "entity_id": "10000000-0000-4000-8000-000000000140",
+      "name": "Renamed Banner"
+    },
+    {
+      "op": "entity.delete",
+      "entity_id": "00000000-0000-4000-8000-0000000000ff"
+    }
+  ]
+}

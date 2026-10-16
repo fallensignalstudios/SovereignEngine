@@ -1,0 +1,164 @@
+docs/reports/evidence/captures/editor_01_opened.png: 1600x900 sha256 4128422d3de23ea6d60eb36089ee2c903ed66d06462df5b2db3c2723dab70dad
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-editor swapchain readback (full editor window)
+  Scene: First Light (first_light.scene.json, revision 0, content sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:43.482Z
+docs/reports/evidence/captures/editor_02_column_moved.png: 1600x900 sha256 6a0a13301ad15f339837a19b7fbf3f2da91d83bf17d8391dc46aea6480076a83
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-editor swapchain readback (full editor window)
+  Scene: First Light (first_light.scene.json, revision 1, content sha256 cb80ca4f0991a5e6ab17272a6435726d71863a893258cb4e1a4939bcab4ec57e)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:44.674Z
+docs/reports/evidence/captures/editor_03_move_undone_viewport.png: 955x568 sha256 c22ada0cafa3b8c93c6e6f7de2bd4c7281175f1100359a565ff1ab11e6c57e52
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-editor viewport view readback
+  Scene: First Light (first_light.scene.json, revision 2, content sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:45.548Z
+docs/reports/evidence/captures/editor_04_material_saved.png: 1600x900 sha256 0b0be7edf126e86047406dbd87518e31058a93a4cd2c47ebccd42d801ef87dc6
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-editor swapchain readback (full editor window)
+  Scene: First Light (first_light.scene.json, revision 4, content sha256 f07a82ef89318451868ad6e84d2d47b00c6dbae847070b1c25bba327fde11b2d)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:46.467Z
+docs/reports/evidence/captures/editor_05_playing.png: 1600x900 sha256 b35ffc86910c15b0a656a781cff0343c781292e576fcd1aaeeeba29e9e1ae825
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-editor swapchain readback (full editor window)
+  Scene: First Light (first_light.scene.json, revision 4, content sha256 f07a82ef89318451868ad6e84d2d47b00c6dbae847070b1c25bba327fde11b2d)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:49.201Z
+docs/reports/evidence/captures/editor_06_after_lifecycle.png: 1600x900 sha256 1ac0ac0c76cbfed838496f057c2bea7541752d635e9be441e9bbd58d8e62825c
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-editor swapchain readback (full editor window)
+  Scene: First Light (first_light.scene.json, revision 4, content sha256 f07a82ef89318451868ad6e84d2d47b00c6dbae847070b1c25bba327fde11b2d)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:24:08.891Z
+docs/reports/evidence/captures/runtime_editor_saved_scene.png: 1280x720 sha256 b33315a2abccd490bc044a6baa5dbfe7b2ebab98ff534610608ff49f803ef872
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-runtime swapchain readback (presented frame)
+  Scene: First Light (first_light.scene.json, revision 4, content sha256 f07a82ef89318451868ad6e84d2d47b00c6dbae847070b1c25bba327fde11b2d)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:24:33.523Z
+docs/reports/evidence/captures/runtime_first_light.png: 1280x720 sha256 029a347704de19435247354cbac12e8b55f30e2a70248ca9f5b84f653fdf0c91
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-runtime swapchain readback (presented frame)
+  Scene: First Light (first_light.scene.json, revision 0, content sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:33.955Z
+docs/reports/evidence/captures/rendering/axis_lab.png: 640x360 sha256 2fcfc60951cccf2d43cfbef4e83d22cc2ccd805eb2cdd9bb9ba2196ff2750093
+  Software: Sovereign Engine 0.1.0
+  Source: offscreen view readback (sovereign-render-tests)
+  Scene: S0 Axis Lab (tests/fixtures/axis_lab.scene.json)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:30.023Z
+docs/reports/evidence/captures/rendering/axis_lab_selected.png: 640x360 sha256 e8c39c916c50ae7cde492336dc81caa2d37887d4c577acd8bdcf1fe1ea33a3a8
+  Software: Sovereign Engine 0.1.0
+  Source: offscreen view readback (sovereign-render-tests)
+  Scene: S0 Axis Lab, X marker selected
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:30.203Z
+docs/reports/evidence/captures/rendering/first_light.png: 1280x720 sha256 abc7aa5d675ad5f7ad750194cba23c5fe7ae7f7a642d618d59502e2aec4b02dc
+  Software: Sovereign Engine 0.1.0
+  Source: offscreen view readback (sovereign-render-tests)
+  Scene: S1 First Light (content/authoring/first_light.scene.json)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:23:30.319Z
+docs/reports/evidence/gui_real_input/runtime_after_gui_session.png: 1280x720 sha256 482369b440cb217ca5bc0e50537970904defc701dd3228dccb49b4a03771aeb6
+  Software: Sovereign Engine 0.1.0
+  Source: sovereign-runtime swapchain readback (presented frame)
+  Scene: First Light (first_light.scene.json, revision 6, content sha256 a1b52150f1d547400a4e9fc9053787304d84389efe89e3f9fb5ff673ee99737e)
+  EvidenceClass: software-rendered (CPU Vulkan implementation)
+  Device: llvmpipe (LLVM 20.1.2, 256 bits) [cpu]
+  Driver: llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)
+  Backend: native Vulkan 1.3 (volk + VMA; device reports API 1.4.318), engine-owned HLSL->SPIR-V shaders
+  ShaderCompiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA)
+  ValidationLayer: on (+synchronization)
+  ValidationErrorsAtCapture: 0
+  EngineCommit: fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)
+  CapturedAt: 2026-10-16T23:24:25.565Z
+docs/reports/evidence/gui_real_input/x11_01_opened.png: 1600x900 sha256 07a86f33dc47ec32be9a58808af86aad8878c6dcc6957b2432487f5d16e79a2d
+docs/reports/evidence/gui_real_input/x11_02_position_typed.png: 1600x900 sha256 42920e4edb50edd5db4781de7ec6b6822e40af374a710d873072f8c7ea14ca28
+docs/reports/evidence/gui_real_input/x11_03_material_typed.png: 1600x900 sha256 70e8019175ba0119168843655df778fbb2b83f77f0328b8b1abaf8245e44ac16
+docs/reports/evidence/gui_real_input/x11_04_viewport_pick.png: 1600x900 sha256 aa990b7775d683b8fbed45e8f3eac83e586687da67e54bbcbde27ab2e1e0c727
+docs/reports/evidence/gui_real_input/x11_05_history.png: 1600x900 sha256 03da8d5c0fb74bd2494b9cef70de1f1cbdc0b983a34cb7a61ff2aa8c25776400
+docs/reports/evidence/gui_real_input/x11_06_diagnostics_validation.png: 1600x900 sha256 25df951e01e6cd63546a9d7e710e67a164a90338b546295b97d5698c3cc5b9b4
+docs/reports/evidence/gui_real_input/x11_07_saved.png: 1600x900 sha256 80ce53da92074d89c59e0ea7f6378837d174e3be25743a606546b1c59e53a97c
+docs/reports/evidence/gui_real_input/x11_08_reopened.png: 1600x900 sha256 e285f9f46cab8fd19faadc1d2206eb72d51b9abcf28ac947a2f52bb38ca00965

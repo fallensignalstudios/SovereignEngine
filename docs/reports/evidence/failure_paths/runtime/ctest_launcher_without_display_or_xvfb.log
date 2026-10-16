@@ -1,0 +1,4 @@
+$ env -u DISPLAY -u WAYLAND_DISPLAY PATH=build/dev-vulkan/test-artifacts/failure_paths/work/empty-path /bin/bash scripts/ctest_display_launcher.sh /bin/true
+# expected exit 77, diagnostic /skipped \(not passed\)/
+no display and no Xvfb/openbox: test skipped (not passed)
+# exit 77 after 0.01s: passed 

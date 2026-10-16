@@ -1,0 +1,189 @@
+$ unshare -rn cmake --preset dev-headless -B docs/reports/evidence/failure_paths/configure/work/offline_fresh
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+  FETCHCONTENT_UPDATES_DISCONNECTED="ON"
+  SOV_ENABLE_GRAPHICS="OFF"
+  SOV_WARNINGS_AS_ERRORS="ON"
+
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.43.0") 
+[1/9] Creating directories for 'nlohmann_json-populate'
+[1/9] Performing download step (download, verify and extract) for 'nlohmann_json-populate'
+-- Downloading...
+   dst='docs/reports/evidence/failure_paths/configure/work/offline_fresh/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/json.tar.xz'
+   timeout='none'
+   inactivity timeout='none'
+-- Using src='https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz'
+-- Retrying...
+-- Using src='https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz'
+-- Retry after 5 seconds (attempt #2) ...
+-- Using src='https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz'
+-- Retry after 5 seconds (attempt #3) ...
+-- Using src='https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz'
+-- Retry after 15 seconds (attempt #4) ...
+-- Using src='https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz'
+-- Retry after 60 seconds (attempt #5) ...
+-- Using src='https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz'
+CMake Error at nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/download-nlohmann_json-populate.cmake:170 (message):
+  Each download failed!
+
+    error: downloading 'https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz' failed
+          status_code: 7
+          status_string: "Couldn't connect to server"
+          log:
+          --- LOG BEGIN ---
+          Uses proxy env variable no_proxy == 'localhost,127.0.0.1,::1,127.0.0.0/8,0.0.0.0/8,::,169.254.0.0/16,api.anthropic.com,api-staging.anthropic.com,api-pr-preview.anthropic.com,mcp-proxy.anthropic.com,mcp-proxy-staging.anthropic.com,registry.npmjs.org,jsr.io,npm.jsr.io,pypi.org,files.pythonhosted.org,index.crates.io,proxy.golang.org,host.docker.internal,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.svc.cluster.local,*.svc.cluster.local'
+
+  Uses proxy env variable https_proxy == 'http://127.0.0.1:35943'
+
+    Trying 127.0.0.1:35943...
+
+  Immediate connect fail for 127.0.0.1: Network is unreachable
+
+  Failed to connect to 127.0.0.1 port 35943 after 0 ms: Couldn't connect to
+  server
+
+  Closing connection
+
+
+
+          --- LOG END ---
+          error: downloading 'https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz' failed
+          status_code: 7
+          status_string: "Couldn't connect to server"
+          log:
+          --- LOG BEGIN ---
+          Uses proxy env variable no_proxy == 'localhost,127.0.0.1,::1,127.0.0.0/8,0.0.0.0/8,::,169.254.0.0/16,api.anthropic.com,api-staging.anthropic.com,api-pr-preview.anthropic.com,mcp-proxy.anthropic.com,mcp-proxy-staging.anthropic.com,registry.npmjs.org,jsr.io,npm.jsr.io,pypi.org,files.pythonhosted.org,index.crates.io,proxy.golang.org,host.docker.internal,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.svc.cluster.local,*.svc.cluster.local'
+
+  Uses proxy env variable https_proxy == 'http://127.0.0.1:35943'
+
+    Trying 127.0.0.1:35943...
+
+  Immediate connect fail for 127.0.0.1: Network is unreachable
+
+  Failed to connect to 127.0.0.1 port 35943 after 0 ms: Couldn't connect to
+  server
+
+  Closing connection
+
+
+
+          --- LOG END ---
+          error: downloading 'https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz' failed
+          status_code: 7
+          status_string: "Couldn't connect to server"
+          log:
+          --- LOG BEGIN ---
+          Uses proxy env variable no_proxy == 'localhost,127.0.0.1,::1,127.0.0.0/8,0.0.0.0/8,::,169.254.0.0/16,api.anthropic.com,api-staging.anthropic.com,api-pr-preview.anthropic.com,mcp-proxy.anthropic.com,mcp-proxy-staging.anthropic.com,registry.npmjs.org,jsr.io,npm.jsr.io,pypi.org,files.pythonhosted.org,index.crates.io,proxy.golang.org,host.docker.internal,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.svc.cluster.local,*.svc.cluster.local'
+
+  Uses proxy env variable https_proxy == 'http://127.0.0.1:35943'
+
+    Trying 127.0.0.1:35943...
+
+  Immediate connect fail for 127.0.0.1: Network is unreachable
+
+  Failed to connect to 127.0.0.1 port 35943 after 0 ms: Couldn't connect to
+  server
+
+  Closing connection
+
+
+
+          --- LOG END ---
+          error: downloading 'https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz' failed
+          status_code: 7
+          status_string: "Couldn't connect to server"
+          log:
+          --- LOG BEGIN ---
+          Uses proxy env variable no_proxy == 'localhost,127.0.0.1,::1,127.0.0.0/8,0.0.0.0/8,::,169.254.0.0/16,api.anthropic.com,api-staging.anthropic.com,api-pr-preview.anthropic.com,mcp-proxy.anthropic.com,mcp-proxy-staging.anthropic.com,registry.npmjs.org,jsr.io,npm.jsr.io,pypi.org,files.pythonhosted.org,index.crates.io,proxy.golang.org,host.docker.internal,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.svc.cluster.local,*.svc.cluster.local'
+
+  Uses proxy env variable https_proxy == 'http://127.0.0.1:35943'
+
+    Trying 127.0.0.1:35943...
+
+  Immediate connect fail for 127.0.0.1: Network is unreachable
+
+  Failed to connect to 127.0.0.1 port 35943 after 0 ms: Couldn't connect to
+  server
+
+  Closing connection
+
+
+
+          --- LOG END ---
+          error: downloading 'https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz' failed
+          status_code: 7
+          status_string: "Couldn't connect to server"
+          log:
+          --- LOG BEGIN ---
+          Uses proxy env variable no_proxy == 'localhost,127.0.0.1,::1,127.0.0.0/8,0.0.0.0/8,::,169.254.0.0/16,api.anthropic.com,api-staging.anthropic.com,api-pr-preview.anthropic.com,mcp-proxy.anthropic.com,mcp-proxy-staging.anthropic.com,registry.npmjs.org,jsr.io,npm.jsr.io,pypi.org,files.pythonhosted.org,index.crates.io,proxy.golang.org,host.docker.internal,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.svc.cluster.local,*.svc.cluster.local'
+
+  Uses proxy env variable https_proxy == 'http://127.0.0.1:35943'
+
+    Trying 127.0.0.1:35943...
+
+  Immediate connect fail for 127.0.0.1: Network is unreachable
+
+  Failed to connect to 127.0.0.1 port 35943 after 0 ms: Couldn't connect to
+  server
+
+  Closing connection
+
+
+
+          --- LOG END ---
+          error: downloading 'https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz' failed
+          status_code: 7
+          status_string: "Couldn't connect to server"
+          log:
+          --- LOG BEGIN ---
+          Uses proxy env variable no_proxy == 'localhost,127.0.0.1,::1,127.0.0.0/8,0.0.0.0/8,::,169.254.0.0/16,api.anthropic.com,api-staging.anthropic.com,api-pr-preview.anthropic.com,mcp-proxy.anthropic.com,mcp-proxy-staging.anthropic.com,registry.npmjs.org,jsr.io,npm.jsr.io,pypi.org,files.pythonhosted.org,index.crates.io,proxy.golang.org,host.docker.internal,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,100.64.0.0/10,.svc.cluster.local,*.svc.cluster.local'
+
+  Uses proxy env variable https_proxy == 'http://127.0.0.1:35943'
+
+    Trying 127.0.0.1:35943...
+
+  Immediate connect fail for 127.0.0.1: Network is unreachable
+
+  Failed to connect to 127.0.0.1 port 35943 after 0 ms: Couldn't connect to
+  server
+
+  Closing connection
+
+
+
+          --- LOG END ---
+          
+    
+
+
+FAILED: nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-download docs/reports/evidence/failure_paths/configure/work/offline_fresh/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-download 
+cd docs/reports/evidence/failure_paths/configure/work/offline_fresh/_deps && /usr/bin/cmake -P docs/reports/evidence/failure_paths/configure/work/offline_fresh/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/download-nlohmann_json-populate.cmake && /usr/bin/cmake -P docs/reports/evidence/failure_paths/configure/work/offline_fresh/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/verify-nlohmann_json-populate.cmake && /usr/bin/cmake -P docs/reports/evidence/failure_paths/configure/work/offline_fresh/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/extract-nlohmann_json-populate.cmake && /usr/bin/cmake -E touch docs/reports/evidence/failure_paths/configure/work/offline_fresh/_deps/nlohmann_json-subbuild/nlohmann_json-populate-prefix/src/nlohmann_json-populate-stamp/nlohmann_json-populate-download
+ninja: build stopped: subcommand failed.
+
+CMake Error at /usr/share/cmake-3.28/Modules/FetchContent.cmake:1679 (message):
+  Build step for nlohmann_json failed: 1
+Call Stack (most recent call first):
+  /usr/share/cmake-3.28/Modules/FetchContent.cmake:1819:EVAL:2 (__FetchContent_directPopulate)
+  /usr/share/cmake-3.28/Modules/FetchContent.cmake:1819 (cmake_language)
+  /usr/share/cmake-3.28/Modules/FetchContent.cmake:2033 (FetchContent_Populate)
+  cmake/Dependencies.cmake:102 (FetchContent_MakeAvailable)
+  cmake/Dependencies.cmake:124 (sov_fetch)
+  CMakeLists.txt:25 (sov_fetch_headless_dependencies)
+
+
+-- Configuring incomplete, errors occurred!
+# exit 1: passed 

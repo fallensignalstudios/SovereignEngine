@@ -1,0 +1,8 @@
+$ build/dev-vulkan/bin/sovereign-runtime --scene content/authoring/first_light.scene.json --frames 5 --device no-such-gpu
+# expected exit 4, diagnostic /does not match the requested device/
+2026-10-16T23:24:27.479Z [info ] [runtime] scene "First Light" (10000000-0000-4000-8000-000000000001), revision 0, 12 entities, file sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3
+2026-10-16T23:24:27.489Z [info ] [platform] SDL 3.2.30 video driver: x11
+2026-10-16T23:24:27.573Z [info ] [vulkan] physical device: llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: does not match the requested device "no-such-gpu"
+2026-10-16T23:24:27.583Z [error] [runtime] unsupported_component: no suitable Vulkan device:
+  llvmpipe (LLVM 20.1.2, 256 bits) (cpu, api 1.4.318, driver llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)) -> rejected: does not match the requested device "no-such-gpu"
+# exit 4 after 0.13s: passed 

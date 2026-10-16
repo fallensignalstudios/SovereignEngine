@@ -1,0 +1,17 @@
+offline_rebuild_both_presets exit 0
+asan_1_configure exit 0
+asan_2_build exit 0
+asan_3_test exit 0
+cli_demo exit 0
+dev_vulkan_verbose exit 0
+runtime_opens_editor_saved_scene exit 0
+gui_real_input_repeated_10x exit 0
+owner_schema_check_of_editor_written_scenes exit 0
+configure_failure_paths exit 0
+perf_first_light_1280x720_vsync exit 0
+perf_first_light_1280x720_novsync exit 0
+perf_first_light_1920x1080_novsync exit 0
+perf_first_light_1920x1080_novsync_novalidation exit 0
+gpu_qualify_on_this_host exit 8
+isolation_before_after_identical exit 1
+isolation_outside_repository_identical exit 0 (recomputed after the script fix; the first comparison above included the repository's own build/ listing)

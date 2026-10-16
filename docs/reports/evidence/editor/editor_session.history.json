@@ -1,0 +1,52 @@
+{
+  "revision": 4,
+  "next_undo": "05f6af86-3521-4acc-9aff-a63924182edc",
+  "next_redo": null,
+  "journal": {
+    "present": true,
+    "consistent": true,
+    "notes": []
+  },
+  "transactions": [
+    {
+      "commit_id": "3f54712b-2733-48d8-b51e-f9684c875700",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 0,
+      "new_revision": 1,
+      "label": "Set transform",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "53e72fea-73dd-40da-8a1d-098629b5fe73",
+      "kind": "undo",
+      "actor": "editor:local",
+      "base_revision": 1,
+      "new_revision": 2,
+      "label": "Undo: Set transform",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "f0117389-2a55-41f7-a84e-bd64ce2eb74d",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 2,
+      "new_revision": 3,
+      "label": "Set Base color",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "05f6af86-3521-4acc-9aff-a63924182edc",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 3,
+      "new_revision": 4,
+      "label": "Set Emissive",
+      "idempotency_key": "",
+      "operations": 1
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "protocol": "sovereign.command_result",
+  "protocol_version": 1,
+  "request_id": null,
+  "status": "committed",
+  "delivery": "original",
+  "kind": "redo",
+  "actor": "cli:demo",
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "revision_before": 2,
+  "revision_after": 3,
+  "commit_id": "4787cd00-7bc2-4c3d-9471-d80d6aa0a4f9",
+  "target_commit": "2ad228ec-a0e6-4857-a01e-be4b1ca182fa",
+  "request_hash": null,
+  "operations": [
+    {
+      "index": 0,
+      "op": "entity.create",
+      "entity_id": "10000000-0000-4000-8000-000000000140",
+      "status": "applied"
+    },
+    {
+      "index": 1,
+      "op": "entity.rename",
+      "entity_id": "10000000-0000-4000-8000-000000000103",
+      "status": "applied"
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "diff": {
+    "revision_before": 2,
+    "revision_after": 3,
+    "entities_created": [
+      {
+        "entity_id": "10000000-0000-4000-8000-000000000140",
+        "name": "Test banner",
+        "changes": [
+          {
+            "path": "name",
+            "before": null,
+            "after": "Test banner"
+          },
+          {
+            "path": "components.Transform.position",
+            "before": null,
+            "after": [0.0, 6.0, -8.75]
+          },
+          {
+            "path": "components.Transform.rotation_xyzw",
+            "before": null,
+            "after": [0.0, 0.0, 0.0, 1.0]
+          },
+          {
+            "path": "components.Transform.scale",
+            "before": null,
+            "after": [4.0, 5.0, 0.05]
+          },
+          {
+            "path": "components.Transform.parent_id",
+            "before": null,
+            "after": null
+          },
+          {
+            "path": "components.PrimitiveMesh.primitive",
+            "before": null,
+            "after": "box"
+          },
+          {
+            "path": "components.MaterialParameters.base_color_rgba",
+            "before": null,
+            "after": [0.24, 0.022, 0.016, 1.0]
+          },
+          {
+            "path": "components.MaterialParameters.emissive_rgb",
+            "before": null,
+            "after": [0.0, 0.0, 0.0]
+          }
+        ]
+      }
+    ],
+    "entities_deleted": [],
+    "entities_modified": [
+      {
+        "entity_id": "10000000-0000-4000-8000-000000000103",
+        "name": "First Light dais",
+        "changes": [
+          {
+            "path": "name",
+            "before": "Raised platform",
+            "after": "First Light dais"
+          }
+        ]
+      }
+    ],
+    "scene_fields": [],
+    "summary": "1 created, 0 deleted, 1 modified, 0 scene field(s) changed"
+  },
+  "conflict": null
+}

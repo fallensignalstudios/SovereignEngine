@@ -1,0 +1,87 @@
+{
+  "tool": "sovereign-runtime --perf-report",
+  "evidence_class": "software-rendered (CPU Vulkan implementation)",
+  "note": "CPU Vulkan implementation: these timings are NOT GPU performance and are not a baseline",
+  "engine": {
+    "version": "0.1.0",
+    "commit": "fcbc52cc6b0f55680a40c99ca5f41266d5ce2630 (clean)",
+    "build": "Debug",
+    "compiler": "GNU 13.3.0",
+    "dependency_lock_sha256": "c2ad80e256bb24a21da9321f9c562a1a2cb1d2393845987f493e1e80cb5a1065"
+  },
+  "device": {
+    "name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "type": "cpu",
+    "driver": "llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)",
+    "api": "1.4.318",
+    "swapchain": "1918x1055 format 50 images 4 present mode 1",
+    "gpu_timestamps": true
+  },
+  "settings": {
+    "resolution": [
+      1918,
+      1055
+    ],
+    "vsync": false,
+    "validation": true,
+    "warmup_frames": 120,
+    "scripted_input": false,
+    "renderer": "R0 forward + ACES tone map, fixed R0 lighting, no MSAA"
+  },
+  "scene": "First Light (first_light.scene.json, revision 0, content sha256 f6aa89c0b31c4fd31b4522adaaaf3fdd7366af08eb6fad4c086a8bc2f78b4ee3)",
+  "content": {
+    "instances": 12,
+    "triangles": 840
+  },
+  "frames": {
+    "total": 720,
+    "skipped": 0,
+    "measured": 599
+  },
+  "frame_time": {
+    "samples": 599,
+    "mean_ms": 20.598423073455756,
+    "p50_ms": 20.270794,
+    "p95_ms": 24.077149,
+    "p99_ms": 26.933107,
+    "max_ms": 37.904511
+  },
+  "renderer_cpu_work": {
+    "samples": 599,
+    "mean_ms": 1.0104433706176947,
+    "p50_ms": 0.8876480000000022,
+    "p95_ms": 1.7174680000000002,
+    "p99_ms": 2.2347490000000008,
+    "max_ms": 17.597493000000004
+  },
+  "renderer_blocked": {
+    "samples": 599,
+    "mean_ms": 17.720203398998333,
+    "p50_ms": 17.456698,
+    "p95_ms": 20.988675999999998,
+    "p99_ms": 23.043433,
+    "max_ms": 25.045378999999997
+  },
+  "gpu": {
+    "samples": 599,
+    "mean_ms": 17.398618040066776,
+    "p50_ms": 17.140235,
+    "p95_ms": 20.649978,
+    "p99_ms": 22.694899,
+    "max_ms": 24.767609
+  },
+  "definitions": {
+    "frame_time": "wall time between consecutive frame starts (whole loop: events, simulation, render)",
+    "renderer_cpu_work": "renderer CPU time excluding blocking waits: upload, command recording, submit",
+    "renderer_blocked": "time blocked on the frame-context fence, swapchain acquire and present",
+    "gpu": "graphics-queue timestamp delta of the frame's command buffer",
+    "percentiles": "nearest-rank over the measured frames after warm-up"
+  },
+  "memory": {
+    "process_rss_bytes": 222953472,
+    "process_peak_rss_bytes": 223346688,
+    "process_memory_available": true,
+    "vma_peak_bytes": 48177064
+  },
+  "what_frame_time_includes": "no vsync waits (uncapped where supported)"
+}

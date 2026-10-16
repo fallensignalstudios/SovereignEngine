@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "scene_id": "10000000-0000-4000-8000-000000000001",
+  "name": "First Light",
+  "revision": 0,
+  "active_camera_id": "10000000-0000-4000-8000-000000000201",
+  "background_linear_rgb": [0.012, 0.014, 0.022],
+  "entities": [
+    {
+      "id": "10000000-0000-4000-8000-000000000101",
+      "name": "Hall floor",
+      "components": {
+        "Transform": {
+          "position": [0.0, -0.15, 0.0],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [30.0, 0.3, 18.0],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "box"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.055, 0.06, 0.07, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000102",
+      "name": "Central walkway",
+      "components": {
+        "Transform": {
+          "position": [0.0, 0.025, 0.0],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [5.0, 0.05, 17.0],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "box"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.18, 0.025, 0.02, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000103",
+      "name": "Raised platform",
+      "components": {
+        "Transform": {
+          "position": [0.0, 0.5, -6.5],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [10.0, 1.0, 4.0],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "box"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.23, 0.115, 0.045, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000104",
+      "name": "Rear wall",
+      "components": {
+        "Transform": {
+          "position": [0.0, 5.0, -9.0],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [30.0, 10.0, 0.35],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "box"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.04, 0.045, 0.055, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000110",
+      "name": "Column 1",
+      "components": {
+        "Transform": {
+          "position": [-7.0, 3.5, -5.5],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 7.0, 1.6],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "cylinder"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.35, 0.16, 0.045, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000111",
+      "name": "Column 2",
+      "components": {
+        "Transform": {
+          "position": [-7.0, 3.5, 0.0],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 7.0, 1.6],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "cylinder"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.35, 0.16, 0.045, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000112",
+      "name": "Column 3",
+      "components": {
+        "Transform": {
+          "position": [-7.0, 3.5, 5.5],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 7.0, 1.6],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "cylinder"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.35, 0.16, 0.045, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000113",
+      "name": "Column 4",
+      "components": {
+        "Transform": {
+          "position": [7.0, 3.5, -5.5],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 7.0, 1.6],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "cylinder"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.35, 0.16, 0.045, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000114",
+      "name": "Column 5",
+      "components": {
+        "Transform": {
+          "position": [7.0, 3.5, 0.0],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 7.0, 1.6],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "cylinder"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.35, 0.16, 0.045, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000115",
+      "name": "Column 6",
+      "components": {
+        "Transform": {
+          "position": [7.0, 3.5, 5.5],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 7.0, 1.6],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "cylinder"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.35, 0.16, 0.045, 1.0],
+          "emissive_rgb": [0.0, 0.0, 0.0]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000130",
+      "name": "Platform light strip",
+      "components": {
+        "Transform": {
+          "position": [0.0, 1.05, -4.55],
+          "rotation_xyzw": [0.0, 0.0, 0.0, 1.0],
+          "scale": [9.0, 0.08, 0.08],
+          "parent_id": null
+        },
+        "PrimitiveMesh": {
+          "primitive": "box"
+        },
+        "MaterialParameters": {
+          "base_color_rgba": [0.35, 0.16, 0.03, 1.0],
+          "emissive_rgb": [1.4, 0.45, 0.06]
+        }
+      }
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000201",
+      "name": "First Light camera",
+      "components": {
+        "Transform": {
+          "position": [0.0, 6.0, 22.0],
+          "rotation_xyzw": [-0.13052619222005157, 0.0, 0.0, 0.9914448613738104],
+          "scale": [1.0, 1.0, 1.0],
+          "parent_id": null
+        },
+        "Camera": {
+          "projection": "perspective",
+          "fov_y_degrees": 60.0,
+          "near_m": 0.1,
+          "far_m": 1000.0
+        }
+      }
+    }
+  ]
+}

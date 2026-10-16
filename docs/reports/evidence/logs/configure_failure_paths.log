@@ -1,0 +1,9 @@
+$ scripts/configure_failure_paths.sh docs/reports/evidence/failure_paths/configure
+# 2026-10-16T23:27:17Z commit fcbc52cc6b0f55680a40c99ca5f41266d5ce2630
+dxc_override_does_not_exist                  exit 1   passed 
+dxc_override_is_a_directory                  exit 1   passed 
+dxc_override_cannot_run                      exit 1   passed 
+dependency_at_unpinned_revision              exit 1   passed 
+offline_configure_without_dependency_cache   exit 1   passed 
+configure failure paths: 5/5 passed
+# exit 0 at 2026-10-16T23:30:04Z

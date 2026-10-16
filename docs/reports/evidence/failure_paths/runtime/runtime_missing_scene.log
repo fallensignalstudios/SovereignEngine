@@ -1,0 +1,4 @@
+$ build/dev-vulkan/bin/sovereign-runtime --scene build/dev-vulkan/test-artifacts/failure_paths/work/does-not-exist.scene.json --frames 5
+# expected exit 1, diagnostic /cannot open scene/
+2026-10-16T23:24:27.259Z [error] [runtime] cannot open scene build/dev-vulkan/test-artifacts/failure_paths/work/does-not-exist.scene.json: io_failure: cannot stat build/dev-vulkan/test-artifacts/failure_paths/work/does-not-exist.scene.json: No such file or directory
+# exit 1 after 0.01s: passed 

@@ -1,0 +1,22 @@
+{
+  "tool": "scripts/failure_paths_check.sh",
+  "commit": "fcbc52cc6b0f55680a40c99ca5f41266d5ce2630",
+  "failures": 0,
+  "cases": [
+    {"case":"runtime_normal_close","expected_exit":0,"exit":0,"seconds":0.66,"verdict":"passed","reason":"","log":"runtime_normal_close.log"},
+    {"case":"runtime_missing_scene","expected_exit":1,"exit":1,"seconds":0.01,"verdict":"passed","reason":"","log":"runtime_missing_scene.log"},
+    {"case":"runtime_malformed_scene","expected_exit":1,"exit":1,"seconds":0.01,"verdict":"passed","reason":"","log":"runtime_malformed_scene.log"},
+    {"case":"editor_missing_scene","expected_exit":1,"exit":1,"seconds":0.01,"verdict":"passed","reason":"","log":"editor_missing_scene.log"},
+    {"case":"runtime_no_display","expected_exit":4,"exit":4,"seconds":0.01,"verdict":"passed","reason":"","log":"runtime_no_display.log"},
+    {"case":"ctest_launcher_without_display_or_xvfb","expected_exit":77,"exit":77,"seconds":0.01,"verdict":"passed","reason":"","log":"ctest_launcher_without_display_or_xvfb.log"},
+    {"case":"runtime_no_vulkan_driver","expected_exit":4,"exit":4,"seconds":0.03,"verdict":"passed","reason":"","log":"runtime_no_vulkan_driver.log"},
+    {"case":"runtime_required_validation_layer_missing","expected_exit":4,"exit":4,"seconds":0.06,"verdict":"passed","reason":"","log":"runtime_required_validation_layer_missing.log"},
+    {"case":"runtime_requested_device_absent","expected_exit":4,"exit":4,"seconds":0.13,"verdict":"passed","reason":"","log":"runtime_requested_device_absent.log"},
+    {"case":"runtime_physical_gpu_required_on_cpu_only_host","expected_exit":4,"exit":4,"seconds":0.14,"verdict":"passed","reason":"","log":"runtime_physical_gpu_required_on_cpu_only_host.log"},
+    {"case":"runtime_missing_shaders_after_device_init","expected_exit":4,"exit":4,"seconds":0.16,"verdict":"passed","reason":"","log":"runtime_missing_shaders_after_device_init.log"},
+    {"case":"editor_requested_device_absent","expected_exit":4,"exit":4,"seconds":0.13,"verdict":"passed","reason":"","log":"editor_requested_device_absent.log"},
+    {"case":"editor_missing_shaders_after_device_init","expected_exit":4,"exit":4,"seconds":0.16,"verdict":"passed","reason":"","log":"editor_missing_shaders_after_device_init.log"},
+    {"case":"editor_failed_init_left_scene_unchanged","expected_exit":0,"exit":0,"seconds":0.01,"verdict":"passed","reason":"","log":"editor_failed_init_left_scene_unchanged.log"},
+    {"case":"cli_write_after_failed_editor_init","expected_exit":0,"exit":0,"seconds":0.02,"verdict":"passed","reason":"","log":"cli_write_after_failed_editor_init.log"}
+  ]
+}

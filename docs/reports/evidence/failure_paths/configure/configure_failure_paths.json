@@ -1,0 +1,12 @@
+{
+  "tool": "scripts/configure_failure_paths.sh",
+  "commit": "fcbc52cc6b0f55680a40c99ca5f41266d5ce2630",
+  "failures": 0,
+  "cases": [
+    {"case":"dxc_override_does_not_exist","exit":1,"verdict":"passed","reason":"","network":"disabled","log":"dxc_override_does_not_exist.log"},
+    {"case":"dxc_override_is_a_directory","exit":1,"verdict":"passed","reason":"","network":"disabled","log":"dxc_override_is_a_directory.log"},
+    {"case":"dxc_override_cannot_run","exit":1,"verdict":"passed","reason":"","network":"disabled","log":"dxc_override_cannot_run.log"},
+    {"case":"dependency_at_unpinned_revision","exit":1,"verdict":"passed","reason":"","network":"disabled","log":"dependency_at_unpinned_revision.log"},
+    {"case":"offline_configure_without_dependency_cache","exit":1,"verdict":"passed","reason":"","network":"disabled","log":"offline_configure_without_dependency_cache.log"}
+  ]
+}

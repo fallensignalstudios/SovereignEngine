@@ -1,0 +1,4 @@
+$ build/dev-vulkan/bin/sovereign-editor --scene build/dev-vulkan/test-artifacts/failure_paths/work/does-not-exist.scene.json
+# expected exit 1, diagnostic /cannot open/
+2026-10-16T23:24:27.296Z [error] [editor] cannot open build/dev-vulkan/test-artifacts/failure_paths/work/does-not-exist.scene.json: io_failure: cannot stat build/dev-vulkan/test-artifacts/failure_paths/work/does-not-exist.scene.json: No such file or directory
+# exit 1 after 0.01s: passed 
