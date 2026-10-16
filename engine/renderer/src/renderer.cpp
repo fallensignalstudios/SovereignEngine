@@ -44,6 +44,20 @@ void HostReadBarrier(VkCommandBuffer cmd) {
   vkCmdPipelineBarrier2(cmd, &dep);
 }
 
+// Readback buffers are reused across frames: order a new copy into them after earlier copies on
+// the queue (the earlier copies' barriers only targeted host reads).
+void ReadbackWriteAfterWriteBarrier(VkCommandBuffer cmd) {
+  VkMemoryBarrier2 mb{VK_STRUCTURE_TYPE_MEMORY_BARRIER_2};
+  mb.srcStageMask = VK_PIPELINE_STAGE_2_COPY_BIT;
+  mb.srcAccessMask = VK_ACCESS_2_TRANSFER_WRITE_BIT;
+  mb.dstStageMask = VK_PIPELINE_STAGE_2_COPY_BIT;
+  mb.dstAccessMask = VK_ACCESS_2_TRANSFER_WRITE_BIT;
+  VkDependencyInfo dep{VK_STRUCTURE_TYPE_DEPENDENCY_INFO};
+  dep.memoryBarrierCount = 1;
+  dep.pMemoryBarriers = &mb;
+  vkCmdPipelineBarrier2(cmd, &dep);
+}
+
 struct Targets {
   vk::Image hdr, pick, depth;
   VkDescriptorSet tonemap_set = VK_NULL_HANDLE;
@@ -944,6 +958,7 @@ void Renderer::Impl::DrawScene(Targets& t, vk::Image& output, VkFormat output_fo
     if (t.pick.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL) {
       vk::Transition(cmd, t.pick, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_2_COPY_BIT,
                      VK_ACCESS_2_TRANSFER_READ_BIT);
+      ReadbackWriteAfterWriteBarrier(cmd);
     }
     const std::uint32_t x = std::min(p.x, extent.width - 1), y = std::min(p.y, extent.height - 1);
     VkBufferImageCopy region{};
@@ -1058,6 +1073,7 @@ void Renderer::EndFrame() {
       }
       if (f.window_capture.buffer) {
         vk::Transition(cmd, sc, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_2_COPY_BIT, VK_ACCESS_2_TRANSFER_READ_BIT);
+        ReadbackWriteAfterWriteBarrier(cmd);
         VkBufferImageCopy region{};
         region.imageSubresource = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 0, 1};
         region.imageExtent = {e.width, e.height, 1};
@@ -1069,7 +1085,10 @@ void Renderer::EndFrame() {
       }
       im.capture_requested = false;
     }
-    vk::Transition(cmd, sc, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_PIPELINE_STAGE_2_NONE, VK_ACCESS_2_NONE);
+    // The layout transition is a write: chain it into the present semaphore's signal scope (the
+    // signal uses ALL_COMMANDS) by naming a destination stage inside that scope. With dst = NONE the
+    // transition is not ordered before the signal, and present can observe it unfinished.
+    vk::Transition(cmd, sc, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, VK_ACCESS_2_NONE);
   }
   vkEndCommandBuffer(cmd);
 
