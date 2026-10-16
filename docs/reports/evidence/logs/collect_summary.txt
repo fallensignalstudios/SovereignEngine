@@ -1,0 +1,8 @@
+offline_rebuild_both_presets exit 0
+asan_1_configure exit 0
+asan_2_build exit 0
+asan_3_test exit 0
+cli_demo exit 0
+dev_vulkan_verbose exit 0
+runtime_opens_editor_saved_scene exit 0
+gpu_qualify_on_this_host exit 8

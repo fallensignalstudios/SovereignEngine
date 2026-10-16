@@ -1,0 +1,2047 @@
+{
+  "format": "sovereign.scene",
+  "schema_version": 1,
+  "scene_id": "8d4684d6-93cd-5d04-a868-b4d839bafda7",
+  "name": "First Light",
+  "revision": 4,
+  "region": {
+    "cell": [0, 0, 0]
+  },
+  "asset_references": [],
+  "active_camera": "98fcda69-2d02-5a08-af47-a01a10aa7dd6",
+  "environment": {
+    "ambient_color": [0.42, 0.3, 0.26],
+    "ambient_intensity": 0.22,
+    "background_color": [0.004, 0.0035, 0.005],
+    "fog_color": [0.035, 0.02, 0.018],
+    "fog_density": 0.018,
+    "exposure": 1.1
+  },
+  "entities": [
+    {
+      "id": "112b12dd-9bb3-5186-9e24-c12fcf54bfb9",
+      "name": "Column E1",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.5, 0.0, -8.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "1298a82a-2231-57dd-a713-9c28be5ebe3f",
+      "name": "Walkway Light Strip (East)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [2.25, 0.012, 1.5],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.024, 23.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "16877fb2-97b9-53ca-822b-31b8397479cd",
+      "name": "Column E1 Capital",
+      "components": {
+        "transform": {
+          "parent": "112b12dd-9bb3-5186-9e24-c12fcf54bfb9",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "1b4c4755-6e5e-5def-b40c-95a322d8084d",
+      "name": "Column W3 Base",
+      "components": {
+        "transform": {
+          "parent": "797ba59f-6819-5db3-8f4d-8823a5891825",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "1d1d9327-ebdc-546f-93e6-57ded1a720ed",
+      "name": "Column E4",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.5, 0.0, 4.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "1d75e66e-cb39-5d49-8e9c-8ec7428ffa24",
+      "name": "Column E6 Capital",
+      "components": {
+        "transform": {
+          "parent": "97bed9e8-b320-594d-a781-9e375023f34e",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "1dc3879e-9648-559e-b3a9-e1d9e1d468ec",
+      "name": "Column W1 Capital",
+      "components": {
+        "transform": {
+          "parent": "9949acb1-9986-5162-b619-52e51af32e47",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "228ac414-5869-5518-b407-e82353c8cafb",
+      "name": "Column W1 Shaft",
+      "components": {
+        "transform": {
+          "parent": "9949acb1-9986-5162-b619-52e51af32e47",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "2e7fa1d0-b3e0-5939-a134-c8a75a58e198",
+      "name": "Column W4 Band",
+      "components": {
+        "transform": {
+          "parent": "7fef6493-efce-5317-a904-81f1704a7627",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "30e6248b-5eb4-581b-b0f7-aad817a025cb",
+      "name": "Column W2 Band",
+      "components": {
+        "transform": {
+          "parent": "40dc947e-18d5-5e30-94d6-c3deb1ea9bc1",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "31bb8276-ad0d-5e77-b103-23474c896136",
+      "name": "Column E2 Base",
+      "components": {
+        "transform": {
+          "parent": "fbab1857-2f62-543e-8992-f121d66a121f",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "3393e93f-398f-5eb9-806b-033a778b62f4",
+      "name": "Column W6",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.5, 0.0, 12.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "34616f0f-c80d-5d75-937d-e0687599cbc6",
+      "name": "Column W5 Capital",
+      "components": {
+        "transform": {
+          "parent": "c3229905-b9b5-5514-92ad-455988c6c3f4",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "3cb46d24-c32a-506d-9ced-7c50060ad859",
+      "name": "Dais Step (Upper)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 0.4, -9.2],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [7.0, 0.8, 0.7]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "3cb47153-023e-5e09-9fa3-39eddd5df8a7",
+      "name": "Column E4 Shaft",
+      "components": {
+        "transform": {
+          "parent": "1d1d9327-ebdc-546f-93e6-57ded1a720ed",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "40dc947e-18d5-5e30-94d6-c3deb1ea9bc1",
+      "name": "Column W2",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.5, 0.0, -4.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "41edb1a1-c6ee-5809-bba3-527b6a9bce77",
+      "name": "Column W2 Shaft",
+      "components": {
+        "transform": {
+          "parent": "40dc947e-18d5-5e30-94d6-c3deb1ea9bc1",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "433ba49c-7ba0-59be-bdba-fbdc4b357f29",
+      "name": "Column E2 Band",
+      "components": {
+        "transform": {
+          "parent": "fbab1857-2f62-543e-8992-f121d66a121f",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "434ce651-c278-56a6-8edc-62fa54423aba",
+      "name": "Column E2 Shaft",
+      "components": {
+        "transform": {
+          "parent": "fbab1857-2f62-543e-8992-f121d66a121f",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "4529005e-20c5-5e0d-a553-6c0041481faa",
+      "name": "Dais Edge Trim",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 1.23, -9.52],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [12.1, 0.06, 0.08]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "47977a9e-7119-5f91-9821-48bf41121e3f",
+      "name": "Back Banner (West)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.0, 5.6, -14.96],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.2, 7.0, 0.06]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.3, 0.022, 0.026],
+          "roughness": 0.55,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "47fe1438-decd-5b98-a823-c867e9957fbd",
+      "name": "Column W5 Band",
+      "components": {
+        "transform": {
+          "parent": "c3229905-b9b5-5514-92ad-455988c6c3f4",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "48c0690c-e575-5ef0-b928-a5ed7bc59179",
+      "name": "Walkway Trim (East)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [1.75, 0.03, 1.5],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.15, 0.06, 23.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "49a78ff9-74bf-5326-97e9-3c886aba021c",
+      "name": "Walkway Runner",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 0.02, 1.5],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [3.2, 0.04, 23.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.3, 0.022, 0.026],
+          "roughness": 0.55,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "4b64139c-ec7c-5014-944d-69cb98f1a8d9",
+      "name": "Monolith Seam",
+      "components": {
+        "transform": {
+          "parent": "61782bf0-de84-5397-9c82-1f486df4ffa4",
+          "position": [0.0, 0.0, 0.02],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.04, 0.9, 1.05]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.06, 0.01, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.18, 0.04],
+          "emissive_strength": 3.2
+        }
+      }
+    },
+    {
+      "id": "4be84eb8-fc4e-585b-8ddf-d562bad3442f",
+      "name": "Column E5 Capital",
+      "components": {
+        "transform": {
+          "parent": "9a0b82bd-fb8a-5a2b-8119-1164602a43a9",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "4dd1a9c4-abda-54ba-a73d-1233713bb822",
+      "name": "Hall Floor",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, -0.25, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [18.0, 0.5, 30.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.05, 0.046, 0.048],
+          "roughness": 0.7,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "527c7842-c2a5-54e8-a415-ef1fe87b2a83",
+      "name": "Column W4 Base",
+      "components": {
+        "transform": {
+          "parent": "7fef6493-efce-5317-a904-81f1704a7627",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "5427e0af-3a88-54fa-bc2b-a1a679425e10",
+      "name": "Column E4 Base",
+      "components": {
+        "transform": {
+          "parent": "1d1d9327-ebdc-546f-93e6-57ded1a720ed",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "55121e31-7cb7-5c77-a8c1-894e5c977b5f",
+      "name": "Walkway Trim (West)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-1.75, 0.03, 1.5],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.15, 0.06, 23.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "5644360c-1954-5e5a-bf7d-94a2c43b95c8",
+      "name": "Column W5 Shaft",
+      "components": {
+        "transform": {
+          "parent": "c3229905-b9b5-5514-92ad-455988c6c3f4",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "5794eadd-24d1-5c39-89a3-fa6691048f79",
+      "name": "Column E2 Capital",
+      "components": {
+        "transform": {
+          "parent": "fbab1857-2f62-543e-8992-f121d66a121f",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "59c3bbee-417a-5b35-8129-38d8f3db7228",
+      "name": "Ceiling Beam 1",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 9.6, -8.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [18.5, 0.5, 0.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.3, 0.17, 0.07],
+          "roughness": 0.45,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "5bac97ad-406a-587e-bb94-fa3c95795f74",
+      "name": "Column E3 Base",
+      "components": {
+        "transform": {
+          "parent": "becdd114-fe9a-54d0-84dc-512664d73c79",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "5d225234-9af9-52a9-b1ea-c9a713a002be",
+      "name": "Column E4 Capital",
+      "components": {
+        "transform": {
+          "parent": "1d1d9327-ebdc-546f-93e6-57ded1a720ed",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "5ec9ea29-9127-5d9c-86b6-449d3bae086c",
+      "name": "Column W4 Shaft",
+      "components": {
+        "transform": {
+          "parent": "7fef6493-efce-5317-a904-81f1704a7627",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "5fe1405a-6767-540f-9934-062fa6ddb40d",
+      "name": "Dais",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 0.6, -12.25],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [12.0, 1.2, 5.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "600ba020-86c8-5e45-8b6f-cde9ac5d13f8",
+      "name": "Wall Sconce (West 3)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-8.97, 4.2, 10.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.9, 0.35]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "61782bf0-de84-5397-9c82-1f486df4ffa4",
+      "name": "Monolith",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 4.2, -14.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.2, 6.0, 0.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "65b1bd6e-688e-5d0e-9814-97df453b0730",
+      "name": "Column W3 Shaft",
+      "components": {
+        "transform": {
+          "parent": "797ba59f-6819-5db3-8f4d-8823a5891825",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "66a8921b-be1e-5902-b118-034ebfd95584",
+      "name": "Wall (West)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-9.25, 5.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.5, 10.0, 30.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "67d86d1a-d144-5185-a376-d72aed886fba",
+      "name": "Column W5 Base",
+      "components": {
+        "transform": {
+          "parent": "c3229905-b9b5-5514-92ad-455988c6c3f4",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "682c46bc-ab1b-5b66-a02e-7def52acc021",
+      "name": "Column E5 Band",
+      "components": {
+        "transform": {
+          "parent": "9a0b82bd-fb8a-5a2b-8119-1164602a43a9",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "6b45d759-a0c1-5147-9db2-6e7bab9f474f",
+      "name": "Banner Rod (West Wall, Dais)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-8.92, 8.75, -11.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.12, 0.12, 2.7]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "6cc519d3-db50-5591-85b1-10b6328da5b6",
+      "name": "Key Light",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 12.0, 0.0],
+          "rotation": [-0.42534965, 0.21743796, 0.106051579, 0.872096021],
+          "scale": [1.0, 1.0, 1.0]
+        },
+        "directional_light": {
+          "color": [1.0, 0.86, 0.7],
+          "intensity": 2.4
+        }
+      }
+    },
+    {
+      "id": "6d39e479-0f7b-5cac-984a-6ab4db196c82",
+      "name": "Column E6 Band",
+      "components": {
+        "transform": {
+          "parent": "97bed9e8-b320-594d-a781-9e375023f34e",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "6febd10f-7b9a-54fe-b220-fcfd7afc25db",
+      "name": "Back Banner Rod (East)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.0, 9.2, -14.9],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.7, 0.12, 0.12]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "72436f25-ab35-53dc-a2c2-5579971b26c0",
+      "name": "Wall (North)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 5.0, -15.25],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [19.0, 10.0, 0.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "77b22940-2b9a-5298-b4da-0afaec430629",
+      "name": "Column W3 Capital",
+      "components": {
+        "transform": {
+          "parent": "797ba59f-6819-5db3-8f4d-8823a5891825",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "797ba59f-6819-5db3-8f4d-8823a5891825",
+      "name": "Column W3",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.5, 0.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "7fe2a17a-545d-5d8c-9b15-441a941b6a11",
+      "name": "Column E6 Shaft",
+      "components": {
+        "transform": {
+          "parent": "97bed9e8-b320-594d-a781-9e375023f34e",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "7fef6493-efce-5317-a904-81f1704a7627",
+      "name": "Column W4",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.5, 0.0, 4.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "80cd6aaf-7e08-50fb-9d47-389bbf5754e0",
+      "name": "Wall (East)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [9.25, 5.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.5, 10.0, 30.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "81578e2f-7a70-52e4-8283-92049f514277",
+      "name": "Column E5 Base",
+      "components": {
+        "transform": {
+          "parent": "9a0b82bd-fb8a-5a2b-8119-1164602a43a9",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "87bcf24f-bd76-5cd1-9544-bf9b6a461d86",
+      "name": "Brazier Ember (East)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [4.6, 2.24, -11.2],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.66, 0.08, 0.66]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.03, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.34, 0.05],
+          "emissive_strength": 3.0
+        }
+      }
+    },
+    {
+      "id": "8e4af032-cc1e-5d47-81ed-47e4a95e01bc",
+      "name": "Column E1 Band",
+      "components": {
+        "transform": {
+          "parent": "112b12dd-9bb3-5186-9e24-c12fcf54bfb9",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "8f995423-3104-5d3c-946d-70a4d8020f45",
+      "name": "Wall Sconce (West 2)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-8.97, 4.2, 2.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.9, 0.35]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "92e1f4f8-6130-5f70-a03b-fdec2cdc2c1f",
+      "name": "Column E3 Shaft",
+      "components": {
+        "transform": {
+          "parent": "becdd114-fe9a-54d0-84dc-512664d73c79",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "93d70b34-f25e-59c0-b032-5944a75d55ee",
+      "name": "Column W6 Capital",
+      "components": {
+        "transform": {
+          "parent": "3393e93f-398f-5eb9-806b-033a778b62f4",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "96685335-d5f0-56ae-ad25-c6aef039753d",
+      "name": "Column W2 Base",
+      "components": {
+        "transform": {
+          "parent": "40dc947e-18d5-5e30-94d6-c3deb1ea9bc1",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "973060cd-d005-51f6-9b5a-265a9ac9031e",
+      "name": "Banner (West Wall, Dais)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-8.96, 5.4, -11.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 6.4, 2.2]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.3, 0.022, 0.026],
+          "roughness": 0.55,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "97bed9e8-b320-594d-a781-9e375023f34e",
+      "name": "Column E6",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.5, 0.0, 12.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "98fcda69-2d02-5a08-af47-a01a10aa7dd6",
+      "name": "Main Camera",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 2.3, 14.6],
+          "rotation": [-0.026176948, 0.0, 0.0, 0.999657325],
+          "scale": [1.0, 1.0, 1.0]
+        },
+        "camera": {
+          "vertical_fov_degrees": 60.0,
+          "near_clip": 0.1,
+          "far_clip": 1000.0
+        }
+      }
+    },
+    {
+      "id": "9949acb1-9986-5162-b619-52e51af32e47",
+      "name": "Column W1",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.5, 0.0, -8.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "9a0b82bd-fb8a-5a2b-8119-1164602a43a9",
+      "name": "Column E5",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.5, 0.0, 8.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "9ac30e36-bf04-5b91-a284-59c1a217c377",
+      "name": "Column W1 Band",
+      "components": {
+        "transform": {
+          "parent": "9949acb1-9986-5162-b619-52e51af32e47",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "9cb7f044-fcc3-5710-8bd1-7c603b02de29",
+      "name": "Wall Sconce (East 2)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [8.97, 4.2, 2.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.9, 0.35]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "a21e439f-c105-5f8e-be8a-b0311835990a",
+      "name": "Back Banner (East)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.0, 5.6, -14.96],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.2, 7.0, 0.06]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.3, 0.022, 0.026],
+          "roughness": 0.55,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "a49bda74-77a5-585d-be32-7bd1e45f0ff3",
+      "name": "Column E6 Base",
+      "components": {
+        "transform": {
+          "parent": "97bed9e8-b320-594d-a781-9e375023f34e",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "a51c5548-db86-51f1-9e25-c87a0750e2b0",
+      "name": "Column E3 Band",
+      "components": {
+        "transform": {
+          "parent": "becdd114-fe9a-54d0-84dc-512664d73c79",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "ae5ccac7-36c7-5d08-9f79-b9ea85cefc26",
+      "name": "Column W2 Capital",
+      "components": {
+        "transform": {
+          "parent": "40dc947e-18d5-5e30-94d6-c3deb1ea9bc1",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "af97d824-7feb-5880-9459-81130523e6aa",
+      "name": "Column W6 Band",
+      "components": {
+        "transform": {
+          "parent": "3393e93f-398f-5eb9-806b-033a778b62f4",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "b89c993e-c42c-598b-ac5c-f69f075fc1ab",
+      "name": "Brazier (West)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-4.6, 1.7, -11.2],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.8, 1.0, 0.8]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.3, 0.17, 0.07],
+          "roughness": 0.45,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "b8ac95e9-dd9b-521c-b340-19e240d6df34",
+      "name": "Dais Step (Lower)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 0.2, -8.55],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [7.0, 0.4, 0.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "b8bd1e6f-1b1a-51e8-bb14-3b43ec2e0543",
+      "name": "Brazier Ember (West)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-4.6, 2.24, -11.2],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.66, 0.08, 0.66]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.03, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.34, 0.05],
+          "emissive_strength": 3.0
+        }
+      }
+    },
+    {
+      "id": "bc62a4ba-70d0-59ae-aff3-f499daebb08f",
+      "name": "Ceiling Beam 2",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 9.6, 2.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [18.5, 0.5, 0.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.3, 0.17, 0.07],
+          "roughness": 0.45,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "becdd114-fe9a-54d0-84dc-512664d73c79",
+      "name": "Column E3",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.5, 0.0, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "bfc2eb9a-593e-530f-aad6-efe08eaaba29",
+      "name": "Column W4 Capital",
+      "components": {
+        "transform": {
+          "parent": "7fef6493-efce-5317-a904-81f1704a7627",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "c101f45f-c6b3-511f-b1b4-f0fda50ce235",
+      "name": "Column E3 Capital",
+      "components": {
+        "transform": {
+          "parent": "becdd114-fe9a-54d0-84dc-512664d73c79",
+          "position": [0.0, 7.85, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.5, 0.5, 1.5]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "c3229905-b9b5-5514-92ad-455988c6c3f4",
+      "name": "Column W5",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.5, 0.0, 8.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "c5547c3b-6a98-51c5-a575-651728f31599",
+      "name": "Column E4 Band",
+      "components": {
+        "transform": {
+          "parent": "1d1d9327-ebdc-546f-93e6-57ded1a720ed",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "ca08f9d9-d0e4-5fb6-b28d-c9234f5c0dee",
+      "name": "Dais Edge Glow",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 1.05, -9.505],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [11.6, 0.05, 0.03]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "d11eae5d-571b-581b-bfc0-0500052a3a28",
+      "name": "Wall Sconce (West 1)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-8.97, 4.2, -6.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.9, 0.35]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "d1aaa5b0-8a41-5ba0-99ba-74688a41f95c",
+      "name": "Wall Sconce (East 1)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [8.97, 4.2, -6.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.9, 0.35]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "d3678e2e-b242-5cae-b4f8-aae94fe32260",
+      "name": "Column E1 Base",
+      "components": {
+        "transform": {
+          "parent": "112b12dd-9bb3-5186-9e24-c12fcf54bfb9",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "d5426135-1d6b-5fce-ae6d-8068998d9a61",
+      "name": "Wall Sconce (East 3)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [8.97, 4.2, 10.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.9, 0.35]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "da1414eb-9d07-501e-9a13-f907b72c1ac0",
+      "name": "Column E5 Shaft",
+      "components": {
+        "transform": {
+          "parent": "9a0b82bd-fb8a-5a2b-8119-1164602a43a9",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "dacca6e5-0371-5c93-8591-0fd64898915c",
+      "name": "Column W1 Base",
+      "components": {
+        "transform": {
+          "parent": "9949acb1-9986-5162-b619-52e51af32e47",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "e008a757-d4ee-5b35-82f0-fe0330b8c158",
+      "name": "Back Banner Rod (West)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-5.0, 9.2, -14.9],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.7, 0.12, 0.12]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "e0fbda6c-18e3-5329-933b-e82ce4274f53",
+      "name": "Column W3 Band",
+      "components": {
+        "transform": {
+          "parent": "797ba59f-6819-5db3-8f4d-8823a5891825",
+          "position": [0.0, 2.2, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.96, 0.12, 0.96]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "e10cb043-906e-504a-a011-46757daa81a8",
+      "name": "Ceiling Beam 3",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 9.6, 12.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [18.5, 0.5, 0.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.3, 0.17, 0.07],
+          "roughness": 0.45,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "e269fd1e-7be9-5d65-93ef-025502e3a989",
+      "name": "Walkway Light Strip (West)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [-2.25, 0.012, 1.5],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.06, 0.024, 23.0]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.08, 0.04, 0.01],
+          "roughness": 0.5,
+          "metallic": 0.0,
+          "emissive": [1.0, 0.45, 0.08],
+          "emissive_strength": 1.6
+        }
+      }
+    },
+    {
+      "id": "e570383a-a30f-5fc7-9d38-da2069f4b195",
+      "name": "Column E1 Shaft",
+      "components": {
+        "transform": {
+          "parent": "112b12dd-9bb3-5186-9e24-c12fcf54bfb9",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "e63d2030-380a-5f0c-a8da-fd05e54c8341",
+      "name": "Column W6 Shaft",
+      "components": {
+        "transform": {
+          "parent": "3393e93f-398f-5eb9-806b-033a778b62f4",
+          "position": [0.0, 4.1, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.9, 7.0, 0.9]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.22, 0.03, 0.03],
+          "roughness": 0.4,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "f066b3b7-ffb4-5ca0-a141-a37cc011e125",
+      "name": "Altar",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [0.0, 1.8, -12.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [2.6, 1.2, 1.3]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.48, 0.29, 0.12],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "f9dc175a-9426-5f66-8309-04332115924b",
+      "name": "Brazier (East)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [4.6, 1.7, -11.2],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [0.8, 1.0, 0.8]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [0.3, 0.17, 0.07],
+          "roughness": 0.45,
+          "metallic": 1.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "id": "fbab1857-2f62-543e-8992-f121d66a121f",
+      "name": "Column E2",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [5.5, 0.0, -4.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.0, 1.0, 1.0]
+        }
+      }
+    },
+    {
+      "id": "ff378b35-bfac-5139-87e3-0043f1438fb2",
+      "name": "Column W6 Base",
+      "components": {
+        "transform": {
+          "parent": "3393e93f-398f-5eb9-806b-033a778b62f4",
+          "position": [0.0, 0.3, 0.0],
+          "rotation": [0.0, 0.0, 0.0, 1.0],
+          "scale": [1.6, 0.6, 1.6]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [0.03, 0.03, 0.034],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [0.0, 0.0, 0.0],
+          "emissive_strength": 0.0
+        }
+      }
+    }
+  ]
+}

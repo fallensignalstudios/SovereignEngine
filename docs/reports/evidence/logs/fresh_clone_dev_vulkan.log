@@ -1,0 +1,966 @@
+$ cmake --preset dev-vulkan -DSOV_DXC_EXECUTABLE=<repo>/build/tools/dxc-b106a961d092/bin/dxc
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+  FETCHCONTENT_UPDATES_DISCONNECTED="ON"
+  SOV_ENABLE_GRAPHICS="ON"
+  SOV_WARNINGS_AS_ERRORS="ON"
+
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Git: /usr/bin/git (found version "2.43.0") 
+-- Using the multi-header code from <fresh-clone>/build/dev-vulkan/_deps/nlohmann_json-src/include/
+-- Dependency nlohmann_json: https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz (sha256 42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
+-- Dependency EnTT: v3.15.0 @ d4014c74dc3793aba95ae354d6e23a026c2796db (verified)
+-- Dependency Vulkan-Headers: vulkan-sdk-1.4.341.0 @ b5c8f996196ba4aa6d8f97e52b5d3b6e70f7e4e2 (verified)
+-- Dependency volk: vulkan-sdk-1.4.341.0 @ d979819fd03de3a7606d6e23d6ff4968942599da (verified)
+-- Dependency VulkanMemoryAllocator: v3.3.0 @ 1d8f600fd424278486eade7ed3e877c99f0846b1 (verified)
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1") 
+-- Detecting Target CPU Architecture
+-- Detecting Target CPU Architecture - X64
+-- Performing Test HAVE_GCC_WALL
+-- Performing Test HAVE_GCC_WALL - Success
+-- Performing Test HAVE_GCC_WUNDEF
+-- Performing Test HAVE_GCC_WUNDEF - Success
+-- Performing Test HAVE_GCC_WFLOAT_CONVERSION
+-- Performing Test HAVE_GCC_WFLOAT_CONVERSION - Success
+-- Performing Test HAVE_GCC_NO_STRICT_ALIASING
+-- Performing Test HAVE_GCC_NO_STRICT_ALIASING - Success
+-- Performing Test HAVE_GCC_WDOCUMENTATION
+-- Performing Test HAVE_GCC_WDOCUMENTATION - Failed
+-- Performing Test HAVE_GCC_WDOCUMENTATION_UNKNOWN_COMMAND
+-- Performing Test HAVE_GCC_WDOCUMENTATION_UNKNOWN_COMMAND - Failed
+-- Performing Test HAVE_GCC_COMMENT_BLOCK_COMMANDS
+-- Performing Test HAVE_GCC_COMMENT_BLOCK_COMMANDS - Failed
+-- Performing Test HAVE_CLANG_COMMENT_BLOCK_COMMANDS
+-- Performing Test HAVE_CLANG_COMMENT_BLOCK_COMMANDS - Failed
+-- Performing Test HAVE_GCC_WSHADOW
+-- Performing Test HAVE_GCC_WSHADOW - Success
+-- Performing Test HAVE_GCC_WUNUSED_LOCAL_TYPEDEFS
+-- Performing Test HAVE_GCC_WUNUSED_LOCAL_TYPEDEFS - Success
+-- Performing Test HAVE_GCC_WIMPLICIT_FALLTHROUGH
+-- Performing Test HAVE_GCC_WIMPLICIT_FALLTHROUGH - Success
+-- Performing Test COMPILER_SUPPORTS_FDIAGNOSTICS_COLOR_ALWAYS
+-- Performing Test COMPILER_SUPPORTS_FDIAGNOSTICS_COLOR_ALWAYS - Success
+-- Looking for __GLIBC__
+-- Looking for __GLIBC__ - found
+-- Linker identification: GNUlike
+-- Performing Test LINKER_SUPPORTS_VERSION_SCRIPT
+-- Performing Test LINKER_SUPPORTS_VERSION_SCRIPT - Success
+-- Performing Test COMPILER_SUPPORTS_GCC_ATOMICS
+-- Performing Test COMPILER_SUPPORTS_GCC_ATOMICS - Success
+-- Performing Test HAVE_GCC_FVISIBILITY
+-- Performing Test HAVE_GCC_FVISIBILITY - Success
+-- Performing Test LINKER_SUPPORTS_WL_NO_UNDEFINED
+-- Performing Test LINKER_SUPPORTS_WL_NO_UNDEFINED - Success
+-- Performing Test COMPILER_SUPPORTS_MMX
+-- Performing Test COMPILER_SUPPORTS_MMX - Success
+-- Performing Test COMPILER_SUPPORTS_SSE
+-- Performing Test COMPILER_SUPPORTS_SSE - Success
+-- Performing Test COMPILER_SUPPORTS_SSE2
+-- Performing Test COMPILER_SUPPORTS_SSE2 - Success
+-- Performing Test COMPILER_SUPPORTS_SSE3
+-- Performing Test COMPILER_SUPPORTS_SSE3 - Success
+-- Performing Test COMPILER_SUPPORTS_SSE4_1
+-- Performing Test COMPILER_SUPPORTS_SSE4_1 - Success
+-- Performing Test COMPILER_SUPPORTS_SSE4_2
+-- Performing Test COMPILER_SUPPORTS_SSE4_2 - Success
+-- Performing Test COMPILER_SUPPORTS_AVX
+-- Performing Test COMPILER_SUPPORTS_AVX - Success
+-- Performing Test COMPILER_SUPPORTS_AVX2
+-- Performing Test COMPILER_SUPPORTS_AVX2 - Success
+-- Performing Test COMPILER_SUPPORTS_AVX512F
+-- Performing Test COMPILER_SUPPORTS_AVX512F - Success
+-- Looking for alloca.h
+-- Looking for alloca.h - found
+-- Looking for float.h
+-- Looking for float.h - found
+-- Looking for iconv.h
+-- Looking for iconv.h - found
+-- Looking for inttypes.h
+-- Looking for inttypes.h - found
+-- Looking for limits.h
+-- Looking for limits.h - found
+-- Looking for malloc.h
+-- Looking for malloc.h - found
+-- Looking for math.h
+-- Looking for math.h - found
+-- Looking for memory.h
+-- Looking for memory.h - found
+-- Looking for signal.h
+-- Looking for signal.h - found
+-- Looking for stdarg.h
+-- Looking for stdarg.h - found
+-- Looking for stdbool.h
+-- Looking for stdbool.h - found
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Looking for stdint.h
+-- Looking for stdint.h - found
+-- Looking for stdio.h
+-- Looking for stdio.h - found
+-- Looking for stdlib.h
+-- Looking for stdlib.h - found
+-- Looking for string.h
+-- Looking for string.h - found
+-- Looking for strings.h
+-- Looking for strings.h - found
+-- Looking for sys/types.h
+-- Looking for sys/types.h - found
+-- Looking for time.h
+-- Looking for time.h - found
+-- Looking for wchar.h
+-- Looking for wchar.h - found
+-- Looking for pow in m
+-- Looking for pow in m - found
+-- Looking for abs
+-- Looking for abs - found
+-- Looking for acos
+-- Looking for acos - found
+-- Looking for acosf
+-- Looking for acosf - found
+-- Looking for asin
+-- Looking for asin - found
+-- Looking for asinf
+-- Looking for asinf - found
+-- Looking for atan
+-- Looking for atan - found
+-- Looking for atan2
+-- Looking for atan2 - found
+-- Looking for atan2f
+-- Looking for atan2f - found
+-- Looking for atanf
+-- Looking for atanf - found
+-- Looking for atof
+-- Looking for atof - found
+-- Looking for atoi
+-- Looking for atoi - found
+-- Looking for bcopy
+-- Looking for bcopy - found
+-- Looking for ceil
+-- Looking for ceil - found
+-- Looking for ceilf
+-- Looking for ceilf - found
+-- Looking for copysign
+-- Looking for copysign - found
+-- Looking for copysignf
+-- Looking for copysignf - found
+-- Looking for cos
+-- Looking for cos - found
+-- Looking for cosf
+-- Looking for cosf - found
+-- Looking for _Exit
+-- Looking for _Exit - found
+-- Looking for exp
+-- Looking for exp - found
+-- Looking for expf
+-- Looking for expf - found
+-- Looking for fabs
+-- Looking for fabs - found
+-- Looking for fabsf
+-- Looking for fabsf - found
+-- Looking for floor
+-- Looking for floor - found
+-- Looking for floorf
+-- Looking for floorf - found
+-- Looking for fmod
+-- Looking for fmod - found
+-- Looking for fmodf
+-- Looking for fmodf - found
+-- Looking for fopen64
+-- Looking for fopen64 - found
+-- Looking for fseeko
+-- Looking for fseeko - found
+-- Looking for fseeko64
+-- Looking for fseeko64 - found
+-- Looking for getenv
+-- Looking for getenv - found
+-- Looking for _i64toa
+-- Looking for _i64toa - not found
+-- Looking for index
+-- Looking for index - found
+-- Looking for itoa
+-- Looking for itoa - not found
+-- Looking for log
+-- Looking for log - found
+-- Looking for log10
+-- Looking for log10 - found
+-- Looking for log10f
+-- Looking for log10f - found
+-- Looking for logf
+-- Looking for logf - found
+-- Looking for lround
+-- Looking for lround - found
+-- Looking for lroundf
+-- Looking for lroundf - found
+-- Looking for _ltoa
+-- Looking for _ltoa - not found
+-- Looking for malloc
+-- Looking for malloc - found
+-- Looking for memcmp
+-- Looking for memcmp - found
+-- Looking for memcpy
+-- Looking for memcpy - found
+-- Looking for memmove
+-- Looking for memmove - found
+-- Looking for memset
+-- Looking for memset - found
+-- Looking for modf
+-- Looking for modf - found
+-- Looking for modff
+-- Looking for modff - found
+-- Looking for pow
+-- Looking for pow - found
+-- Looking for powf
+-- Looking for powf - found
+-- Looking for putenv
+-- Looking for putenv - found
+-- Looking for rindex
+-- Looking for rindex - found
+-- Looking for round
+-- Looking for round - found
+-- Looking for roundf
+-- Looking for roundf - found
+-- Looking for scalbn
+-- Looking for scalbn - found
+-- Looking for scalbnf
+-- Looking for scalbnf - found
+-- Looking for setenv
+-- Looking for setenv - found
+-- Looking for sin
+-- Looking for sin - found
+-- Looking for sinf
+-- Looking for sinf - found
+-- Looking for sqr
+-- Looking for sqr - not found
+-- Looking for sqrt
+-- Looking for sqrt - found
+-- Looking for sqrtf
+-- Looking for sqrtf - found
+-- Looking for sscanf
+-- Looking for sscanf - found
+-- Looking for strchr
+-- Looking for strchr - found
+-- Looking for strcmp
+-- Looking for strcmp - found
+-- Looking for strlcat
+-- Looking for strlcat - found
+-- Looking for strlcpy
+-- Looking for strlcpy - found
+-- Looking for strlen
+-- Looking for strlen - found
+-- Looking for strncmp
+-- Looking for strncmp - found
+-- Looking for strnlen
+-- Looking for strnlen - found
+-- Looking for strpbrk
+-- Looking for strpbrk - found
+-- Looking for strrchr
+-- Looking for strrchr - found
+-- Looking for strstr
+-- Looking for strstr - found
+-- Looking for strnstr
+-- Looking for strnstr - not found
+-- Looking for strtod
+-- Looking for strtod - found
+-- Looking for strtok_r
+-- Looking for strtok_r - found
+-- Looking for strtol
+-- Looking for strtol - found
+-- Looking for strtoll
+-- Looking for strtoll - found
+-- Looking for strtoul
+-- Looking for strtoul - found
+-- Looking for strtoull
+-- Looking for strtoull - found
+-- Looking for tan
+-- Looking for tan - found
+-- Looking for tanf
+-- Looking for tanf - found
+-- Looking for trunc
+-- Looking for trunc - found
+-- Looking for truncf
+-- Looking for truncf - found
+-- Looking for unsetenv
+-- Looking for unsetenv - found
+-- Looking for vsnprintf
+-- Looking for vsnprintf - found
+-- Looking for vsscanf
+-- Looking for vsscanf - found
+-- Looking for wcsnlen
+-- Looking for wcsnlen - found
+-- Looking for wcscmp
+-- Looking for wcscmp - found
+-- Looking for wcsdup
+-- Looking for wcsdup - found
+-- Looking for wcslcat
+-- Looking for wcslcat - found
+-- Looking for wcslcpy
+-- Looking for wcslcpy - found
+-- Looking for wcslen
+-- Looking for wcslen - found
+-- Looking for wcsncmp
+-- Looking for wcsncmp - found
+-- Looking for wcsstr
+-- Looking for wcsstr - found
+-- Looking for wcstol
+-- Looking for wcstol - found
+-- Looking for strcasestr
+-- Looking for strcasestr - found
+-- Performing Test LIBC_HAS_ISINF
+-- Performing Test LIBC_HAS_ISINF - Success
+-- Performing Test LIBC_ISINF_HANDLES_FLOAT
+-- Performing Test LIBC_ISINF_HANDLES_FLOAT - Success
+-- Performing Test LIBC_HAS_ISINFF
+-- Performing Test LIBC_HAS_ISINFF - Success
+-- Performing Test LIBC_HAS_ISNAN
+-- Performing Test LIBC_HAS_ISNAN - Success
+-- Performing Test LIBC_ISNAN_HANDLES_FLOAT
+-- Performing Test LIBC_ISNAN_HANDLES_FLOAT - Success
+-- Performing Test LIBC_HAS_ISNANF
+-- Performing Test LIBC_HAS_ISNANF - Success
+-- Looking for fdatasync
+-- Looking for fdatasync - found
+-- Looking for gethostname
+-- Looking for gethostname - found
+-- Looking for getpagesize
+-- Looking for getpagesize - found
+-- Looking for getresgid
+-- Looking for getresgid - found
+-- Looking for getresuid
+-- Looking for getresuid - found
+-- Looking for sigaction
+-- Looking for sigaction - found
+-- Looking for sigtimedwait
+-- Looking for sigtimedwait - found
+-- Looking for setjmp
+-- Looking for setjmp - found
+-- Looking for nanosleep
+-- Looking for nanosleep - found
+-- Looking for gmtime_r
+-- Looking for gmtime_r - found
+-- Looking for localtime_r
+-- Looking for localtime_r - found
+-- Looking for nl_langinfo
+-- Looking for nl_langinfo - found
+-- Looking for sysconf
+-- Looking for sysconf - found
+-- Looking for sysctlbyname
+-- Looking for sysctlbyname - not found
+-- Looking for getauxval
+-- Looking for getauxval - found
+-- Looking for elf_aux_info
+-- Looking for elf_aux_info - not found
+-- Looking for poll
+-- Looking for poll - found
+-- Looking for memfd_create
+-- Looking for memfd_create - found
+-- Looking for posix_fallocate
+-- Looking for posix_fallocate - found
+-- Performing Test ICONV_IN_LIBC
+-- Performing Test ICONV_IN_LIBC - Success
+-- Performing Test ICONV_IN_LIBICONV
+-- Performing Test ICONV_IN_LIBICONV - Failed
+-- Performing Test HAVE_SA_SIGACTION
+-- Performing Test HAVE_SA_SIGACTION - Success
+-- Performing Test HAVE_ST_MTIM
+-- Performing Test HAVE_ST_MTIM - Success
+-- Looking for dlopen
+-- Looking for dlopen - found
+-- Performing Test HAVE_O_CLOEXEC
+-- Performing Test HAVE_O_CLOEXEC - Success
+-- Found X11: /usr/include   
+-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so
+-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so - found
+-- Looking for gethostbyname
+-- Looking for gethostbyname - found
+-- Looking for connect
+-- Looking for connect - found
+-- Looking for remove
+-- Looking for remove - found
+-- Looking for shmat
+-- Looking for shmat - found
+-- Looking for IceConnectionNumber in ICE
+-- Looking for IceConnectionNumber in ICE - found
+-- dynamic libX11 -> libX11.so.6
+-- dynamic libXext -> libXext.so.6
+-- dynamic libXcursor -> libXcursor.so.1
+-- dynamic libXi -> libXi.so.6
+-- dynamic libXfixes -> libXfixes.so.3
+-- dynamic libXrandr -> libXrandr.so.2
+-- dynamic libXrender -> libXrender.so.1
+-- dynamic libXss -> libXss.so.1
+-- Looking for shmat
+-- Looking for shmat - found
+-- Performing Test HAVE_XGENERICEVENT
+-- Performing Test HAVE_XGENERICEVENT - Success
+-- Looking for XkbLookupKeySym
+-- Looking for XkbLookupKeySym - found
+-- Performing Test HAVE_XINPUT2_MULTITOUCH
+-- Performing Test HAVE_XINPUT2_MULTITOUCH - Success
+-- Performing Test HAVE_XFIXES_H
+-- Performing Test HAVE_XFIXES_H - Success
+-- Checking for module 'libdrm'
+--   Package 'libdrm', required by 'virtual:world', not found
+-- Checking for module 'gbm'
+--   Package 'gbm', required by 'virtual:world', not found
+-- Performing Test HAVE_LINUX_INPUT_H
+-- Performing Test HAVE_LINUX_INPUT_H - Success
+-- Performing Test HAVE_INPUT_KD
+-- Performing Test HAVE_INPUT_KD - Success
+-- Performing Test HAVE_LINUX_VIDEODEV2_H
+-- Performing Test HAVE_LINUX_VIDEODEV2_H - Success
+-- Looking for libudev.h
+-- Looking for libudev.h - not found
+-- Looking for sys/inotify.h
+-- Looking for sys/inotify.h - found
+-- Looking for inotify_init
+-- Looking for inotify_init - found
+-- Looking for inotify_init1
+-- Looking for inotify_init1 - found
+-- Checking for one of the modules 'dbus-1;dbus'
+-- Checking for one of the modules 'ibus-1.0;ibus'
+-- Checking for one of the modules 'liburing-ffi'
+-- Checking for module 'libusb-1.0>=1.0.16'
+--   Package 'libusb-1.0', required by 'virtual:world', not found
+-- Could NOT find LibUSB (missing: LibUSB_LIBRARY LibUSB_INCLUDE_PATH) (found version "LibUSB_VERSION-NOTFOUND")
+-- Performing Test HAVE_PTHREADS
+-- Performing Test HAVE_PTHREADS - Success
+-- Performing Test HAVE_RECURSIVE_MUTEXES
+-- Performing Test HAVE_RECURSIVE_MUTEXES - Success
+-- Performing Test HAVE_PTHREADS_SEM
+-- Performing Test HAVE_PTHREADS_SEM - Success
+-- Performing Test COMPILER_HAS_SEM_TIMEDWAIT
+-- Performing Test COMPILER_HAS_SEM_TIMEDWAIT - Success
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Looking for pthread_np.h
+-- Looking for pthread_np.h - not found
+-- Performing Test HAVE_PTHREAD_SETNAME_NP
+-- Performing Test HAVE_PTHREAD_SETNAME_NP - Success
+-- Looking for clock_gettime in c
+-- Looking for clock_gettime in c - found
+-- Performing Test HAVE_POSIX_SPAWN
+-- Performing Test HAVE_POSIX_SPAWN - Success
+-- 
+-- SDL3 was configured with the following options:
+-- 
+-- Platform: Linux-6.18.44-fc-v139
+-- 64-bit:   TRUE
+-- Compiler: /usr/bin/cc
+-- Revision: SDL-3.2.30-release-3.2.30
+-- Vendor:   
+-- 
+-- Subsystems:
+--   Audio:    OFF
+--   Video:    ON
+--   GPU:      OFF
+--   Render:   OFF
+--   Camera:   OFF
+--   Joystick: ON
+--   Haptic:   OFF
+--   Hidapi:   ON
+--   Power:    OFF
+--   Sensor:   OFF
+--   Dialog:   OFF
+-- 
+-- Options:
+--   SDL_ALSA                    (Wanted: OFF): OFF
+--   SDL_ALSA_SHARED             (Wanted: OFF): OFF
+--   SDL_ALTIVEC                 (Wanted: OFF): OFF
+--   SDL_ARMNEON                 (Wanted: OFF): OFF
+--   SDL_ASAN                    (Wanted: OFF): OFF
+--   SDL_ASSEMBLY                (Wanted: ON): ON
+--   SDL_ASSERTIONS              (Wanted: auto): auto
+--   SDL_AVX                     (Wanted: ON): ON
+--   SDL_AVX2                    (Wanted: ON): ON
+--   SDL_AVX512F                 (Wanted: ON): ON
+--   SDL_BACKGROUNDING_SIGNAL    (Wanted: OFF): OFF
+--   SDL_CCACHE                  (Wanted: OFF): OFF
+--   SDL_CLANG_TIDY              (Wanted: OFF): OFF
+--   SDL_CLOCK_GETTIME           (Wanted: ON): ON
+--   SDL_COCOA                   (Wanted: OFF): OFF
+--   SDL_DBUS                    (Wanted: ON): OFF
+--   SDL_DEPS_SHARED             (Wanted: ON): OFF
+--   SDL_DIRECTX                 (Wanted: OFF): OFF
+--   SDL_DISKAUDIO               (Wanted: OFF): OFF
+--   SDL_DUMMYAUDIO              (Wanted: OFF): OFF
+--   SDL_DUMMYCAMERA             (Wanted: OFF): OFF
+--   SDL_DUMMYVIDEO              (Wanted: ON): ON
+--   SDL_EXAMPLES                (Wanted: OFF): OFF
+--   SDL_EXAMPLES_LINK_SHARED    (Wanted: OFF): OFF
+--   SDL_FOREGROUNDING_SIGNAL    (Wanted: OFF): OFF
+--   SDL_GCC_ATOMICS             (Wanted: ON): ON
+--   SDL_GPU_DXVK                (Wanted: OFF): OFF
+--   SDL_HIDAPI                  (Wanted: ON): ON
+--   SDL_HIDAPI_JOYSTICK         (Wanted: ON): ON
+--   SDL_HIDAPI_LIBUSB           (Wanted: ON): OFF
+--   SDL_HIDAPI_LIBUSB_SHARED    (Wanted: ON): OFF
+--   SDL_IBUS                    (Wanted: ON): OFF
+--   SDL_INSTALL                 (Wanted: OFF): OFF
+--   SDL_INSTALL_TESTS           (Wanted: OFF): OFF
+--   SDL_JACK                    (Wanted: OFF): OFF
+--   SDL_JACK_SHARED             (Wanted: OFF): OFF
+--   SDL_KMSDRM                  (Wanted: ON): OFF
+--   SDL_KMSDRM_SHARED           (Wanted: ON): OFF
+--   SDL_LASX                    (Wanted: OFF): OFF
+--   SDL_LIBC                    (Wanted: ON): ON
+--   SDL_LIBICONV                (Wanted: OFF): OFF
+--   SDL_LIBUDEV                 (Wanted: ON): OFF
+--   SDL_LIBURING                (Wanted: ON): OFF
+--   SDL_LSX                     (Wanted: OFF): OFF
+--   SDL_METAL                   (Wanted: OFF): OFF
+--   SDL_MMX                     (Wanted: ON): ON
+--   SDL_OFFSCREEN               (Wanted: ON): ON
+--   SDL_OPENGL                  (Wanted: OFF): OFF
+--   SDL_OPENGLES                (Wanted: OFF): OFF
+--   SDL_OPENVR                  (Wanted: OFF): OFF
+--   SDL_OSS                     (Wanted: OFF): OFF
+--   SDL_PIPEWIRE                (Wanted: ON): OFF
+--   SDL_PIPEWIRE_SHARED         (Wanted: ON): OFF
+--   SDL_PTHREADS                (Wanted: ON): ON
+--   SDL_PTHREADS_SEM            (Wanted: ON): ON
+--   SDL_PULSEAUDIO              (Wanted: OFF): OFF
+--   SDL_PULSEAUDIO_SHARED       (Wanted: OFF): OFF
+--   SDL_RENDER_D3D              (Wanted: OFF): OFF
+--   SDL_RENDER_D3D11            (Wanted: OFF): OFF
+--   SDL_RENDER_D3D12            (Wanted: OFF): OFF
+--   SDL_RENDER_GPU              (Wanted: OFF): OFF
+--   SDL_RENDER_METAL            (Wanted: OFF): OFF
+--   SDL_RENDER_VULKAN           (Wanted: OFF): OFF
+--   SDL_ROCKCHIP                (Wanted: OFF): OFF
+--   SDL_RPATH                   (Wanted: ON): OFF
+--   SDL_RPI                     (Wanted: OFF): OFF
+--   SDL_SNDIO                   (Wanted: OFF): OFF
+--   SDL_SNDIO_SHARED            (Wanted: OFF): OFF
+--   SDL_SSE                     (Wanted: ON): ON
+--   SDL_SSE2                    (Wanted: ON): ON
+--   SDL_SSE3                    (Wanted: ON): ON
+--   SDL_SSE4_1                  (Wanted: ON): ON
+--   SDL_SSE4_2                  (Wanted: ON): ON
+--   SDL_SYSTEM_ICONV            (Wanted: ON): ON
+--   SDL_TESTS                   (Wanted: OFF): OFF
+--   SDL_TESTS_LINK_SHARED       (Wanted: OFF): OFF
+--   SDL_UNINSTALL               (Wanted: OFF): OFF
+--   SDL_VIRTUAL_JOYSTICK        (Wanted: ON): ON
+--   SDL_VIVANTE                 (Wanted: OFF): OFF
+--   SDL_VULKAN                  (Wanted: ON): ON
+--   SDL_WASAPI                  (Wanted: OFF): OFF
+--   SDL_WAYLAND                 (Wanted: OFF): OFF
+--   SDL_WAYLAND_LIBDECOR        (Wanted: OFF): OFF
+--   SDL_WAYLAND_LIBDECOR_SHARED (Wanted: OFF): OFF
+--   SDL_WAYLAND_SHARED          (Wanted: OFF): OFF
+--   SDL_X11                     (Wanted: ON): ON
+--   SDL_X11_SHARED              (Wanted: ON): ON
+--   SDL_X11_XCURSOR             (Wanted: ON): ON
+--   SDL_X11_XDBE                (Wanted: ON): ON
+--   SDL_X11_XFIXES              (Wanted: ON): ON
+--   SDL_X11_XINPUT              (Wanted: ON): ON
+--   SDL_X11_XRANDR              (Wanted: ON): ON
+--   SDL_X11_XSCRNSAVER          (Wanted: ON): ON
+--   SDL_X11_XSHAPE              (Wanted: ON): ON
+--   SDL_X11_XSYNC               (Wanted: ON): ON
+--   SDL_XINPUT                  (Wanted: OFF): OFF
+-- 
+--  Build Shared Library: OFF
+--  Build Static Library: ON
+--  Build Static Library with Position Independent Code: 
+-- 
+-- If something was not detected, although the libraries
+-- were installed, then make sure you have set the
+-- CMAKE_C_FLAGS and CMAKE_PREFIX_PATH CMake variables correctly.
+-- 
+-- Dependency SDL3: release-3.2.30 @ f5e5f6588921eed3d7d048ce43d9eb1ff0da0ffc (verified)
+-- Dependency imgui: v1.92.9b-docking @ b48d1afbe8ee8b238e2961dc363a949dd7304e23 (verified)
+-- Shader compiler: DXC (user-supplied: <repo>/build/tools/dxc-b106a961d092/bin/dxc) -> <repo>/build/tools/dxc-b106a961d092/bin/dxc
+-- Configuring done (52.7s)
+-- Generating done (0.1s)
+-- Build files have been written to: <fresh-clone>/build/dev-vulkan
+# exit 0
+$ cmake --build --preset dev-vulkan
+[1/323] Building CXX object CMakeFiles/sov_third_party_imgui.dir/_deps/imgui-src/backends/imgui_impl_sdl3.cpp.o
+[2/323] Building C object CMakeFiles/sov_third_party_volk.dir/_deps/volk-src/volk.c.o
+[3/323] Linking C static library lib/libsov_third_party_volk.a
+[4/323] Updating build information
+[5/323] Building CXX object CMakeFiles/sov_third_party_imgui.dir/_deps/imgui-src/backends/imgui_impl_vulkan.cpp.o
+[6/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/cmake_pch.h.gch
+[7/323] Building CXX object CMakeFiles/sov_third_party_imgui.dir/_deps/imgui-src/imgui_tables.cpp.o
+[8/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL.c.o
+[9/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_assert.c.o
+[10/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_error.c.o
+[11/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_guid.c.o
+[12/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_hashtable.c.o
+[13/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_hints.c.o
+[14/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_list.c.o
+[15/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_log.c.o
+[16/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_utils.c.o
+[17/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/atomic/SDL_atomic.c.o
+[18/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/atomic/SDL_spinlock.c.o
+[19/323] Building CXX object CMakeFiles/sov_third_party_imgui.dir/_deps/imgui-src/imgui_draw.cpp.o
+[20/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/SDL_properties.c.o
+[21/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_audiodev.c.o
+[22/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_audiocvt.c.o
+[23/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_audioqueue.c.o
+[24/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_audio.c.o
+[25/323] Building CXX object CMakeFiles/sov_third_party_imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o
+[26/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_audiotypecvt.c.o
+[27/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_audioresample.c.o
+[28/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/dynapi/SDL_dynapi.c.o
+[29/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/SDL_core_unsupported.c.o
+[30/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_mixer.c.o
+[31/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/cpuinfo/SDL_cpuinfo.c.o
+[32/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_categories.c.o
+[33/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_clipboardevents.c.o
+[34/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_displayevents.c.o
+[35/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/SDL_wave.c.o
+[36/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_dropevents.c.o
+[37/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_eventwatch.c.o
+[38/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_keysym_to_keycode.c.o
+[39/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/camera/SDL_camera.c.o
+[40/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_keysym_to_scancode.c.o
+[41/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_keymap.c.o
+[42/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_events.c.o
+[43/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_keyboard.c.o
+[44/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_scancode_tables.c.o
+[45/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_quit.c.o
+[46/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_mouse.c.o
+[47/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_pen.c.o
+[48/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_touch.c.o
+[49/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/imKStoUCS.c.o
+[50/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/filesystem/SDL_filesystem.c.o
+[51/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/events/SDL_windowevents.c.o
+[52/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/hidapi/SDL_hidapi.c.o
+[53/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/io/SDL_asyncio.c.o
+[54/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/io/SDL_iostream.c.o
+[55/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/haptic/SDL_haptic.c.o
+[56/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/io/generic/SDL_asyncio_generic.c.o
+[57/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/controller_type.c.o
+[58/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/SDL_steam_virtual_gamepad.c.o
+[59/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/gpu/SDL_gpu.c.o
+[60/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/locale/SDL_locale.c.o
+[61/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/SDL_gamepad.c.o
+[62/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/main/SDL_runapp.c.o
+[63/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/misc/SDL_url.c.o
+[64/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/main/SDL_main_callbacks.c.o
+[65/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/power/SDL_power.c.o
+[66/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/SDL_render_unsupported.c.o
+[67/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/direct3d/SDL_render_d3d.c.o
+[68/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/SDL_yuv_sw.c.o
+[69/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/direct3d11/SDL_render_d3d11.c.o
+[70/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/direct3d11/SDL_shaders_d3d11.c.o
+[71/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/direct3d/SDL_shaders_d3d.c.o
+[72/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/direct3d12/SDL_render_d3d12.c.o
+[73/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/direct3d12/SDL_shaders_d3d12.c.o
+[74/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/gpu/SDL_render_gpu.c.o
+[75/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/gpu/SDL_shaders_gpu.c.o
+[76/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/gpu/SDL_pipeline_gpu.c.o
+[77/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/SDL_joystick.c.o
+[78/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/opengl/SDL_shaders_gl.c.o
+[79/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/opengl/SDL_render_gl.c.o
+[80/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/opengles2/SDL_render_gles2.c.o
+[81/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/ps2/SDL_render_ps2.c.o
+[82/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/psp/SDL_render_psp.c.o
+[83/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/opengles2/SDL_shaders_gles2.c.o
+[84/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_blendfillrect.c.o
+[85/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_blendline.c.o
+[86/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_blendpoint.c.o
+[87/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_drawline.c.o
+[88/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_rotate.c.o
+[89/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_drawpoint.c.o
+[90/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_render_sw.c.o
+[91/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/software/SDL_triangle.c.o
+[92/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/SDL_render.c.o
+[93/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/vitagxm/SDL_render_vita_gxm.c.o
+[94/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/vitagxm/SDL_render_vita_gxm_memory.c.o
+[95/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/vitagxm/SDL_render_vita_gxm_tools.c.o
+[96/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/vulkan/SDL_render_vulkan.c.o
+[97/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/render/vulkan/SDL_shaders_vulkan.c.o
+[98/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_crc16.c.o
+[99/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/sensor/SDL_sensor.c.o
+[100/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_crc32.c.o
+[101/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_getenv.c.o
+[102/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_memcpy.c.o
+[103/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_iconv.c.o
+[104/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_malloc.c.o
+[105/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_memmove.c.o
+[106/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_memset.c.o
+[107/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_murmur3.c.o
+[108/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_mslibc.c.o
+[109/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_strtokr.c.o
+[110/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_random.c.o
+[111/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_qsort.c.o
+[112/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_stdlib.c.o
+[113/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/stdlib/SDL_string.c.o
+[114/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/storage/SDL_storage.c.o
+[115/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/time/SDL_time.c.o
+[116/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/timer/SDL_timer.c.o
+[117/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/thread/SDL_thread.c.o
+[118/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit.c.o
+[119/323] Building CXX object CMakeFiles/sov_third_party_imgui.dir/_deps/imgui-src/imgui.cpp.o
+[120/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit_1.c.o
+[121/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit_copy.c.o
+[122/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_RLEaccel.c.o
+[123/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit_0.c.o
+[124/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit_slow.c.o
+[125/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_bmp.c.o
+[126/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_egl.c.o
+[127/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit_N.c.o
+[128/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_clipboard.c.o
+[129/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_fillrect.c.o
+[130/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_pixels.c.o
+[131/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit_A.c.o
+[132/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_rect.c.o
+[133/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_video_unsupported.c.o
+[134/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_stretch.c.o
+[135/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_vulkan_utils.c.o
+[136/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/yuv2rgb/yuv_rgb_lsx.c.o
+[137/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_stb.c.o
+[138/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_yuv.c.o
+[139/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_surface.c.o
+[140/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/loadso/dlopen/SDL_sysloadso.c.o
+[141/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_video.c.o
+[142/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/dummy/SDL_nullevents.c.o
+[143/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/virtual/SDL_virtualjoystick.c.o
+[144/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/yuv2rgb/yuv_rgb_std.c.o
+[145/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/dummy/SDL_nullframebuffer.c.o
+[146/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/dummy/SDL_nullvideo.c.o
+[147/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11clipboard.c.o
+[148/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11dyn.c.o
+[149/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11framebuffer.c.o
+[150/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11modes.c.o
+[151/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11messagebox.c.o
+[152/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11keyboard.c.o
+[153/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11opengl.c.o
+[154/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11events.c.o
+[155/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11opengles.c.o
+[156/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11mouse.c.o
+[157/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11shape.c.o
+[158/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11pen.c.o
+[159/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11touch.c.o
+[160/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11settings.c.o
+[161/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/SDL_blit_auto.c.o
+[162/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11video.c.o
+[163/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11xinput2.c.o
+[164/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11xfixes.c.o
+[165/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/edid-parse.c.o
+[166/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11vulkan.c.o
+[167/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11window.c.o
+[168/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/yuv2rgb/yuv_rgb_sse.c.o
+[169/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/unix/SDL_appid.c.o
+[170/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/SDL_x11xsync.c.o
+[171/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/unix/SDL_gtk.c.o
+[172/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/unix/SDL_poll.c.o
+[173/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/x11/xsettings-client.c.o
+[174/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/tray/unix/SDL_tray.c.o
+[175/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/linux/SDL_evdev_kbd.c.o
+[176/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/linux/SDL_evdev.c.o
+[177/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/linux/SDL_evdev_capabilities.c.o
+[178/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/core/linux/SDL_threadprio.c.o
+[179/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_combined.c.o
+[180/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_luna.c.o
+[181/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_gamecube.c.o
+[182/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_ps3.c.o
+[183/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_rumble.c.o
+[184/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_ps5.c.o
+[185/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_ps4.c.o
+[186/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_shield.c.o
+[187/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_stadia.c.o
+[188/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_steam_hori.c.o
+[189/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_steamdeck.c.o
+[190/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_steam.c.o
+[191/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_wii.c.o
+[192/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_xbox360w.c.o
+[193/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_xbox360.c.o
+[194/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/thread/pthread/SDL_systhread.c.o
+[195/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_switch.c.o
+[196/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapi_xboxone.c.o
+[197/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/thread/pthread/SDL_sysmutex.c.o
+[198/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/hidapi/SDL_hidapijoystick.c.o
+[199/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/misc/unix/SDL_sysurl.c.o
+[200/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/thread/pthread/SDL_sysrwlock.c.o
+[201/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/thread/pthread/SDL_syssem.c.o
+[202/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/thread/pthread/SDL_syscond.c.o
+[203/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/thread/pthread/SDL_systls.c.o
+[204/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/joystick/linux/SDL_sysjoystick.c.o
+[205/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/filesystem/unix/SDL_sysfilesystem.c.o
+[206/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/storage/steam/SDL_steamstorage.c.o
+[207/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/locale/unix/SDL_syslocale.c.o
+[208/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/storage/generic/SDL_genericstorage.c.o
+[209/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/filesystem/posix/SDL_sysfsops.c.o
+[210/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/time/unix/SDL_systime.c.o
+[211/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/dialog/SDL_dialog.c.o
+[212/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/offscreen/SDL_offscreenevents.c.o
+[213/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/timer/unix/SDL_systimer.c.o
+[214/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/process/SDL_process.c.o
+[215/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/offscreen/SDL_offscreenframebuffer.c.o
+[216/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/offscreen/SDL_offscreenopengles.c.o
+[217/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/process/posix/SDL_posixprocess.c.o
+[218/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/offscreen/SDL_offscreenvideo.c.o
+[219/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/offscreen/SDL_offscreenwindow.c.o
+[220/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/audio/dummy/SDL_dummyaudio.c.o
+[221/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/haptic/dummy/SDL_syshaptic.c.o
+[222/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/sensor/dummy/SDL_dummysensor.c.o
+[223/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/tray/SDL_tray_utils.c.o
+[224/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/camera/dummy/SDL_camera_dummy.c.o
+[225/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/dialog/dummy/SDL_dummydialog.c.o
+[226/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/main/generic/SDL_sysmain_callbacks.c.o
+[227/323] Building C object _deps/sdl3-build/CMakeFiles/SDL3-static.dir/src/video/offscreen/SDL_offscreenvulkan.c.o
+[228/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_log.c.o
+[229/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_exp.c.o
+[230/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_fmod.c.o
+[231/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_log10.c.o
+[232/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_atan2.c.o
+[233/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_rem_pio2.c.o
+[234/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_pow.c.o
+[235/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_sqrt.c.o
+[236/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_rem_pio2.c.o
+[237/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_cos.c.o
+[238/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_sin.c.o
+[239/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_tan.c.o
+[240/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_atan.c.o
+[241/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_copysign.c.o
+[242/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_cos.c.o
+[243/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_fabs.c.o
+[244/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_floor.c.o
+[245/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isinf.c.o
+[246/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isinff.c.o
+[247/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isnanf.c.o
+[248/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isnan.c.o
+[249/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_modf.c.o
+[250/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_scalbn.c.o
+[251/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_sin.c.o
+[252/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/math.cpp.o
+[253/323] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_tan.c.o
+[254/323] Linking C static library lib/libSDL_uclibc.a
+[255/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/result.cpp.o
+[256/323] Linking C static library lib/libSDL3.a
+[257/323] Linking CXX static library lib/libsov_third_party_imgui.a
+[258/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/sha256.cpp.o
+[259/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/log.cpp.o
+[260/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/uuid.cpp.o
+[261/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/build_info.cpp.o
+[262/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/png.cpp.o
+[263/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/fs.cpp.o
+[264/323] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/primitive_geometry.cpp.o
+[265/323] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/json.cpp.o
+[266/323] Linking CXX static library lib/libsov_core.a
+[267/323] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/reflection.cpp.o
+[268/323] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/scene_diff.cpp.o
+[269/323] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/command_batch.cpp.o
+[270/323] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/scene_document.cpp.o
+[271/323] Building CXX object engine/runtime/CMakeFiles/sov_runtime.dir/src/simulation.cpp.o
+[272/323] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/operation.cpp.o
+[273/323] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/world.cpp.o
+[274/323] Linking CXX static library lib/libsov_world.a
+[275/323] Linking CXX static library lib/libsov_runtime.a
+[276/323] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/transaction.cpp.o
+[277/323] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/scene_session.cpp.o
+[278/323] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/scene_store.cpp.o
+[279/323] Building CXX object engine/rhi/vulkan/CMakeFiles/sov_rhi_vulkan.dir/src/device.cpp.o
+[280/323] DXC forward.hlsl (ps, PSMain) -> SPIR-V
+[281/323] DXC forward.hlsl (vs, VSMain) -> SPIR-V
+[282/323] DXC matrix_probe.hlsl (cs, CSMain) -> SPIR-V
+[283/323] DXC tonemap.hlsl (ps, PSMain) -> SPIR-V
+[284/323] DXC tonemap.hlsl (vs, VSMain) -> SPIR-V
+[285/323] Linking CXX static library lib/libsov_commands.a
+[286/323] Building CXX object engine/rhi/vulkan/CMakeFiles/sov_rhi_vulkan.dir/src/vma_impl.cpp.o
+[287/323] Building CXX object engine/rhi/vulkan/CMakeFiles/sov_rhi_vulkan.dir/src/resources.cpp.o
+[288/323] Building CXX object engine/platform/CMakeFiles/sov_platform.dir/src/window.cpp.o
+[289/323] Linking CXX static library lib/libsov_platform.a
+[290/323] Building CXX object engine/rhi/vulkan/CMakeFiles/sov_rhi_vulkan.dir/src/swapchain.cpp.o
+[291/323] Linking CXX static library lib/libsov_rhi_vulkan.a
+[292/323] Building CXX object engine/runtime/CMakeFiles/sovereign-runtime.dir/app/main.cpp.o
+[293/323] Building CXX object games/sandbox/CMakeFiles/sov_game_sandbox.dir/src/sandbox.cpp.o
+[294/323] Linking CXX static library lib/libsov_game_sandbox.a
+[295/323] Building CXX object editor/application/CMakeFiles/sovereign-editor.dir/main.cpp.o
+[296/323] Building CXX object editor/CMakeFiles/sov_editor_authoring.dir/authoring/src/editor_document.cpp.o
+[297/323] Linking CXX static library lib/libsov_editor_authoring.a
+[298/323] Building CXX object engine/renderer/CMakeFiles/sov_renderer.dir/src/renderer.cpp.o
+[299/323] Linking CXX static library lib/libsov_renderer.a
+[300/323] Building CXX object editor/application/CMakeFiles/sovereign-editor.dir/imgui_layer.cpp.o
+[301/323] Linking CXX executable bin/sovereign-runtime
+[302/323] Building CXX object editor/application/CMakeFiles/sovereign-editor.dir/automation.cpp.o
+[303/323] Building CXX object tests/CMakeFiles/sovereign-render-tests.dir/support/test_main.cpp.o
+[304/323] Building CXX object tests/CMakeFiles/sov_test_harness.dir/support/sov_test.cpp.o
+[305/323] Building CXX object editor/application/CMakeFiles/sovereign-editor.dir/editor_app.cpp.o
+[306/323] Linking CXX static library lib/libsov_test_harness.a
+[307/323] Building CXX object editor/application/CMakeFiles/sovereign-editor.dir/__/panels/panels.cpp.o
+[308/323] Linking CXX executable bin/sovereign-editor
+[309/323] Building CXX object tools/cli/CMakeFiles/sovereign-cli.dir/main.cpp.o
+[310/323] Building CXX object tests/CMakeFiles/sovereign-render-tests.dir/rendering/test_rendering.cpp.o
+[311/323] Linking CXX executable bin/sovereign-cli
+[312/323] Linking CXX executable bin/sovereign-render-tests
+[313/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/support/test_main.cpp.o
+[314/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_math.cpp.o
+[315/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_world.cpp.o
+[316/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_core.cpp.o
+[317/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_scene.cpp.o
+[318/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_cli.cpp.o
+[319/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_editor.cpp.o
+[320/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_commands.cpp.o
+[321/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_play.cpp.o
+[322/323] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_store.cpp.o
+[323/323] Linking CXX executable bin/sovereign-tests
+# exit 0
+$ ctest --preset dev-vulkan --output-on-failure
+Test project <fresh-clone>/build/dev-vulkan
+      Start  1: headless.core
+ 1/19 Test  #1: headless.core ............................   Passed    0.15 sec
+      Start  2: headless.math
+ 2/19 Test  #2: headless.math ............................   Passed    0.00 sec
+      Start  3: headless.scene
+ 3/19 Test  #3: headless.scene ...........................   Passed    0.02 sec
+      Start  4: headless.world
+ 4/19 Test  #4: headless.world ...........................   Passed    0.01 sec
+      Start  5: headless.commands
+ 5/19 Test  #5: headless.commands ........................   Passed    0.06 sec
+      Start  6: headless.store
+ 6/19 Test  #6: headless.store ...........................   Passed    1.04 sec
+      Start  7: headless.cli
+ 7/19 Test  #7: headless.cli .............................   Passed    0.77 sec
+      Start  8: headless.editor
+ 8/19 Test  #8: headless.editor ..........................   Passed    0.46 sec
+      Start  9: headless.play
+ 9/19 Test  #9: headless.play ............................   Passed    0.87 sec
+      Start 10: vulkan.rendering
+10/19 Test #10: vulkan.rendering .........................   Passed    1.16 sec
+      Start 11: static.no_unreal_dependency
+11/19 Test #11: static.no_unreal_dependency ..............   Passed    0.12 sec
+      Start 12: static.runtime_has_no_editor_code
+12/19 Test #12: static.runtime_has_no_editor_code ........   Passed    0.27 sec
+      Start 13: vulkan.runtime_first_light
+13/19 Test #13: vulkan.runtime_first_light ...............   Passed    3.47 sec
+      Start 14: vulkan.runtime_window_lifecycle_stress
+14/19 Test #14: vulkan.runtime_window_lifecycle_stress ...   Passed    8.76 sec
+      Start 17: vulkan.editor_clean_stage
+15/19 Test #17: vulkan.editor_clean_stage ................   Passed    0.01 sec
+      Start 16: vulkan.editor_stage_scene
+16/19 Test #16: vulkan.editor_stage_scene ................   Passed    0.01 sec
+      Start 15: vulkan.editor_first_success_automation
+17/19 Test #15: vulkan.editor_first_success_automation ...   Passed   35.69 sec
+      Start 18: vulkan.editor_real_x11_input
+18/19 Test #18: vulkan.editor_real_x11_input .............   Passed    9.39 sec
+      Start 19: static.license_notices_match_lock
+19/19 Test #19: static.license_notices_match_lock ........   Passed    0.03 sec
+
+100% tests passed, 0 tests failed out of 19
+
+Label Time Summary:
+display     =  57.33 sec*proc (6 tests)
+headless    =   3.53 sec*proc (11 tests)
+static      =   0.43 sec*proc (3 tests)
+vulkan      =  58.77 sec*proc (8 tests)
+
+Total Test time (real) =  62.31 sec
+# exit 0

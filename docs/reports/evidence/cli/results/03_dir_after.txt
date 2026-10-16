@@ -1,0 +1,6 @@
+.
+..
+first_light.scene.json
+first_light.scene.json.bak
+first_light.scene.json.journal
+first_light.scene.json.lock

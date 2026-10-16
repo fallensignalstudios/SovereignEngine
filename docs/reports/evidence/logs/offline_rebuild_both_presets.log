@@ -1,0 +1,269 @@
+$ unshare -rn bash -c offline () 
+{ 
+    echo "network check inside the namespace (must fail):";
+    curl -sS -m 5 -o /dev/null https://github.com && { 
+        echo "NETWORK REACHABLE - not an offline test";
+        return 1
+    };
+    git ls-remote https://github.com/libsdl-org/SDL > /dev/null 2>&1 && { 
+        echo "git reached network";
+        return 1
+    };
+    echo "-> no network";
+    touch engine/core/src/build_info.cpp engine/renderer/src/renderer.cpp;
+    cmake --preset dev-headless && cmake --build --preset dev-headless && ctest --preset dev-headless || return 1;
+    cmake --preset dev-vulkan && cmake --build --preset dev-vulkan && ctest --preset dev-vulkan -R 'static\.|vulkan\.rendering' --output-on-failure
+}; offline
+# 2026-10-16T21:39:55Z commit 384eaea603d398b5f650cacd63644bfa94b10bd2
+network check inside the namespace (must fail):
+curl: (7) Failed to connect to 127.0.0.1 port 35943 after 0 ms: Couldn't connect to server
+-> no network
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+  FETCHCONTENT_UPDATES_DISCONNECTED="ON"
+  SOV_ENABLE_GRAPHICS="OFF"
+  SOV_WARNINGS_AS_ERRORS="ON"
+
+-- Using the multi-header code from build/dev-headless/_deps/nlohmann_json-src/include/
+-- Dependency nlohmann_json: https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz (sha256 42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
+-- Dependency EnTT: v3.15.0 @ d4014c74dc3793aba95ae354d6e23a026c2796db (verified)
+-- Configuring done (0.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: build/dev-headless
+[1/5] Updating build information
+[2/5] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/build_info.cpp.o
+[3/5] Linking CXX static library lib/libsov_core.a
+[4/5] Linking CXX executable bin/sovereign-cli
+[5/5] Linking CXX executable bin/sovereign-tests
+Test project build/dev-headless
+      Start  6: headless.store
+      Start  9: headless.play
+      Start  7: headless.cli
+      Start 10: static.no_unreal_dependency
+ 1/13 Test #10: static.no_unreal_dependency .......................   Passed    0.45 sec
+      Start  8: headless.editor
+ 2/13 Test  #7: headless.cli ......................................   Passed    0.86 sec
+      Start 12: static.headless_sovereign-tests_has_no_graphics
+ 3/13 Test  #8: headless.editor ...................................   Passed    0.55 sec
+      Start 11: static.headless_sovereign-cli_has_no_graphics
+ 4/13 Test  #9: headless.play .....................................   Passed    1.02 sec
+      Start  1: headless.core
+ 5/13 Test  #6: headless.store ....................................   Passed    1.13 sec
+      Start  5: headless.commands
+ 6/13 Test #12: static.headless_sovereign-tests_has_no_graphics ...   Passed    0.28 sec
+      Start 13: static.license_notices_match_lock
+ 7/13 Test  #1: headless.core .....................................   Passed    0.13 sec
+      Start  3: headless.scene
+ 8/13 Test #13: static.license_notices_match_lock .................   Passed    0.02 sec
+      Start  4: headless.world
+ 9/13 Test  #4: headless.world ....................................   Passed    0.01 sec
+      Start  2: headless.math
+10/13 Test  #2: headless.math .....................................   Passed    0.01 sec
+11/13 Test  #3: headless.scene ....................................   Passed    0.03 sec
+12/13 Test  #5: headless.commands .................................   Passed    0.06 sec
+13/13 Test #11: static.headless_sovereign-cli_has_no_graphics .....   Passed    0.21 sec
+
+100% tests passed, 0 tests failed out of 13
+
+Label Time Summary:
+headless    =   4.76 sec*proc (13 tests)
+static      =   0.97 sec*proc (4 tests)
+
+Total Test time (real) =   1.22 sec
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_EXPORT_COMPILE_COMMANDS="ON"
+  FETCHCONTENT_UPDATES_DISCONNECTED="ON"
+  SOV_ENABLE_GRAPHICS="ON"
+  SOV_WARNINGS_AS_ERRORS="ON"
+
+-- Using the multi-header code from build/dev-vulkan/_deps/nlohmann_json-src/include/
+-- Dependency nlohmann_json: https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz (sha256 42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
+-- Dependency EnTT: v3.15.0 @ d4014c74dc3793aba95ae354d6e23a026c2796db (verified)
+-- Dependency Vulkan-Headers: vulkan-sdk-1.4.341.0 @ b5c8f996196ba4aa6d8f97e52b5d3b6e70f7e4e2 (verified)
+-- Dependency volk: vulkan-sdk-1.4.341.0 @ d979819fd03de3a7606d6e23d6ff4968942599da (verified)
+-- Dependency VulkanMemoryAllocator: v3.3.0 @ 1d8f600fd424278486eade7ed3e877c99f0846b1 (verified)
+-- dynamic libX11 -> libX11.so.6
+-- dynamic libXext -> libXext.so.6
+-- dynamic libXcursor -> libXcursor.so.1
+-- dynamic libXi -> libXi.so.6
+-- dynamic libXfixes -> libXfixes.so.3
+-- dynamic libXrandr -> libXrandr.so.2
+-- dynamic libXrender -> libXrender.so.1
+-- dynamic libXss -> libXss.so.1
+-- Checking for module 'libdrm'
+--   Package 'libdrm', required by 'virtual:world', not found
+-- Checking for module 'gbm'
+--   Package 'gbm', required by 'virtual:world', not found
+-- Checking for one of the modules 'dbus-1;dbus'
+-- Checking for one of the modules 'ibus-1.0;ibus'
+-- Checking for one of the modules 'liburing-ffi'
+-- Checking for module 'libusb-1.0>=1.0.16'
+--   Package 'libusb-1.0', required by 'virtual:world', not found
+-- Could NOT find LibUSB (missing: LibUSB_LIBRARY LibUSB_INCLUDE_PATH) (found version "LibUSB_VERSION-NOTFOUND")
+-- 
+-- SDL3 was configured with the following options:
+-- 
+-- Platform: Linux-6.18.44-fc-v139
+-- 64-bit:   TRUE
+-- Compiler: /usr/bin/cc
+-- Revision: SDL-3.2.30-release-3.2.30
+-- Vendor:   
+-- 
+-- Subsystems:
+--   Audio:    OFF
+--   Video:    ON
+--   GPU:      OFF
+--   Render:   OFF
+--   Camera:   OFF
+--   Joystick: ON
+--   Haptic:   OFF
+--   Hidapi:   ON
+--   Power:    OFF
+--   Sensor:   OFF
+--   Dialog:   OFF
+-- 
+-- Options:
+--   SDL_ALSA                    (Wanted: OFF): OFF
+--   SDL_ALSA_SHARED             (Wanted: OFF): OFF
+--   SDL_ALTIVEC                 (Wanted: OFF): OFF
+--   SDL_ARMNEON                 (Wanted: OFF): OFF
+--   SDL_ASAN                    (Wanted: OFF): OFF
+--   SDL_ASSEMBLY                (Wanted: ON): ON
+--   SDL_ASSERTIONS              (Wanted: auto): auto
+--   SDL_AVX                     (Wanted: ON): ON
+--   SDL_AVX2                    (Wanted: ON): ON
+--   SDL_AVX512F                 (Wanted: ON): ON
+--   SDL_BACKGROUNDING_SIGNAL    (Wanted: OFF): OFF
+--   SDL_CCACHE                  (Wanted: OFF): OFF
+--   SDL_CLANG_TIDY              (Wanted: OFF): OFF
+--   SDL_CLOCK_GETTIME           (Wanted: ON): ON
+--   SDL_COCOA                   (Wanted: OFF): OFF
+--   SDL_DBUS                    (Wanted: ON): OFF
+--   SDL_DEPS_SHARED             (Wanted: ON): OFF
+--   SDL_DIRECTX                 (Wanted: OFF): OFF
+--   SDL_DISKAUDIO               (Wanted: OFF): OFF
+--   SDL_DUMMYAUDIO              (Wanted: OFF): OFF
+--   SDL_DUMMYCAMERA             (Wanted: OFF): OFF
+--   SDL_DUMMYVIDEO              (Wanted: ON): ON
+--   SDL_EXAMPLES                (Wanted: OFF): OFF
+--   SDL_EXAMPLES_LINK_SHARED    (Wanted: OFF): OFF
+--   SDL_FOREGROUNDING_SIGNAL    (Wanted: OFF): OFF
+--   SDL_GCC_ATOMICS             (Wanted: ON): ON
+--   SDL_GPU_DXVK                (Wanted: OFF): OFF
+--   SDL_HIDAPI                  (Wanted: ON): ON
+--   SDL_HIDAPI_JOYSTICK         (Wanted: ON): ON
+--   SDL_HIDAPI_LIBUSB           (Wanted: ON): OFF
+--   SDL_HIDAPI_LIBUSB_SHARED    (Wanted: ON): OFF
+--   SDL_IBUS                    (Wanted: ON): OFF
+--   SDL_INSTALL                 (Wanted: OFF): OFF
+--   SDL_INSTALL_TESTS           (Wanted: OFF): OFF
+--   SDL_JACK                    (Wanted: OFF): OFF
+--   SDL_JACK_SHARED             (Wanted: OFF): OFF
+--   SDL_KMSDRM                  (Wanted: ON): OFF
+--   SDL_KMSDRM_SHARED           (Wanted: ON): OFF
+--   SDL_LASX                    (Wanted: OFF): OFF
+--   SDL_LIBC                    (Wanted: ON): ON
+--   SDL_LIBICONV                (Wanted: OFF): OFF
+--   SDL_LIBUDEV                 (Wanted: ON): OFF
+--   SDL_LIBURING                (Wanted: ON): OFF
+--   SDL_LSX                     (Wanted: OFF): OFF
+--   SDL_METAL                   (Wanted: OFF): OFF
+--   SDL_MMX                     (Wanted: ON): ON
+--   SDL_OFFSCREEN               (Wanted: ON): ON
+--   SDL_OPENGL                  (Wanted: OFF): OFF
+--   SDL_OPENGLES                (Wanted: OFF): OFF
+--   SDL_OPENVR                  (Wanted: OFF): OFF
+--   SDL_OSS                     (Wanted: OFF): OFF
+--   SDL_PIPEWIRE                (Wanted: ON): OFF
+--   SDL_PIPEWIRE_SHARED         (Wanted: ON): OFF
+--   SDL_PTHREADS                (Wanted: ON): ON
+--   SDL_PTHREADS_SEM            (Wanted: ON): ON
+--   SDL_PULSEAUDIO              (Wanted: OFF): OFF
+--   SDL_PULSEAUDIO_SHARED       (Wanted: OFF): OFF
+--   SDL_RENDER_D3D              (Wanted: OFF): OFF
+--   SDL_RENDER_D3D11            (Wanted: OFF): OFF
+--   SDL_RENDER_D3D12            (Wanted: OFF): OFF
+--   SDL_RENDER_GPU              (Wanted: OFF): OFF
+--   SDL_RENDER_METAL            (Wanted: OFF): OFF
+--   SDL_RENDER_VULKAN           (Wanted: OFF): OFF
+--   SDL_ROCKCHIP                (Wanted: OFF): OFF
+--   SDL_RPATH                   (Wanted: ON): OFF
+--   SDL_RPI                     (Wanted: OFF): OFF
+--   SDL_SNDIO                   (Wanted: OFF): OFF
+--   SDL_SNDIO_SHARED            (Wanted: OFF): OFF
+--   SDL_SSE                     (Wanted: ON): ON
+--   SDL_SSE2                    (Wanted: ON): ON
+--   SDL_SSE3                    (Wanted: ON): ON
+--   SDL_SSE4_1                  (Wanted: ON): ON
+--   SDL_SSE4_2                  (Wanted: ON): ON
+--   SDL_SYSTEM_ICONV            (Wanted: ON): ON
+--   SDL_TESTS                   (Wanted: OFF): OFF
+--   SDL_TESTS_LINK_SHARED       (Wanted: OFF): OFF
+--   SDL_UNINSTALL               (Wanted: OFF): OFF
+--   SDL_VIRTUAL_JOYSTICK        (Wanted: ON): ON
+--   SDL_VIVANTE                 (Wanted: OFF): OFF
+--   SDL_VULKAN                  (Wanted: ON): ON
+--   SDL_WASAPI                  (Wanted: OFF): OFF
+--   SDL_WAYLAND                 (Wanted: OFF): OFF
+--   SDL_WAYLAND_LIBDECOR        (Wanted: OFF): OFF
+--   SDL_WAYLAND_LIBDECOR_SHARED (Wanted: OFF): OFF
+--   SDL_WAYLAND_SHARED          (Wanted: OFF): OFF
+--   SDL_X11                     (Wanted: ON): ON
+--   SDL_X11_SHARED              (Wanted: ON): ON
+--   SDL_X11_XCURSOR             (Wanted: ON): ON
+--   SDL_X11_XDBE                (Wanted: ON): ON
+--   SDL_X11_XFIXES              (Wanted: ON): ON
+--   SDL_X11_XINPUT              (Wanted: ON): ON
+--   SDL_X11_XRANDR              (Wanted: ON): ON
+--   SDL_X11_XSCRNSAVER          (Wanted: ON): ON
+--   SDL_X11_XSHAPE              (Wanted: ON): ON
+--   SDL_X11_XSYNC               (Wanted: ON): ON
+--   SDL_XINPUT                  (Wanted: OFF): OFF
+-- 
+--  Build Shared Library: OFF
+--  Build Static Library: ON
+--  Build Static Library with Position Independent Code: 
+-- 
+-- If something was not detected, although the libraries
+-- were installed, then make sure you have set the
+-- CMAKE_C_FLAGS and CMAKE_PREFIX_PATH CMake variables correctly.
+-- 
+-- Dependency SDL3: release-3.2.30 @ f5e5f6588921eed3d7d048ce43d9eb1ff0da0ffc (verified)
+-- Dependency imgui: v1.92.9b-docking @ b48d1afbe8ee8b238e2961dc363a949dd7304e23 (verified)
+-- Shader compiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA) -> build/tools/dxc-b106a961d092/bin/dxc
+-- Configuring done (0.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: build/dev-vulkan
+[1/10] Updating build information
+[2/10] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/build_info.cpp.o
+[3/10] Linking CXX static library lib/libsov_core.a
+[4/10] Linking CXX executable bin/sovereign-cli
+[5/10] Linking CXX executable bin/sovereign-tests
+[6/10] Building CXX object engine/renderer/CMakeFiles/sov_renderer.dir/src/renderer.cpp.o
+[7/10] Linking CXX static library lib/libsov_renderer.a
+[8/10] Linking CXX executable bin/sovereign-runtime
+[9/10] Linking CXX executable bin/sovereign-render-tests
+[10/10] Linking CXX executable bin/sovereign-editor
+Test project build/dev-vulkan
+    Start 10: vulkan.rendering
+1/4 Test #10: vulkan.rendering ....................   Passed    1.17 sec
+    Start 11: static.no_unreal_dependency
+2/4 Test #11: static.no_unreal_dependency .........   Passed    0.39 sec
+    Start 12: static.runtime_has_no_editor_code
+3/4 Test #12: static.runtime_has_no_editor_code ...   Passed    0.26 sec
+    Start 19: static.license_notices_match_lock
+4/4 Test #19: static.license_notices_match_lock ...   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Label Time Summary:
+headless    =   0.41 sec*proc (2 tests)
+static      =   0.68 sec*proc (3 tests)
+vulkan      =   1.44 sec*proc (2 tests)
+
+Total Test time (real) =   1.86 sec
+# exit 0 at 2026-10-16T21:40:09Z

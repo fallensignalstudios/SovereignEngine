@@ -1,0 +1,28 @@
+{
+  "protocol": "sovereign.command_result",
+  "protocol_version": 1,
+  "request_id": "0a6d3a05-812e-4302-a315-ef456e820524",
+  "status": "rejected",
+  "delivery": "original",
+  "kind": "edit",
+  "actor": "agent:place-banner-example",
+  "scene_id": "8d4684d6-93cd-5d04-a868-b4d839bafda7",
+  "revision_before": 2,
+  "revision_after": 2,
+  "commit_id": null,
+  "target_commit": null,
+  "request_hash": "f9fd57262037e939781679e179c649816a6a1cde0af205e727a25f9cfe16b7b5",
+  "operations": [],
+  "errors": [
+    {
+      "code": "idempotency_conflict",
+      "message": "idempotency key \"place-banner-commit-0001\" for actor \"agent:place-banner-example\" was already used by commit abb4ada7-22b7-40cc-af9c-24ada61e7a4a with different request content (recorded hash 0aea9cc63e2f84929548717420871acf56c7af24020668c864f7ab27be7ffacf, this request f9fd57262037e939781679e179c649816a6a1cde0af205e727a25f9cfe16b7b5). Use a new key for a new action.",
+      "path": "/idempotency_key",
+      "op_index": null,
+      "entity_id": null
+    }
+  ],
+  "warnings": [],
+  "diff": null,
+  "conflict": null
+}

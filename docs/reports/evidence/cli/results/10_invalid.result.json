@@ -1,0 +1,41 @@
+{
+  "protocol": "sovereign.command_result",
+  "protocol_version": 1,
+  "request_id": "0a400d10-fb2b-478a-aee0-790c96bb860d",
+  "status": "rejected",
+  "delivery": "original",
+  "kind": "edit",
+  "actor": "agent:place-banner-example",
+  "scene_id": "8d4684d6-93cd-5d04-a868-b4d839bafda7",
+  "revision_before": 2,
+  "revision_after": 2,
+  "commit_id": null,
+  "target_commit": null,
+  "request_hash": "ae66d24745656a9add76896c0d281005c7ba674969997763fef0dc5bfe13764f",
+  "operations": [
+    {
+      "index": 0,
+      "op": "entity.rename",
+      "entity_id": "973060cd-d005-51f6-9b5a-265a9ac9031e",
+      "status": "valid"
+    },
+    {
+      "index": 1,
+      "op": "entity.delete",
+      "entity_id": "00000000-0000-4000-8000-0000000000ff",
+      "status": "failed"
+    }
+  ],
+  "errors": [
+    {
+      "code": "unknown_entity",
+      "message": "entity 00000000-0000-4000-8000-0000000000ff does not exist",
+      "path": "/operations/1",
+      "op_index": 1,
+      "entity_id": "00000000-0000-4000-8000-0000000000ff"
+    }
+  ],
+  "warnings": [],
+  "diff": null,
+  "conflict": null
+}

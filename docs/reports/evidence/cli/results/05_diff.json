@@ -1,0 +1,144 @@
+{
+  "revision_before": 1,
+  "revision_after": 2,
+  "entities_created": [
+    {
+      "entity_id": "6b45d759-a0c1-5147-9db2-6e7bab9f474f",
+      "name": "Banner Rod (West Wall, Dais)",
+      "changes": [
+        {
+          "path": "name",
+          "before": null,
+          "after": "Banner Rod (West Wall, Dais)"
+        },
+        {
+          "path": "components.transform.parent",
+          "before": null,
+          "after": null
+        },
+        {
+          "path": "components.transform.position",
+          "before": null,
+          "after": [-8.92, 8.75, -11.0]
+        },
+        {
+          "path": "components.transform.rotation",
+          "before": null,
+          "after": [0.0, 0.0, 0.0, 1.0]
+        },
+        {
+          "path": "components.transform.scale",
+          "before": null,
+          "after": [0.12, 0.12, 2.7]
+        },
+        {
+          "path": "components.primitive_mesh.shape",
+          "before": null,
+          "after": "box"
+        },
+        {
+          "path": "components.material.base_color",
+          "before": null,
+          "after": [0.48, 0.29, 0.12]
+        },
+        {
+          "path": "components.material.roughness",
+          "before": null,
+          "after": 0.32
+        },
+        {
+          "path": "components.material.metallic",
+          "before": null,
+          "after": 1.0
+        },
+        {
+          "path": "components.material.emissive",
+          "before": null,
+          "after": [0.0, 0.0, 0.0]
+        },
+        {
+          "path": "components.material.emissive_strength",
+          "before": null,
+          "after": 0.0
+        }
+      ]
+    },
+    {
+      "entity_id": "973060cd-d005-51f6-9b5a-265a9ac9031e",
+      "name": "Banner (West Wall, Dais)",
+      "changes": [
+        {
+          "path": "name",
+          "before": null,
+          "after": "Banner (West Wall, Dais)"
+        },
+        {
+          "path": "components.transform.parent",
+          "before": null,
+          "after": null
+        },
+        {
+          "path": "components.transform.position",
+          "before": null,
+          "after": [-8.96, 5.4, -11.0]
+        },
+        {
+          "path": "components.transform.rotation",
+          "before": null,
+          "after": [0.0, 0.0, 0.0, 1.0]
+        },
+        {
+          "path": "components.transform.scale",
+          "before": null,
+          "after": [0.06, 6.4, 2.2]
+        },
+        {
+          "path": "components.primitive_mesh.shape",
+          "before": null,
+          "after": "box"
+        },
+        {
+          "path": "components.material.base_color",
+          "before": null,
+          "after": [0.3, 0.022, 0.026]
+        },
+        {
+          "path": "components.material.roughness",
+          "before": null,
+          "after": 0.55
+        },
+        {
+          "path": "components.material.metallic",
+          "before": null,
+          "after": 0.0
+        },
+        {
+          "path": "components.material.emissive",
+          "before": null,
+          "after": [0.0, 0.0, 0.0]
+        },
+        {
+          "path": "components.material.emissive_strength",
+          "before": null,
+          "after": 0.0
+        }
+      ]
+    }
+  ],
+  "entities_deleted": [],
+  "entities_modified": [
+    {
+      "entity_id": "4b64139c-ec7c-5014-944d-69cb98f1a8d9",
+      "name": "Monolith Seam",
+      "changes": [
+        {
+          "path": "components.material.emissive_strength",
+          "before": 2.2,
+          "after": 3.2
+        }
+      ]
+    }
+  ],
+  "scene_fields": [],
+  "summary": "2 created, 0 deleted, 1 modified, 0 scene field(s) changed"
+}

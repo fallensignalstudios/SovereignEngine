@@ -1,0 +1,52 @@
+{
+  "revision": 5,
+  "next_undo": "c4598983-ca87-495d-b466-4b9b83655c92",
+  "next_redo": null,
+  "journal": {
+    "present": true,
+    "consistent": true,
+    "notes": []
+  },
+  "transactions": [
+    {
+      "commit_id": "72c4fd7e-1d31-4f16-89ee-f024f7703f0e",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 1,
+      "new_revision": 2,
+      "label": "Set transform",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "37585794-5c55-4cb2-bc04-a33a5a4359e9",
+      "kind": "undo",
+      "actor": "editor:local",
+      "base_revision": 2,
+      "new_revision": 3,
+      "label": "Undo: Set transform",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "a0b7f74a-e175-456e-99f0-5188add23d6b",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 3,
+      "new_revision": 4,
+      "label": "Set Base color",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "c4598983-ca87-495d-b466-4b9b83655c92",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 4,
+      "new_revision": 5,
+      "label": "Set Roughness",
+      "idempotency_key": "",
+      "operations": 1
+    }
+  ]
+}

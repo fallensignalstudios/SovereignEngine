@@ -1,0 +1,21 @@
+{
+  "protocol": "sovereign.command_batch",
+  "protocol_version": 1,
+  "request_id": "0a400d10-fb2b-478a-aee0-790c96bb860d",
+  "actor": "agent:place-banner-example",
+  "scene_id": "8d4684d6-93cd-5d04-a868-b4d839bafda7",
+  "base_revision": 2,
+  "idempotency_key": "invalid-batch-0001",
+  "dry_run": false,
+  "operations": [
+    {
+      "op": "entity.rename",
+      "entity_id": "973060cd-d005-51f6-9b5a-265a9ac9031e",
+      "name": "Renamed Banner"
+    },
+    {
+      "op": "entity.delete",
+      "entity_id": "00000000-0000-4000-8000-0000000000ff"
+    }
+  ]
+}

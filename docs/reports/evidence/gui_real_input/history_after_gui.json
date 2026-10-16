@@ -1,0 +1,32 @@
+{
+  "revision": 3,
+  "next_undo": null,
+  "next_redo": "cc4d3caa-392d-4842-b4dc-d18966936c0f",
+  "journal": {
+    "present": true,
+    "consistent": true,
+    "notes": []
+  },
+  "transactions": [
+    {
+      "commit_id": "cc4d3caa-392d-4842-b4dc-d18966936c0f",
+      "kind": "edit",
+      "actor": "editor:local",
+      "base_revision": 1,
+      "new_revision": 2,
+      "label": "Delete",
+      "idempotency_key": "",
+      "operations": 1
+    },
+    {
+      "commit_id": "ce5bf8bb-771c-4452-93d5-70d569559d08",
+      "kind": "undo",
+      "actor": "editor:local",
+      "base_revision": 2,
+      "new_revision": 3,
+      "label": "Undo: Delete",
+      "idempotency_key": "",
+      "operations": 1
+    }
+  ]
+}

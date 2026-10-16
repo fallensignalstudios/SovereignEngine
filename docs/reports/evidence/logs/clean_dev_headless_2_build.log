@@ -1,0 +1,47 @@
+$ cmake --build --preset dev-headless
+# started 2026-10-16T21:36:31Z at commit 384eaea603d398b5f650cacd63644bfa94b10bd2
+[1/44] Updating build information
+[2/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/result.cpp.o
+[3/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/math.cpp.o
+[4/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/sha256.cpp.o
+[5/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/uuid.cpp.o
+[6/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/log.cpp.o
+[7/44] Building CXX object tests/CMakeFiles/sov_test_harness.dir/support/sov_test.cpp.o
+[8/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/png.cpp.o
+[9/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/fs.cpp.o
+[10/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/build_info.cpp.o
+[11/44] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/primitive_geometry.cpp.o
+[12/44] Building CXX object engine/core/CMakeFiles/sov_core.dir/src/json.cpp.o
+[13/44] Linking CXX static library lib/libsov_core.a
+[14/44] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/scene_diff.cpp.o
+[15/44] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/reflection.cpp.o
+[16/44] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/command_batch.cpp.o
+[17/44] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/scene_document.cpp.o
+[18/44] Building CXX object engine/runtime/CMakeFiles/sov_runtime.dir/src/simulation.cpp.o
+[19/44] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/operation.cpp.o
+[20/44] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/transaction.cpp.o
+[21/44] Building CXX object engine/world/CMakeFiles/sov_world.dir/src/world.cpp.o
+[22/44] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/scene_store.cpp.o
+[23/44] Linking CXX static library lib/libsov_test_harness.a
+[24/44] Linking CXX static library lib/libsov_world.a
+[25/44] Linking CXX static library lib/libsov_runtime.a
+[26/44] Building CXX object games/sandbox/CMakeFiles/sov_game_sandbox.dir/src/sandbox.cpp.o
+[27/44] Linking CXX static library lib/libsov_game_sandbox.a
+[28/44] Building CXX object engine/commands/CMakeFiles/sov_commands.dir/src/scene_session.cpp.o
+[29/44] Linking CXX static library lib/libsov_commands.a
+[30/44] Building CXX object editor/CMakeFiles/sov_editor_authoring.dir/authoring/src/editor_document.cpp.o
+[31/44] Linking CXX static library lib/libsov_editor_authoring.a
+[32/44] Building CXX object tools/cli/CMakeFiles/sovereign-cli.dir/main.cpp.o
+[33/44] Linking CXX executable bin/sovereign-cli
+[34/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/support/test_main.cpp.o
+[35/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_math.cpp.o
+[36/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_world.cpp.o
+[37/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_core.cpp.o
+[38/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_scene.cpp.o
+[39/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_store.cpp.o
+[40/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/unit/test_commands.cpp.o
+[41/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_play.cpp.o
+[42/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_cli.cpp.o
+[43/44] Building CXX object tests/CMakeFiles/sovereign-tests.dir/integration/test_editor.cpp.o
+[44/44] Linking CXX executable bin/sovereign-tests
+# finished 2026-10-16T21:37:05Z exit 0 after 34s

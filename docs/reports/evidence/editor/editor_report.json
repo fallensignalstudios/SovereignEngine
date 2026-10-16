@@ -1,0 +1,329 @@
+{
+  "scene": "first_light.scene.json",
+  "revision": 5,
+  "saved_revision": 5,
+  "dirty": false,
+  "file_sha256": "f67c88ce892f15e2e099ea4bbc3260e6e5326de13064d83bd2c789c4d13ce299",
+  "device": {
+    "name": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "type": "cpu",
+    "driver": "llvmpipe Mesa 25.2.8-0ubuntu0.24.04.4 (LLVM 20.1.2)",
+    "evidence_class": "software-rendered (CPU Vulkan implementation)",
+    "swapchain": "1600x900 format 50 images 4 present mode 2"
+  },
+  "validation": {
+    "layer": true,
+    "synchronization": true,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  "resources": {
+    "buffers": 10,
+    "images": 7,
+    "image_views": 7,
+    "vma_allocations": 17,
+    "vma_bytes": 61202344
+  },
+  "frames": 1058,
+  "automation_failures": 0,
+  "transcript": [
+    {
+      "step": {
+        "do": "wait_frames",
+        "n": 10
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:38.704Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_01_opened.png"
+      },
+      "ok": true,
+      "detail": "editor_01_opened.png",
+      "at": "2026-10-16T21:41:39.528Z"
+    },
+    {
+      "step": {
+        "do": "pick",
+        "name": "Altar"
+      },
+      "ok": true,
+      "detail": "pixel (477, 267) -> pick index 32 -> f066b3b7-ffb4-5ca0-a141-a37cc011e125",
+      "at": "2026-10-16T21:41:39.694Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "selected": "Altar",
+        "revision": 1,
+        "dirty": false
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:39.808Z"
+    },
+    {
+      "step": {
+        "do": "select",
+        "name": "Column W3"
+      },
+      "ok": true,
+      "detail": "797ba59f-6819-5db3-8f4d-8823a5891825",
+      "at": "2026-10-16T21:41:39.920Z"
+    },
+    {
+      "step": {
+        "do": "move",
+        "name": "Column W3",
+        "delta": [1.5, 0.0, 0.0]
+      },
+      "ok": true,
+      "detail": "revision 1 -> 2",
+      "at": "2026-10-16T21:41:40.007Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 2,
+        "dirty": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:40.090Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_02_column_moved.png"
+      },
+      "ok": true,
+      "detail": "editor_02_column_moved.png",
+      "at": "2026-10-16T21:41:40.980Z"
+    },
+    {
+      "step": {
+        "do": "undo"
+      },
+      "ok": true,
+      "detail": "revision 2 -> 3",
+      "at": "2026-10-16T21:41:41.080Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 3
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:41.163Z"
+    },
+    {
+      "step": {
+        "do": "capture_viewport",
+        "path": "editor_03_move_undone_viewport.png"
+      },
+      "ok": true,
+      "detail": "editor_03_move_undone_viewport.png",
+      "at": "2026-10-16T21:41:41.582Z"
+    },
+    {
+      "step": {
+        "do": "set_material",
+        "name": "Altar",
+        "field": "base_color",
+        "value": [0.72, 0.4, 0.12]
+      },
+      "ok": true,
+      "detail": "revision 3 -> 4",
+      "at": "2026-10-16T21:41:41.685Z"
+    },
+    {
+      "step": {
+        "do": "set_material",
+        "name": "Altar",
+        "field": "roughness",
+        "value": 0.18
+      },
+      "ok": true,
+      "detail": "revision 4 -> 5",
+      "at": "2026-10-16T21:41:41.781Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 5
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:41.855Z"
+    },
+    {
+      "step": {
+        "do": "select",
+        "name": "Altar"
+      },
+      "ok": true,
+      "detail": "f066b3b7-ffb4-5ca0-a141-a37cc011e125",
+      "at": "2026-10-16T21:41:41.949Z"
+    },
+    {
+      "step": {
+        "do": "save"
+      },
+      "ok": true,
+      "detail": "saved at revision 5",
+      "at": "2026-10-16T21:41:42.085Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "dirty": false,
+        "document_hash_equals_saved": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:42.215Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_04_material_saved.png"
+      },
+      "ok": true,
+      "detail": "editor_04_material_saved.png",
+      "at": "2026-10-16T21:41:43.077Z"
+    },
+    {
+      "step": {
+        "do": "play"
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:43.178Z"
+    },
+    {
+      "step": {
+        "do": "play_ticks",
+        "n": 120
+      },
+      "ok": true,
+      "detail": "120 ticks",
+      "at": "2026-10-16T21:41:45.178Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_05_playing.png"
+      },
+      "ok": true,
+      "detail": "editor_05_playing.png",
+      "at": "2026-10-16T21:41:45.955Z"
+    },
+    {
+      "step": {
+        "do": "stop"
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:46.055Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "playing": false,
+        "revision": 5,
+        "dirty": false,
+        "document_hash_equals_saved": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:46.185Z"
+    },
+    {
+      "step": {
+        "do": "reopen"
+      },
+      "ok": true,
+      "detail": "revision 5",
+      "at": "2026-10-16T21:41:46.326Z"
+    },
+    {
+      "step": {
+        "do": "expect",
+        "revision": 5,
+        "dirty": false,
+        "document_hash_equals_saved": true
+      },
+      "ok": true,
+      "detail": "",
+      "at": "2026-10-16T21:41:46.432Z"
+    },
+    {
+      "step": {
+        "do": "cycles",
+        "n": 50
+      },
+      "ok": true,
+      "detail": "50 cycles; buffers 10->10 images 7->7 allocations 17->17 validation errors 0->0 live worlds 1",
+      "at": "2026-10-16T21:42:10.329Z"
+    },
+    {
+      "step": {
+        "do": "resize_window",
+        "w": 1280,
+        "h": 720
+      },
+      "ok": true,
+      "detail": "window now 1280x720",
+      "at": "2026-10-16T21:42:10.744Z"
+    },
+    {
+      "step": {
+        "do": "minimize"
+      },
+      "ok": true,
+      "detail": "frame rendered after step: false",
+      "at": "2026-10-16T21:42:10.919Z"
+    },
+    {
+      "step": {
+        "do": "restore"
+      },
+      "ok": true,
+      "detail": "frame rendered after step: true",
+      "at": "2026-10-16T21:42:11.293Z"
+    },
+    {
+      "step": {
+        "do": "resize_window",
+        "w": 1600,
+        "h": 900
+      },
+      "ok": true,
+      "detail": "window now 1600x900",
+      "at": "2026-10-16T21:42:11.696Z"
+    },
+    {
+      "step": {
+        "do": "select",
+        "name": "Column E2 Shaft"
+      },
+      "ok": true,
+      "detail": "434ce651-c278-56a6-8edc-62fa54423aba",
+      "at": "2026-10-16T21:42:11.761Z"
+    },
+    {
+      "step": {
+        "do": "capture_window",
+        "path": "editor_06_after_lifecycle.png"
+      },
+      "ok": true,
+      "detail": "editor_06_after_lifecycle.png",
+      "at": "2026-10-16T21:42:12.541Z"
+    }
+  ]
+}
