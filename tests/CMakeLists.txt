@@ -36,7 +36,9 @@ if(SOV_ENABLE_GRAPHICS)
   sov_configure_target(sovereign-render-tests)
   target_link_libraries(sovereign-render-tests PRIVATE sov_test_harness sov::renderer sov::world sov::core)
   add_test(NAME vulkan.rendering COMMAND sovereign-render-tests --suite rendering)
-  set_tests_properties(vulkan.rendering PROPERTIES LABELS "vulkan")
+  # Every Vulkan test requires the Khronos validation layer: a host without it fails the test with
+  # a diagnostic instead of silently running unvalidated (G1-R05, G0-07).
+  set_tests_properties(vulkan.rendering PROPERTIES LABELS "vulkan" ENVIRONMENT "SOV_REQUIRE_VALIDATION=1")
 endif()
 
 # --- static checks on build products and sources (no GPU needed) ----------------------------
@@ -83,14 +85,42 @@ if(SOV_ENABLE_GRAPHICS)
     COMMAND "${CMAKE_COMMAND}" -E rm -rf ${artifacts}/editor)
   add_test(NAME vulkan.editor_real_x11_input
     COMMAND "${launcher}" ${PROJECT_SOURCE_DIR}/scripts/gui_real_input_check.sh ${CMAKE_BINARY_DIR}/bin ${artifacts}/gui_real_input)
+  # G1-R14 / G0-07: normal close, failed and partial initialization (no display, no driver, missing
+  # layer, absent device, missing shaders after device creation) exit with a diagnostic, no hang.
+  add_test(NAME vulkan.failure_paths_unwind_cleanly
+    COMMAND "${launcher}" ${PROJECT_SOURCE_DIR}/scripts/failure_paths_check.sh ${CMAKE_BINARY_DIR}/bin ${artifacts}/failure_paths)
   set_tests_properties(vulkan.editor_clean_stage PROPERTIES FIXTURES_SETUP editor_clean LABELS "vulkan;display")
   set_tests_properties(vulkan.editor_stage_scene PROPERTIES FIXTURES_SETUP editor_scene FIXTURES_REQUIRED editor_clean LABELS "vulkan;display")
   set_tests_properties(vulkan.editor_first_success_automation PROPERTIES FIXTURES_REQUIRED editor_scene)
-  set_tests_properties(vulkan.editor_real_x11_input PROPERTIES ENVIRONMENT "SOV_CLI=$<TARGET_FILE:sovereign-cli>")
   foreach(t vulkan.runtime_first_light vulkan.runtime_window_lifecycle_stress vulkan.editor_first_success_automation
-            vulkan.editor_real_x11_input)
-    set_tests_properties(${t} PROPERTIES LABELS "vulkan;display" SKIP_RETURN_CODE 77 TIMEOUT 900)
+            vulkan.editor_real_x11_input vulkan.failure_paths_unwind_cleanly)
+    set_tests_properties(${t} PROPERTIES LABELS "vulkan;display" SKIP_RETURN_CODE 77 TIMEOUT 900
+      ENVIRONMENT "SOV_REQUIRE_VALIDATION=1")
   endforeach()
+  set_tests_properties(vulkan.editor_real_x11_input PROPERTIES
+    ENVIRONMENT "SOV_REQUIRE_VALIDATION=1;SOV_CLI=$<TARGET_FILE:sovereign-cli>")
+endif()
+
+# G0-06: executables link only the C/C++ runtime, embed no search paths, name no Unreal types.
+if(NOT WIN32)
+  set(sov_linked_executables sovereign-cli sovereign-tests)
+  if(SOV_ENABLE_GRAPHICS)
+    list(APPEND sov_linked_executables sovereign-runtime sovereign-editor sovereign-render-tests)
+  endif()
+  foreach(bin IN LISTS sov_linked_executables)
+    add_test(NAME static.${bin}_link_dependencies
+      COMMAND "${CMAKE_COMMAND}" -DBINARY=$<TARGET_FILE:${bin}> "-DSANITIZED=$<BOOL:${SOV_SANITIZE}>"
+        -P "${PROJECT_SOURCE_DIR}/cmake/CheckLinkedLibraries.cmake")
+    set_tests_properties(static.${bin}_link_dependencies PROPERTIES LABELS "headless;static")
+  endforeach()
+  if(SOV_ENABLE_GRAPHICS)
+    # ...and at run time every loaded object (dlopen'ed Vulkan loader, ICD, layers, X11) is a system library.
+    add_test(NAME vulkan.loaded_libraries_are_system_only
+      COMMAND "${PROJECT_SOURCE_DIR}/scripts/ctest_display_launcher.sh" ${PROJECT_SOURCE_DIR}/scripts/loaded_libraries_check.sh
+        ${CMAKE_BINARY_DIR}/bin ${CMAKE_BINARY_DIR}/test-artifacts/loaded_libraries)
+    set_tests_properties(vulkan.loaded_libraries_are_system_only PROPERTIES LABELS "vulkan;display;static" SKIP_RETURN_CODE 77
+      TIMEOUT 300 ENVIRONMENT "SOV_REQUIRE_VALIDATION=1")
+  endif()
 endif()
 
 add_test(NAME static.license_notices_match_lock

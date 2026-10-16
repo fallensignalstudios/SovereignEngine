@@ -1,6 +1,7 @@
 #include "sov/rhi/vulkan/device.h"
 
 #include <algorithm>
+#include <cctype>
 #include <cstring>
 #include <format>
 
@@ -21,6 +22,12 @@ std::string TypeString(VkPhysicalDeviceType t) {
     case VK_PHYSICAL_DEVICE_TYPE_CPU: return "cpu";
     default: return "other";
   }
+}
+
+bool ContainsIgnoringCase(std::string_view text, std::string_view needle) {
+  const auto lower = [](char c) { return static_cast<char>(std::tolower(static_cast<unsigned char>(c))); };
+  return std::search(text.begin(), text.end(), needle.begin(), needle.end(),
+                     [&](char a, char b) { return lower(a) == lower(b); }) != text.end();
 }
 
 int TypeScore(VkPhysicalDeviceType t) {
@@ -148,6 +155,10 @@ Result<void> Device::CreateInstance(const DeviceConfig& config) {
         extensions.push_back(VK_EXT_VALIDATION_FEATURES_EXTENSION_NAME);
         validation_features = true;
       }
+    } else if (config.require_validation) {
+      return MakeError(ErrorCode::UnsupportedComponent,
+                       "VK_LAYER_KHRONOS_validation is required (SOV_REQUIRE_VALIDATION=1) but is not installed; install the "
+                       "Vulkan validation layers or unset SOV_REQUIRE_VALIDATION");
     } else {
       LogWarn("vulkan", "validation requested but VK_LAYER_KHRONOS_validation is not installed; continuing WITHOUT validation");
     }
@@ -227,6 +238,8 @@ Result<void> Device::SelectPhysicalDevice(const DeviceConfig& config) {
     else if (!f12.timelineSemaphore) reject = "timelineSemaphore not supported";
     else if (config.require_physical_gpu && props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU) {
       reject = "CPU/software implementation refused (physical GPU required)";
+    } else if (!config.device_name_filter.empty() && !ContainsIgnoringCase(props.deviceName, config.device_name_filter)) {
+      reject = std::format("does not match the requested device \"{}\"", config.device_name_filter);
     }
 
     std::uint32_t family = UINT32_MAX;

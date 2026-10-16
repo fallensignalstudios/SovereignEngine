@@ -178,9 +178,18 @@ function(sov_fetch_graphics_dependencies)
       "into build/tools), or set SOV_DXC_EXECUTABLE, or after reviewing docs/decisions/ADR-015 configure with "
       "-DSOV_DXC_ALLOW_PREBUILT=ON.")
   endif()
+  # Fail at configure time, with the path, rather than at the first shader build step.
+  if(NOT EXISTS "${dxc_exe}" OR IS_DIRECTORY "${dxc_exe}")
+    message(FATAL_ERROR "Shader compiler ${SOV_SHADER_COMPILER_DESC}: '${dxc_exe}' does not exist or is not a file.")
+  endif()
+  execute_process(COMMAND "${dxc_exe}" --version RESULT_VARIABLE dxc_rc OUTPUT_VARIABLE dxc_version
+                  ERROR_VARIABLE dxc_err OUTPUT_STRIP_TRAILING_WHITESPACE TIMEOUT 60)
+  if(NOT dxc_rc EQUAL 0)
+    message(FATAL_ERROR "Shader compiler '${dxc_exe}' cannot run (--version: ${dxc_rc} ${dxc_err})")
+  endif()
   set(SOV_DXC "${dxc_exe}" CACHE INTERNAL "Resolved DXC executable (ADR-015 selection)" FORCE)
   set(SOV_SHADER_COMPILER_DESC "${SOV_SHADER_COMPILER_DESC}" PARENT_SCOPE)
-  message(STATUS "Shader compiler: ${SOV_SHADER_COMPILER_DESC} -> ${SOV_DXC}")
+  message(STATUS "Shader compiler: ${SOV_SHADER_COMPILER_DESC} -> ${SOV_DXC} (${dxc_version})")
 
   # volk: compiled once, loads the system Vulkan loader at runtime; no link-time libvulkan dependency.
   add_library(sov_third_party_volk STATIC "${volk_SOURCE_DIR}/volk.c")

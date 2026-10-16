@@ -234,6 +234,22 @@ Result<std::unique_ptr<FileLock>> FileLock::TryAcquire(const std::filesystem::pa
     return MakeError(ErrorCode::LockUnavailable,
                      std::format("scene writer lock {} is held by {}", lock_path.string(), ReadHolder(lock_path)));
   }
+  {
+    // A clean release clears the holder text, so leftover text names an owner that died holding it.
+    char buf[512];
+    DWORD got = 0;
+    SetFilePointer(h, 0, nullptr, FILE_BEGIN);
+    if (ReadFile(h, buf, sizeof(buf) - 1, &got, nullptr) && got > 0) {
+      std::string previous(buf, got);
+      while (!previous.empty() && (previous.back() == '\n' || previous.back() == ' ')) previous.pop_back();
+      while (!previous.empty() && previous.front() == ' ') previous.erase(previous.begin());
+      lock->reclaimed_from_ = previous;
+    }
+  }
+  if (!lock->reclaimed_from_.empty()) {
+    LogWarn("fs", "writer lock {} was left by \"{}\", which ended without releasing it; reclaimed", lock_path.string(),
+            lock->reclaimed_from_);
+  }
   // The holder description lives after the locked byte range so readers can see it.
   SetFilePointer(h, 0, nullptr, FILE_BEGIN);
   SetEndOfFile(h);
@@ -257,6 +273,22 @@ Result<std::unique_ptr<FileLock>> FileLock::TryAcquire(const std::filesystem::pa
                                    holder.empty() ? std::string("another writer") : holder));
     }
     return MakeError(ErrorCode::IoFailure, std::format("flock failed on {}: {}", lock_path.string(), ErrnoText(err)));
+  }
+  {
+    // A clean release clears the holder text, so leftover text names an owner that died holding it.
+    char buf[512];
+    const ssize_t n = ::pread(fd, buf, sizeof(buf) - 1, 0);
+    if (n > 0) {
+      std::string previous(buf, static_cast<std::size_t>(n));
+      while (!previous.empty() && (previous.back() == '\n' || previous.back() == ' ')) previous.pop_back();
+      lock->reclaimed_from_ = previous;
+    }
+  }
+  if (!lock->reclaimed_from_.empty()) {
+    LogWarn("fs",
+            "writer lock {} was left by \"{}\", which ended without releasing it; the OS released its lock when it "
+            "exited, so this writer now owns it (journal recovery decides any interrupted commit)",
+            lock_path.string(), lock->reclaimed_from_);
   }
   if (::ftruncate(fd, 0) == 0) {
     std::string text = std::string(holder_description) + "\n";

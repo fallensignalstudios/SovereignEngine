@@ -52,10 +52,15 @@ class FileLock {
   FileLock& operator=(const FileLock&) = delete;
 
   const std::filesystem::path& path() const { return path_; }
+  // Holder record left in the lock file by a previous owner that ended without releasing the lock
+  // (crash, kill). Empty after a clean release. The OS lock itself died with that process, so
+  // acquiring was safe; this makes the reclaim explicit to callers and logs.
+  const std::string& reclaimed_from() const { return reclaimed_from_; }
 
  private:
   FileLock() = default;
   std::filesystem::path path_;
+  std::string reclaimed_from_;
 #if defined(_WIN32)
   void* handle_ = nullptr;
 #else

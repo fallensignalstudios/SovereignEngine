@@ -58,6 +58,12 @@ Result<std::unique_ptr<SceneStore>> SceneStore::Open(const std::filesystem::path
   store->file_sha256_ = std::move(loaded->file_sha256);
   store->load_warnings_ = std::move(loaded->warnings);
   if (auto r = store->LoadJournal(); !r) return r.take_error();
+  if (store->lock_ && !store->lock_->reclaimed_from().empty()) {
+    store->journal_.notes.push_back(std::format(
+        "reclaimed a stale writer lock left by \"{}\" (that writer ended without releasing it); journal recovery "
+        "above decided any commit it left unfinished",
+        store->lock_->reclaimed_from()));
+  }
   return store;
 }
 

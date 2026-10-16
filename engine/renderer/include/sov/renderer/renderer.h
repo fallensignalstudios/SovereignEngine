@@ -63,6 +63,7 @@ struct DeviceDescription {
   std::vector<std::string> candidates;
   bool windowed = false;
   std::string swapchain;          // format/extent/present mode summary when windowed
+  bool gpu_timestamps = false;    // graphics-queue timestamp queries available (FrameStats::gpu_ms)
   // Evidence class of anything this renderer produces (TDD §1.3 / handoff):
   //   "gpu-rendered (physical GPU)" or "software-rendered (CPU Vulkan implementation)"
   std::string evidence_class;
@@ -91,19 +92,30 @@ struct FrameStats {
   std::uint32_t draw_calls = 0;
   std::uint32_t instances = 0;
   std::uint64_t triangles = 0;
+  // Wall time from BeginFrame to the end of EndFrame on the calling thread, and the part of it
+  // spent blocked: frame-context fence wait, swapchain acquire and present. cpu_ms - wait_ms is
+  // the renderer's own CPU work (snapshot upload, command recording, submission).
   double cpu_ms = 0;
+  double wait_ms = 0;
   bool skipped = false;
+  // GPU execution time of an earlier frame (`gpu_frame`), from timestamp queries read when that
+  // frame's context is reused (no stall). -1 when timestamps are unsupported or not yet available.
+  double gpu_ms = -1;
+  std::uint64_t gpu_frame = 0;
 };
 
 struct PickResult {
   std::uint32_t x = 0, y = 0;
   std::uint32_t pick_index = 0;
   std::optional<Uuid> entity;  // resolved with the pick table of the frame that was read
+  std::uint64_t frame = 0;     // renderer frame number of that draw
 };
 
 struct RendererConfig {
   bool validation = true;
   bool require_physical_gpu = false;  // also forced by environment SOV_REQUIRE_PHYSICAL_GPU=1
+  bool require_validation = false;    // also forced by SOV_REQUIRE_VALIDATION=1 (set for every Vulkan test)
+  std::string device_name;            // select by name substring; also SOV_VULKAN_DEVICE
   bool vsync = true;
   std::filesystem::path shader_dir;   // default: <executable dir>/shaders
 };
@@ -141,8 +153,10 @@ class Renderer {
 
   // --- readback ---------------------------------------------------------------------------
   // Queues a read of the view's pick-ID texel at (x, y) during its next draw; the result is
-  // available once that frame completes. `pick_table` must be the snapshot drawn that frame.
-  std::uint64_t RequestPick(ViewHandle view, std::uint32_t x, std::uint32_t y, std::vector<Uuid> pick_table);
+  // available once that frame completes. The index is resolved with the pick table of the snapshot
+  // that draw actually rendered (bound when the copy is recorded), so a pick can never be mapped
+  // through another frame's table.
+  std::uint64_t RequestPick(ViewHandle view, std::uint32_t x, std::uint32_t y);
   std::optional<PickResult> TakePick(std::uint64_t ticket);
   // Blocking captures of a view's most recent draw.
   Result<ImageRgba8> CaptureView(ViewHandle view);

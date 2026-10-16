@@ -6,6 +6,7 @@
 
 #include "editor_app.h"
 #include "sov/core/json.h"
+#include "sov/core/process.h"
 
 namespace sov::editor_app {
 
@@ -49,6 +50,8 @@ class AutomationRunner {
   int cycle_phase_ = 0;
   render::ResourceSummary cycle_baseline_{};
   std::uint32_t cycle_validation_baseline_ = 0;
+  ProcessMemory cycle_memory_baseline_{};
+  ProcessMemory cycle_memory_warm_{};  // after kCycleWarmup cycles (allocator and driver caches populated)
 };
 
 }  // namespace sov::editor_app

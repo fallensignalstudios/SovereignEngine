@@ -1,6 +1,7 @@
 // sovereign-editor: native authoring editor (Dear ImGui tool UI on the engine's Vulkan renderer).
 //
 //   sovereign-editor --scene PATH [--width W --height H] [--automation SCRIPT.json] [--no-validation]
+//                    [--device NAME]
 //
 // The scene's writer lock is held while the editor runs, so offline CLI writes are refused.
 // Exit codes: 0 ok, 1 cannot open scene, 2 usage, 4 platform/graphics failure,
@@ -19,7 +20,7 @@
 
 int main(int argc, char** argv) {
   using namespace sov;
-  std::string scene_path, automation_path;
+  std::string scene_path, automation_path, device_name;
   int width = 1600, height = 900;
   bool validation = true;
   for (int i = 1; i < argc; ++i) {
@@ -37,8 +38,11 @@ int main(int argc, char** argv) {
       height = std::atoi(argv[++i]);
     } else if (a == "--no-validation") {
       validation = false;
+    } else if (a == "--device" && i + 1 < argc) {
+      device_name = argv[++i];
     } else {
-      std::fputs("usage: sovereign-editor --scene PATH [--width W --height H] [--automation SCRIPT.json] [--no-validation]\n", stderr);
+      std::fputs("usage: sovereign-editor --scene PATH [--width W --height H] [--automation SCRIPT.json] [--no-validation]\n"
+                 "                        [--device NAME]\n", stderr);
       return 2;
     }
   }
@@ -77,6 +81,7 @@ int main(int argc, char** argv) {
     }
     render::RendererConfig rc;
     rc.validation = validation;
+    rc.device_name = device_name;
     auto renderer = render::Renderer::CreateForWindow(rc, **window);
     if (!renderer) {
       LogError("editor", "{}", renderer.error().Describe());

@@ -10,7 +10,8 @@ file(GLOB_RECURSE files
   "${SOURCE_DIR}/CMakePresets.json" "${SOURCE_DIR}/dependencies.lock.json" "${SOURCE_DIR}/scripts/*")
 set(hits "")
 foreach(f IN LISTS files)
-  if(f MATCHES "CheckNoUnrealDependency\\.cmake$")
+  # The detectors themselves name the patterns they look for.
+  if(f MATCHES "(CheckNoUnrealDependency\\.cmake|CheckLinkedLibraries\\.cmake|isolation_check\\.sh|loaded_libraries_check\\.sh)$")
     continue()
   endif()
   file(READ "${f}" text)

@@ -1,5 +1,11 @@
 #include <fstream>
 
+#if !defined(_WIN32)
+#include <signal.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#endif
+
 #include "scene_fixtures.h"
 #include "sov/commands/scene_store.h"
 #include "sov/core/fs.h"
@@ -110,6 +116,51 @@ SOV_TEST(store, writer_lock_refuses_second_writer_but_allows_readers) {
   editor.value().reset();
   SOV_CHECK(SceneStore::Open(path, OpenMode::Writer, "sovereign-cli").ok());
 }
+
+#if !defined(_WIN32)
+SOV_TEST(store, stale_lock_from_a_killed_writer_is_reclaimed_explicitly) {
+  // G1-D14: a writer process dies holding the scene (SIGKILL: no destructor, no cleanup). While it
+  // lives, a second writer is refused and told who holds it; once it is gone the OS has released
+  // its lock, the next writer gets it, and the reclaim is reported rather than silent.
+  const auto path = NewScene(ctx);
+  int ready[2];
+  SOV_REQUIRE(::pipe(ready) == 0);
+  const pid_t child = ::fork();
+  SOV_REQUIRE(child >= 0);
+  if (child == 0) {
+    ::close(ready[0]);
+    auto held = SceneStore::Open(path, OpenMode::Writer, "doomed-writer");
+    const char c = held.ok() ? 'y' : 'n';
+    (void)!::write(ready[1], &c, 1);
+    ::pause();  // killed here, still holding the lock
+    ::_exit(0);
+  }
+  ::close(ready[1]);
+  char c = 0;
+  SOV_REQUIRE(::read(ready[0], &c, 1) == 1 && c == 'y');
+  ::close(ready[0]);
+  auto refused = SceneStore::Open(path, OpenMode::Writer, "sovereign-cli");
+  SOV_REQUIRE(!refused.ok());
+  SOV_CHECK_EQ(refused.error().code, ErrorCode::LockUnavailable);
+  SOV_CHECK(refused.error().message.find("doomed-writer") != std::string::npos);
+
+  SOV_REQUIRE(::kill(child, SIGKILL) == 0);
+  int status = 0;
+  SOV_REQUIRE(::waitpid(child, &status, 0) == child);
+  SOV_CHECK(WIFSIGNALED(status));
+  auto next = SceneStore::Open(path, OpenMode::Writer, "sovereign-cli");
+  SOV_REQUIRE_OK(next);
+  SOV_CHECK(fs::FileLock::ReadHolder(SceneStore::LockPath(path)).find("sovereign-cli") != std::string::npos);
+  bool reported = false;
+  for (const auto& n : (*next)->journal_status().notes) reported = reported || n.find("doomed-writer") != std::string::npos;
+  SOV_CHECK_MSG(reported, "reclaiming the dead writer's lock was not reported");
+  // A clean release leaves nothing to reclaim.
+  next.value().reset();
+  auto clean = SceneStore::Open(path, OpenMode::Writer, "sovereign-cli");
+  SOV_REQUIRE_OK(clean);
+  for (const auto& n : (*clean)->journal_status().notes) SOV_CHECK(n.find("reclaimed") == std::string::npos);
+}
+#endif
 
 SOV_TEST(store, crash_after_prepare_recovers_as_aborted) {
   const auto path = NewScene(ctx);

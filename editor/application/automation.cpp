@@ -255,13 +255,20 @@ bool AutomationRunner::Step(EditorApp& app, const Json& step) {
     return true;
   }
   if (what == "cycles") {
-    // Repeated save / play / stop / reopen; GPU resources and validation must return to baseline.
+    // Repeated save / play / stop / reopen (G1-R11). GPU resource counts and GPU memory must return
+    // exactly to baseline, validation must stay clean, and process memory must settle: resident
+    // growth between the warm point (after kCycleWarmup cycles) and the end stays under
+    // kSettledRssGrowthBytes. Baseline, warm and final figures are all reported.
+    constexpr int kCycleWarmup = 10;
+    constexpr std::uint64_t kSettledRssGrowthBytes = 16ull << 20;
     const int n = step.value("n", 10);
     switch (cycle_phase_) {
       case 0:
         app.renderer().WaitIdle();
         cycle_baseline_ = app.renderer().resources();
         cycle_validation_baseline_ = app.renderer().validation().errors;
+        cycle_memory_baseline_ = QueryProcessMemory();
+        cycle_memory_warm_ = cycle_memory_baseline_;
         cycle_ = 0;
         cycle_phase_ = 1;
         return false;
@@ -279,20 +286,36 @@ bool AutomationRunner::Step(EditorApp& app, const Json& step) {
           cycle_phase_ = 0;
           return true;
         }
-        cycle_phase_ = ++cycle_ < n ? 1 : 3;
+        if (++cycle_ == kCycleWarmup) {
+          app.renderer().WaitIdle();
+          cycle_memory_warm_ = QueryProcessMemory();
+        }
+        cycle_phase_ = cycle_ < n ? 1 : 3;
         return false;
       default: {
         app.renderer().WaitIdle();
         const auto after = app.renderer().resources();
         const auto errors = app.renderer().validation().errors;
+        const auto mem = QueryProcessMemory();
+        const std::int64_t settled_growth = n > kCycleWarmup && mem.available
+                                                ? static_cast<std::int64_t>(mem.rss_bytes) -
+                                                      static_cast<std::int64_t>(cycle_memory_warm_.rss_bytes)
+                                                : 0;
+        const bool memory_settled = settled_growth < static_cast<std::int64_t>(kSettledRssGrowthBytes);
         const bool ok = after.buffers == cycle_baseline_.buffers && after.images == cycle_baseline_.images &&
-                        after.vma_allocations == cycle_baseline_.vma_allocations && errors == cycle_validation_baseline_ &&
-                        World::LiveWorldCount() == 1;
+                        after.vma_allocations == cycle_baseline_.vma_allocations && after.vma_bytes == cycle_baseline_.vma_bytes &&
+                        errors == cycle_validation_baseline_ && World::LiveWorldCount() == 1 && memory_settled;
+        const auto mib = [](std::uint64_t b) { return static_cast<double>(b) / (1024.0 * 1024.0); };
         Record(step, ok,
-               std::format("{} cycles; buffers {}->{} images {}->{} allocations {}->{} validation errors {}->{} live worlds {}",
+               std::format("{} save/play/stop/reopen cycles; buffers {}->{} images {}->{} allocations {}->{} vma bytes {}->{} "
+                           "validation errors {}->{} live worlds {}; process RSS {:.1f} MiB (baseline) -> {:.1f} MiB (after {} "
+                           "cycles) -> {:.1f} MiB (end), peak {:.1f} MiB, settled growth {:.2f} MiB (limit {:.0f} MiB){}",
                            n, cycle_baseline_.buffers, after.buffers, cycle_baseline_.images, after.images,
-                           cycle_baseline_.vma_allocations, after.vma_allocations, cycle_validation_baseline_, errors,
-                           World::LiveWorldCount()));
+                           cycle_baseline_.vma_allocations, after.vma_allocations, cycle_baseline_.vma_bytes, after.vma_bytes,
+                           cycle_validation_baseline_, errors, World::LiveWorldCount(), mib(cycle_memory_baseline_.rss_bytes),
+                           mib(cycle_memory_warm_.rss_bytes), kCycleWarmup, mib(mem.rss_bytes), mib(mem.peak_rss_bytes),
+                           static_cast<double>(settled_growth) / (1024.0 * 1024.0), mib(kSettledRssGrowthBytes),
+                           mem.available ? "" : " (process memory query unavailable)"));
         cycle_phase_ = 0;
         return true;
       }

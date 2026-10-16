@@ -89,11 +89,16 @@ Projected Project(const ViewCamera& cam, const Vec3& p, std::uint32_t w, std::ui
 
 Vec3 WorldCenter(const World& w, const Uuid& id) { return GetTranslation(*w.GetWorldMatrix(w.Find(id))); }
 
-void DrawOnce(Renderer& r, ViewHandle view, const Scene& s, const DrawOptions& opt = {}) {
+void DrawSnapshot(Renderer& r, ViewHandle view, const RenderSnapshot& snap, const ViewCamera& camera,
+                  const DrawOptions& opt = {}) {
   if (!r.BeginFrame()) throw std::runtime_error("BeginFrame failed offscreen");
-  r.DrawToView(view, s.snap, s.camera, opt);
+  r.DrawToView(view, snap, camera, opt);
   r.EndFrame();
   r.WaitIdle();
+}
+
+void DrawOnce(Renderer& r, ViewHandle view, const Scene& s, const DrawOptions& opt = {}) {
+  DrawSnapshot(r, view, s.snap, s.camera, opt);
 }
 
 void SaveEvidence(sov::test::Context& ctx, Renderer& r, const ImageRgba8& img, const char* name, const char* scene) {
@@ -221,14 +226,66 @@ SOV_TEST(rendering, axis_lab_orientation_depth_culling_hierarchy_and_pick_ids) {
   SOV_CHECK_EQ(r->validation().errors, 0u);
 }
 
+SOV_TEST(rendering, projection_matches_analytic_fov_and_aspect) {
+  // G1-R02 aspect/FOV and G1-R04 "correct aspect/targets after resize", checked against a
+  // first-principles pinhole model rather than the engine's own projection helper: a point at
+  // view-space (x, y, z) lands at ndc = (x / -z / tan(fov/2) / aspect, y / -z / tan(fov/2)).
+  // Axis Lab camera: (0, 0, 10) looking down -Z. X marker: box x in [1, 3], front face z = +0.15.
+  // Y marker: cylinder y in [1, 3], radius 0.15 (front at z = +0.15).
+  auto& r = SharedRenderer(ctx);
+  Scene s = LoadScene(ctx, "tests/fixtures/axis_lab.scene.json");
+  const auto* cam = s.doc.Find(s.doc.active_camera_id);
+  SOV_REQUIRE(cam && cam->camera);
+  const double t = std::tan(DegToRad(cam->camera->fov_y_degrees) / 2.0);
+  const double d = 10.0 - 0.15;  // camera to the markers' front faces
+  const std::uint32_t x_index = s.snap.PickIndexOf(ByName(s.doc, "X Marker (long box)")->id);
+  const std::uint32_t y_index = s.snap.PickIndexOf(ByName(s.doc, "Y Marker (cylinder)")->id);
+
+  const auto check = [&](ViewHandle view, std::uint32_t w, std::uint32_t h, const char* what) {
+    DrawOnce(*r, view, s);
+    auto ids = r->CaptureViewPickIds(view);
+    SOV_REQUIRE_OK(ids);
+    SOV_REQUIRE(ids->size() == std::size_t{w} * h);  // targets follow the view size
+    const double aspect = double(w) / double(h);
+    // Rightmost X-marker pixel on the centre row vs the analytic edge at x = 3.
+    const std::uint32_t row = h / 2;
+    int right = -1;
+    for (std::uint32_t px = 0; px < w; ++px) {
+      if ((*ids)[std::size_t(row) * w + px] == x_index) right = int(px);
+    }
+    const double expect_right = (3.0 / d / t / aspect + 1.0) * 0.5 * w;
+    SOV_CHECK_MSG(right >= 0 && std::abs((right + 0.5) - expect_right) <= 1.5,
+                  std::format("{} {}x{}: X marker right edge at pixel {} (expected {:.2f})", what, w, h, right, expect_right));
+    // Topmost Y-marker pixel on the centre column vs the analytic edge at y = 3.
+    const std::uint32_t col = w / 2;
+    int top = -1;
+    for (std::uint32_t py = h; py-- > 0;) {
+      if ((*ids)[std::size_t(py) * w + col] == y_index) top = int(py);
+    }
+    const double expect_top = (1.0 - 3.0 / d / t) * 0.5 * h;
+    SOV_CHECK_MSG(top >= 0 && std::abs((top + 0.5) - expect_top) <= 1.5,
+                  std::format("{} {}x{}: Y marker top edge at row {} (expected {:.2f})", what, w, h, top, expect_top));
+    ctx.Note(std::format("{} {}x{} (aspect {:.3f}): X right edge {} vs {:.2f}, Y top edge {} vs {:.2f}", what, w, h, aspect,
+                         right, expect_right, top, expect_top));
+  };
+  const ViewHandle wide = r->CreateView(480, 160);
+  check(wide, 480, 160, "wide");
+  const ViewHandle tall = r->CreateView(240, 360);  // x = 3 lands at ndc 0.79: inside the frame
+  check(tall, 240, 360, "tall");
+  SOV_REQUIRE(r->ResizeView(wide, 300, 300));  // same view after a resize: aspect and targets follow
+  check(wide, 300, 300, "resized");
+  r->DestroyView(wide);
+  r->DestroyView(tall);
+}
+
 SOV_TEST(rendering, request_pick_resolves_entity_with_frame_table) {
   auto& r = SharedRenderer(ctx);
   Scene s = LoadScene(ctx, "tests/fixtures/axis_lab.scene.json");
   const ViewHandle view = r->CreateView(kW, kH);
   const auto* x = ByName(s.doc, "X Marker (long box)");
   const Projected p = Project(s.camera, WorldCenter(*s.world, x->id), kW, kH);
-  const std::uint64_t hit = r->RequestPick(view, p.x, p.y, s.snap.pick_table);
-  const std::uint64_t miss = r->RequestPick(view, 1, 1, s.snap.pick_table);
+  const std::uint64_t hit = r->RequestPick(view, p.x, p.y);
+  const std::uint64_t miss = r->RequestPick(view, 1, 1);
   SOV_CHECK(!r->TakePick(hit).has_value());  // not drawn yet
   DrawOnce(*r, view, s);
   const auto a = r->TakePick(hit);
@@ -237,6 +294,40 @@ SOV_TEST(rendering, request_pick_resolves_entity_with_frame_table) {
   SOV_CHECK(a->entity.has_value() && *a->entity == x->id);
   SOV_CHECK(!b->entity.has_value());
   SOV_CHECK_EQ(b->pick_index, 0u);
+  r->DestroyView(view);
+}
+
+SOV_TEST(rendering, pick_resolves_with_the_drawn_snapshot_not_a_stale_table) {
+  // G1-R03 "no stale frame mapping": a pick is requested while one snapshot is current, then a
+  // different snapshot is drawn whose pick indices are permuted (same geometry, reversed order).
+  // The texel's index must be resolved with the table of the snapshot actually drawn.
+  auto& r = SharedRenderer(ctx);
+  Scene s = LoadScene(ctx, "tests/fixtures/axis_lab.scene.json");
+  const ViewHandle view = r->CreateView(kW, kH);
+  const auto* x = ByName(s.doc, "X Marker (long box)");
+  const Projected p = Project(s.camera, WorldCenter(*s.world, x->id), kW, kH);
+  DrawOnce(*r, view, s);  // frame A: the original snapshot
+  const std::uint32_t index_a = s.snap.PickIndexOf(x->id);
+
+  RenderSnapshot permuted = s.snap;
+  std::reverse(permuted.instances.begin(), permuted.instances.end());
+  permuted.pick_table.clear();
+  for (auto& inst : permuted.instances) {
+    const Uuid id = *s.snap.ResolvePick(inst.pick_index);
+    permuted.pick_table.push_back(id);
+    inst.pick_index = static_cast<std::uint32_t>(permuted.pick_table.size());
+  }
+  const std::uint32_t index_b = permuted.PickIndexOf(x->id);
+  SOV_REQUIRE(index_a != index_b);  // the permutation really changes X's index
+  SOV_REQUIRE(s.snap.ResolvePick(index_b) != x->id);  // a stale table would name another entity
+
+  const std::uint64_t ticket = r->RequestPick(view, p.x, p.y);  // requested while A is current...
+  DrawSnapshot(*r, view, permuted, s.camera);                   // ...but frame B is what gets drawn
+  const auto picked = r->TakePick(ticket);
+  SOV_REQUIRE(picked.has_value());
+  SOV_CHECK_EQ(picked->pick_index, index_b);
+  SOV_REQUIRE(picked->entity.has_value());
+  SOV_CHECK(*picked->entity == x->id);
   r->DestroyView(view);
 }
 

@@ -4,17 +4,28 @@
 //
 //   sovereign-runtime --scene PATH [--width W --height H] [--frames N] [--screenshot OUT.png]
 //                     [--scripted-input] [--stress-window] [--no-validation] [--no-vsync]
+//                     [--device NAME] [--perf-report OUT.json [--warmup N]]
+//
+// --perf-report: after N warm-up frames (default 120), records every frame's wall time (frame
+// start to frame start), renderer CPU work, renderer blocked time and GPU time (timestamp
+// queries), then writes
+// p50/p95/p99/max with process and GPU memory and the exact settings (TDD §21.3) to OUT.json.
 //
 // Exit codes: 0 ok, 1 scene invalid, 2 usage, 4 platform/graphics failure, 6 validation errors seen,
 //             7 resource growth detected by --stress-window.
 
+#include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <cstdio>
 #include <cstring>
 #include <format>
 #include <string>
 
 #include "sov/core/build_info.h"
+#include "sov/core/fs.h"
+#include "sov/core/json.h"
+#include "sov/core/process.h"
 #include "sov/core/log.h"
 #include "sov/core/png.h"
 #include "sov/games/sandbox.h"
@@ -36,6 +47,9 @@ struct Options {
   bool stress_window = false;
   bool validation = true;
   bool vsync = true;
+  std::string device;
+  std::string perf_report;
+  long warmup = 120;
 };
 
 bool Parse(int argc, char** argv, Options& o) {
@@ -60,6 +74,12 @@ bool Parse(int argc, char** argv, Options& o) {
       o.validation = false;
     } else if (a == "--no-vsync") {
       o.vsync = false;
+    } else if (a == "--device") {
+      if (const char* v = next()) o.device = v; else return false;
+    } else if (a == "--perf-report") {
+      if (const char* v = next()) o.perf_report = v; else return false;
+    } else if (a == "--warmup") {
+      if (const char* v = next()) o.warmup = std::atol(v); else return false;
     } else {
       return false;
     }
@@ -84,6 +104,31 @@ void PrintSummary(render::Renderer& r, const runtime::Simulation& sim, std::uint
                static_cast<long long>(res.image_views), static_cast<unsigned long long>(res.vma_allocations));
 }
 
+// Nearest-rank percentile of an unsorted sample (copied).
+double Percentile(std::vector<double> v, double p) {
+  if (v.empty()) return 0;
+  std::sort(v.begin(), v.end());
+  const std::size_t rank = static_cast<std::size_t>(std::ceil(p / 100.0 * static_cast<double>(v.size())));
+  return v[std::min(v.size() - 1, rank == 0 ? 0 : rank - 1)];
+}
+
+Json Distribution(const std::vector<double>& v) {
+  if (v.empty()) return nullptr;
+  double sum = 0;
+  for (double x : v) sum += x;
+  return Json{{"samples", v.size()},
+              {"mean_ms", sum / static_cast<double>(v.size())},
+              {"p50_ms", Percentile(v, 50)},
+              {"p95_ms", Percentile(v, 95)},
+              {"p99_ms", Percentile(v, 99)},
+              {"max_ms", *std::max_element(v.begin(), v.end())}};
+}
+
+struct PerfSamples {
+  std::vector<double> frame_ms, cpu_work_ms, wait_ms, gpu_ms;
+  std::uint64_t peak_vma_bytes = 0;
+};
+
 }  // namespace
 
 int main(int argc, char** argv) {
@@ -94,7 +139,8 @@ int main(int argc, char** argv) {
   Options opt;
   if (!Parse(argc, argv, opt)) {
     std::fputs("usage: sovereign-runtime --scene PATH [--width W --height H] [--frames N] [--screenshot OUT.png]\n"
-               "                         [--scripted-input] [--stress-window] [--no-validation] [--no-vsync]\n",
+               "                         [--scripted-input] [--stress-window] [--no-validation] [--no-vsync]\n"
+               "                         [--device NAME] [--perf-report OUT.json [--warmup N]]\n",
                stderr);
     return 2;
   }
@@ -131,6 +177,7 @@ int main(int argc, char** argv) {
     render::RendererConfig rc;
     rc.validation = opt.validation;
     rc.vsync = opt.vsync;
+    rc.device_name = opt.device;
     auto renderer = render::Renderer::CreateForWindow(rc, **window);
     if (!renderer) {
       LogError("runtime", "{}", renderer.error().Describe());
@@ -148,6 +195,8 @@ int main(int argc, char** argv) {
     render::ResourceSummary baseline{};
     bool baseline_taken = false;
     int stress_step = 0;
+    PerfSamples perf;
+    auto previous_frame_start = std::chrono::steady_clock::now();
     const int stress_sizes[][2] = {{1280, 720}, {640, 360}, {1920, 1080}, {800, 600}, {1600, 900}};
 
     while (running) {
@@ -206,6 +255,10 @@ int main(int argc, char** argv) {
         }
       }
 
+      const auto frame_start = std::chrono::steady_clock::now();
+      const double frame_wall_ms = std::chrono::duration<double, std::milli>(frame_start - previous_frame_start).count();
+      previous_frame_start = frame_start;
+      const bool measuring = !opt.perf_report.empty() && static_cast<long>(frame) > opt.warmup;
       if (r.BeginFrame()) {
         const RenderSnapshot snap = (*sim)->world().ExtractRenderSnapshot();
         if (auto cam = render::ViewCamera::FromSnapshot(snap)) {
@@ -216,6 +269,13 @@ int main(int argc, char** argv) {
         const bool want_shot = !opt.screenshot.empty() && opt.frames > 0 && static_cast<long>(frame) == opt.frames - 1;
         if (want_shot) r.RequestWindowCapture();
         r.EndFrame();
+        if (measuring) {
+          perf.frame_ms.push_back(frame_wall_ms);
+          perf.cpu_work_ms.push_back(r.last_frame().cpu_ms - r.last_frame().wait_ms);
+          perf.wait_ms.push_back(r.last_frame().wait_ms);
+          if (r.last_frame().gpu_ms >= 0) perf.gpu_ms.push_back(r.last_frame().gpu_ms);
+          perf.peak_vma_bytes = std::max<std::uint64_t>(perf.peak_vma_bytes, r.resources().vma_bytes);
+        }
         if (want_shot) {
           auto shot = r.TakeWindowCapture();
           if (!shot) {
@@ -246,6 +306,47 @@ int main(int argc, char** argv) {
 
     r.WaitIdle();
     PrintSummary(r, **sim, frame, skipped);
+    if (!opt.perf_report.empty()) {
+      const auto mem = QueryProcessMemory();
+      const auto& b = GetBuildInfo();
+      int pw = 0, ph = 0;
+      (*window)->PixelSize(pw, ph);
+      Json report{
+          {"tool", "sovereign-runtime --perf-report"},
+          {"evidence_class", r.device().evidence_class},
+          {"note", r.device().is_cpu_implementation
+                       ? "CPU Vulkan implementation: these timings are NOT GPU performance and are not a baseline"
+                       : "physical GPU: compare only with runs on the same recorded machine and settings"},
+          {"engine", Json{{"version", b.version}, {"commit", std::string(b.git_commit) + " (" + b.git_tree_state + ")"},
+                          {"build", b.build_type}, {"compiler", b.compiler}, {"dependency_lock_sha256", b.dependency_lock_sha256}}},
+          {"device", Json{{"name", r.device().name}, {"type", r.device().device_type}, {"driver", r.device().driver},
+                          {"api", r.device().api_version}, {"swapchain", r.device().swapchain},
+                          {"gpu_timestamps", r.device().gpu_timestamps}}},
+          {"settings", Json{{"resolution", Json::array({pw, ph})}, {"vsync", opt.vsync}, {"validation", opt.validation},
+                            {"warmup_frames", opt.warmup}, {"scripted_input", opt.scripted_input},
+                            {"renderer", "R0 forward + ACES tone map, fixed R0 lighting, no MSAA"}}},
+          {"scene", scene::ProvenanceLabel(loaded->document, opt.scene)},
+          {"content", Json{{"instances", r.last_frame().instances}, {"triangles", r.last_frame().triangles}}},
+          {"frames", Json{{"total", frame}, {"skipped", skipped}, {"measured", perf.frame_ms.size()}}},
+          {"frame_time", Distribution(perf.frame_ms)},
+          {"renderer_cpu_work", Distribution(perf.cpu_work_ms)},
+          {"renderer_blocked", Distribution(perf.wait_ms)},
+          {"gpu", Distribution(perf.gpu_ms)},
+          {"definitions", Json{{"frame_time", "wall time between consecutive frame starts (whole loop: events, simulation, render)"},
+                               {"renderer_cpu_work", "renderer CPU time excluding blocking waits: upload, command recording, submit"},
+                               {"renderer_blocked", "time blocked on the frame-context fence, swapchain acquire and present"},
+                               {"gpu", "graphics-queue timestamp delta of the frame's command buffer"},
+                               {"percentiles", "nearest-rank over the measured frames after warm-up"}}},
+          {"memory", Json{{"process_rss_bytes", mem.rss_bytes}, {"process_peak_rss_bytes", mem.peak_rss_bytes},
+                          {"process_memory_available", mem.available}, {"vma_peak_bytes", perf.peak_vma_bytes}}},
+          {"what_frame_time_includes", opt.vsync ? "vsync waits (FIFO present)" : "no vsync waits (uncapped where supported)"}};
+      if (auto w = fs::AtomicWriteFile(opt.perf_report, report.dump(2) + "\n"); !w) {
+        LogError("runtime", "cannot write perf report: {}", w.error().Describe());
+        exit_code = 4;
+      } else {
+        LogInfo("runtime", "perf report written: {} ({} measured frames)", opt.perf_report, perf.frame_ms.size());
+      }
+    }
     if (opt.stress_window && baseline_taken) {
       // Restore the original size so per-target allocations are comparable with the baseline.
       (*window)->Restore();

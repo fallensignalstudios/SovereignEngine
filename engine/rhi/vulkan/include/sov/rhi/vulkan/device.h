@@ -41,6 +41,8 @@ struct ValidationStats {
 struct DeviceConfig {
   bool validation = true;              // VK_LAYER_KHRONOS_validation + synchronization validation if present
   bool require_physical_gpu = false;   // refuse CPU/software implementations
+  bool require_validation = false;     // fail instead of continuing when the validation layer is missing
+  std::string device_name_filter;      // if set: only devices whose name contains this (case-insensitive)
   std::vector<const char*> instance_extensions;  // e.g. surface extensions from the window
   void* get_instance_proc_addr = nullptr;        // optional loader entry (SDL); otherwise volkInitialize()
   std::function<Result<VkSurfaceKHR>(VkInstance)> create_surface;  // optional: windowed device

@@ -214,7 +214,7 @@ void EditorApp::RenderScene() {
   if (!playing() && doc_->selection()) opt.selected_pick_index = last_snapshot_.PickIndexOf(*doc_->selection());
   if (viewport_.pending_click) {
     const auto [x, y] = *viewport_.pending_click;
-    viewport_.pick_ticket = renderer_.RequestPick(viewport_.view, x, y, last_snapshot_.pick_table);
+    viewport_.pick_ticket = renderer_.RequestPick(viewport_.view, x, y);
     viewport_.pending_click.reset();
   }
   renderer_.DrawToView(viewport_.view, last_snapshot_, cam, opt);

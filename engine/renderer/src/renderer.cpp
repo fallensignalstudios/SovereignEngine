@@ -1,6 +1,7 @@
 #include "sov/renderer/renderer.h"
 
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
@@ -86,7 +87,8 @@ struct PendingPick {
   std::uint64_t ticket = 0;
   ViewHandle view;
   std::uint32_t x = 0, y = 0;
-  std::vector<Uuid> table;
+  std::vector<Uuid> table;   // the drawn snapshot's table, bound when the copy is recorded
+  std::uint64_t drawn_frame = 0;
   bool recorded = false;
   std::uint32_t frame = 0;
   std::uint32_t slot = 0;
@@ -169,6 +171,12 @@ struct Renderer::Impl {
 
   FrameStats stats;
   std::chrono::steady_clock::time_point frame_start;
+  // GPU frame timing: two timestamps per frame context, read back when the context is reused.
+  VkQueryPool timestamps = VK_NULL_HANDLE;
+  double timestamp_period_ns = 0;
+  std::uint64_t timestamp_mask = 0;
+  std::array<bool, kFramesInFlight> timestamps_written{};
+  std::array<std::uint64_t, kFramesInFlight> timestamp_frame{};
 
   // --- setup ---------------------------------------------------------------------------------
   Result<void> Init();
@@ -189,6 +197,14 @@ struct Renderer::Impl {
 
 // ---------------------------------------------------------------------------------------------
 
+namespace {
+std::string DeviceNameFilter(const RendererConfig& config) {
+  if (!config.device_name.empty()) return config.device_name;
+  const char* env = std::getenv("SOV_VULKAN_DEVICE");
+  return env ? std::string(env) : std::string();
+}
+}  // namespace
+
 Result<std::unique_ptr<Renderer>> Renderer::CreateForWindow(const RendererConfig& config, platform::Window& window) {
   std::unique_ptr<Renderer> r(new Renderer());
   r->impl_ = std::make_unique<Impl>();
@@ -198,6 +214,8 @@ Result<std::unique_ptr<Renderer>> Renderer::CreateForWindow(const RendererConfig
   vk::DeviceConfig dc;
   dc.validation = config.validation;
   dc.require_physical_gpu = config.require_physical_gpu || EnvFlag("SOV_REQUIRE_PHYSICAL_GPU");
+  dc.require_validation = config.validation && (config.require_validation || EnvFlag("SOV_REQUIRE_VALIDATION"));
+  dc.device_name_filter = DeviceNameFilter(config);
   dc.instance_extensions = window.VulkanInstanceExtensions();
   dc.get_instance_proc_addr = window.VulkanGetInstanceProcAddr();
   dc.create_surface = [&window](VkInstance instance) -> Result<VkSurfaceKHR> {
@@ -231,6 +249,8 @@ Result<std::unique_ptr<Renderer>> Renderer::CreateOffscreen(const RendererConfig
   vk::DeviceConfig dc;
   dc.validation = config.validation;
   dc.require_physical_gpu = config.require_physical_gpu || EnvFlag("SOV_REQUIRE_PHYSICAL_GPU");
+  dc.require_validation = config.validation && (config.require_validation || EnvFlag("SOV_REQUIRE_VALIDATION"));
+  dc.device_name_filter = DeviceNameFilter(config);
   auto device = vk::Device::Create(dc);
   if (!device) return device.take_error();
   im.device = std::move(device).value();
@@ -270,6 +290,25 @@ Result<void> Renderer::Impl::Init() {
     if (!d.SupportsOptimal(r.format, r.features)) {
       return MakeError(ErrorCode::UnsupportedComponent,
                        std::format("device lacks required format {} for {}", static_cast<int>(r.format), r.use));
+    }
+  }
+
+  // GPU timestamps, when the queue family supports them (timestampValidBits > 0).
+  {
+    std::uint32_t qn = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(d.physical(), &qn, nullptr);
+    std::vector<VkQueueFamilyProperties> qf(qn);
+    vkGetPhysicalDeviceQueueFamilyProperties(d.physical(), &qn, qf.data());
+    const std::uint32_t bits = d.queue_family() < qn ? qf[d.queue_family()].timestampValidBits : 0;
+    if (bits > 0 && d.properties().limits.timestampPeriod > 0) {
+      VkQueryPoolCreateInfo qi{VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO};
+      qi.queryType = VK_QUERY_TYPE_TIMESTAMP;
+      qi.queryCount = 2 * kFramesInFlight;
+      if (vkCreateQueryPool(d.device(), &qi, nullptr, &timestamps) == VK_SUCCESS) {
+        timestamp_period_ns = d.properties().limits.timestampPeriod;
+        timestamp_mask = bits >= 64 ? ~std::uint64_t{0} : ((std::uint64_t{1} << bits) - 1);
+        description.gpu_timestamps = true;
+      }
     }
   }
 
@@ -629,6 +668,7 @@ Renderer::Impl::~Impl() {
     if (f.image_available) vkDestroySemaphore(dev, f.image_available, nullptr);
     if (f.pool) vkDestroyCommandPool(dev, f.pool, nullptr);
   }
+  if (timestamps) vkDestroyQueryPool(dev, timestamps, nullptr);
   vk::DestroyBuffer(*device, vertices);
   vk::DestroyBuffer(*device, indices);
   for (auto& [fmt, p] : tonemap_pipelines) vkDestroyPipeline(dev, p, nullptr);
@@ -779,7 +819,7 @@ void Renderer::Impl::ResolvePicks() {
       vmaInvalidateAllocation(device->allocator(), f.pick_readback.allocation, 0, VK_WHOLE_SIZE);
       std::uint32_t value = 0;
       std::memcpy(&value, static_cast<const std::uint8_t*>(f.pick_readback.mapped) + it->slot * 4, 4);
-      PickResult r{it->x, it->y, value, std::nullopt};
+      PickResult r{it->x, it->y, value, std::nullopt, it->drawn_frame};
       if (value != 0 && value <= it->table.size()) r.entity = it->table[value - 1];
       completed_picks[it->ticket] = r;
       it = picks.erase(it);
@@ -813,12 +853,28 @@ bool Renderer::BeginFrame() {
   im.stats = {};
   im.stats.frame = im.frame_number;
   FrameContext& f = im.frames[im.frame_index];
+  const auto since = [](std::chrono::steady_clock::time_point t) {
+    return std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t).count();
+  };
+  const auto wait_start = std::chrono::steady_clock::now();
   if (auto r = im.device->WaitForValue(f.submit_value); !r) {
     LogError("renderer", "{}", r.error().Describe());
     return false;
   }
+  im.stats.wait_ms += since(wait_start);
   im.device->CollectRetired();
   im.ResolvePicks();
+  if (im.timestamps && im.timestamps_written[im.frame_index]) {
+    // This context's previous submission has completed (waited above): its timestamps are ready.
+    std::uint64_t ts[2] = {0, 0};
+    if (vkGetQueryPoolResults(im.device->device(), im.timestamps, im.frame_index * 2, 2, sizeof(ts), ts, sizeof(std::uint64_t),
+                              VK_QUERY_RESULT_64_BIT) == VK_SUCCESS) {
+      const std::uint64_t ticks = ((ts[1] & im.timestamp_mask) - (ts[0] & im.timestamp_mask)) & im.timestamp_mask;
+      im.stats.gpu_ms = static_cast<double>(ticks) * im.timestamp_period_ns / 1e6;
+      im.stats.gpu_frame = im.timestamp_frame[im.frame_index];
+    }
+    im.timestamps_written[im.frame_index] = false;
+  }
   f.draws_used = 0;
   f.picks_used = 0;
   im.window_acquired = false;
@@ -839,7 +895,9 @@ bool Renderer::BeginFrame() {
         return false;
       }
     }
+    const auto acquire_start = std::chrono::steady_clock::now();
     const auto status = im.swapchain->Acquire(f.image_available, im.image_index);
+    im.stats.wait_ms += since(acquire_start);
     if (status == vk::Swapchain::Status::OutOfDate || status == vk::Swapchain::Status::Error) {
       im.needs_recreate = true;
       im.stats.skipped = true;
@@ -858,6 +916,10 @@ bool Renderer::BeginFrame() {
   VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
   bi.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
   vkBeginCommandBuffer(f.cmd, &bi);
+  if (im.timestamps) {
+    vkCmdResetQueryPool(f.cmd, im.timestamps, im.frame_index * 2, 2);
+    vkCmdWriteTimestamp2(f.cmd, VK_PIPELINE_STAGE_2_TOP_OF_PIPE_BIT, im.timestamps, im.frame_index * 2);
+  }
   im.frame_open = true;
   return true;
 }
@@ -977,6 +1039,8 @@ void Renderer::Impl::DrawScene(Targets& t, vk::Image& output, VkFormat output_fo
     region.imageExtent = {1, 1, 1};
     vkCmdCopyImageToBuffer(cmd, t.pick.image, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, f.pick_readback.buffer, 1, &region);
     p.recorded = true;
+    p.table = snap.pick_table;  // the snapshot this frame draws: indices in the texel refer to it
+    p.drawn_frame = stats.frame;
     p.frame = frame_index;
     p.slot = f.picks_used++;
     host_barrier = true;
@@ -1099,6 +1163,11 @@ void Renderer::EndFrame() {
     // transition is not ordered before the signal, and present can observe it unfinished.
     vk::Transition(cmd, sc, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, VK_ACCESS_2_NONE);
   }
+  if (im.timestamps) {
+    vkCmdWriteTimestamp2(cmd, VK_PIPELINE_STAGE_2_ALL_COMMANDS_BIT, im.timestamps, im.frame_index * 2 + 1);
+    im.timestamps_written[im.frame_index] = true;
+    im.timestamp_frame[im.frame_index] = im.frame_number;
+  }
   vkEndCommandBuffer(cmd);
 
   auto value = im.window_acquired
@@ -1118,7 +1187,9 @@ void Renderer::EndFrame() {
       im.capture_frame = im.frame_index;
     }
     if (im.window_acquired) {
+      const auto present_start = std::chrono::steady_clock::now();
       const auto status = im.swapchain->Present(im.image_index);
+      im.stats.wait_ms += std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - present_start).count();
       if (status != vk::Swapchain::Status::Ok) im.needs_recreate = true;
     }
   }
@@ -1135,14 +1206,13 @@ bool Renderer::presentation_suspended() const { return impl_->suspended; }
 
 // --- readback --------------------------------------------------------------------------------
 
-std::uint64_t Renderer::RequestPick(ViewHandle view, std::uint32_t x, std::uint32_t y, std::vector<Uuid> pick_table) {
+std::uint64_t Renderer::RequestPick(ViewHandle view, std::uint32_t x, std::uint32_t y) {
   Impl& im = *impl_;
   PendingPick p;
   p.ticket = im.next_ticket++;
   p.view = view;
   p.x = x;
   p.y = y;
-  p.table = std::move(pick_table);
   im.picks.push_back(std::move(p));
   return im.picks.back().ticket;
 }
