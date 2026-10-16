@@ -1,0 +1,10 @@
+add_subdirectory(core)
+add_subdirectory(world)
+add_subdirectory(commands)
+add_subdirectory(runtime)
+
+if(SOV_ENABLE_GRAPHICS)
+  add_subdirectory(platform)
+  add_subdirectory(rhi/vulkan)
+  add_subdirectory(renderer)
+endif()

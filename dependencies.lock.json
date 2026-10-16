@@ -1,0 +1,163 @@
+{
+  "lock_format": 1,
+  "description": "Pinned third-party stack for Sovereign Engine. CMake reads method/origin/revision/url/sha256/build_options from this file (cmake/Dependencies.cmake); it is the single source of truth for what is fetched. A lock entry records a selection, not a claim that upstream licenses are interchangeable.",
+  "acquisition_method": "CMake FetchContent only. Source dependencies: shallow git clone of an upstream tag, then the checked-out commit is verified against 'revision' and configure fails on mismatch. Prebuilt tool packages and release archives: URL download verified with URL_HASH SHA256.",
+  "resolved_on": "2026-10-16",
+  "dependencies": [
+    {
+      "name": "nlohmann_json",
+      "purpose": "Authoring JSON parse/serialize (scene documents, command batches, journals)",
+      "gate": "G0",
+      "configurations": ["dev-headless", "dev-vulkan"],
+      "method": "url",
+      "origin": "https://github.com/nlohmann/json",
+      "selected_tag": "v3.12.0",
+      "revision": "55f93686c01528224f448c19128836e7df245f72",
+      "url": "https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz",
+      "archive_sha256": "42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa",
+      "license": { "spdx": "MIT", "file": "LICENSE.MIT", "notice_copy": "third_party_notices/nlohmann_json/LICENSE.MIT", "sha256": "46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603" },
+      "transitive": [],
+      "build_options": { "JSON_BuildTests": "OFF", "JSON_Install": "OFF" },
+      "redistribution": "Header-only; compiled into editor, CLI and runtime. MIT notice must accompany binary distributions."
+    },
+    {
+      "name": "EnTT",
+      "purpose": "In-memory ECS component storage behind sov::World (never in persisted or public contracts)",
+      "gate": "G1",
+      "configurations": ["dev-headless", "dev-vulkan"],
+      "method": "git",
+      "origin": "https://github.com/skypjack/entt",
+      "selected_tag": "v3.15.0",
+      "revision": "d4014c74dc3793aba95ae354d6e23a026c2796db",
+      "revision_date": "2025-03-19T10:41:43+01:00",
+      "license": { "spdx": "MIT", "file": "LICENSE", "notice_copy": "third_party_notices/EnTT/LICENSE", "sha256": "" },
+      "transitive": [],
+      "build_options": {},
+      "redistribution": "Header-only code under MIT. Upstream documentation (CC BY 4.0) and logos (CC BY-SA 4.0) are not redistributed."
+    },
+    {
+      "name": "SDL3",
+      "purpose": "Window, event collection, input, Vulkan surface creation (SDL renderer and SDL_GPU are disabled)",
+      "gate": "G1",
+      "configurations": ["dev-vulkan"],
+      "method": "git",
+      "origin": "https://github.com/libsdl-org/SDL",
+      "selected_tag": "release-3.2.30",
+      "revision": "f5e5f6588921eed3d7d048ce43d9eb1ff0da0ffc",
+      "revision_date": "2025-12-31T17:10:09-08:00",
+      "license": { "spdx": "Zlib", "file": "LICENSE.txt", "notice_copy": "third_party_notices/SDL3/LICENSE.txt", "sha256": "" },
+      "transitive": [
+        "Linux build: X11 development headers (libx11-dev, libxext-dev, libxrandr-dev, libxcursor-dev, libxfixes-dev, libxi-dev, libxss-dev, libxtst-dev, libxkbcommon-dev) from the host package manager; libraries are loaded dynamically at runtime"
+      ],
+      "build_options": {
+        "SDL_SHARED": "OFF",
+        "SDL_STATIC": "ON",
+        "SDL_TEST_LIBRARY": "OFF",
+        "SDL_TESTS": "OFF",
+        "SDL_EXAMPLES": "OFF",
+        "SDL_INSTALL": "OFF",
+        "SDL_AUDIO": "OFF",
+        "SDL_CAMERA": "OFF",
+        "SDL_HAPTIC": "OFF",
+        "SDL_SENSOR": "OFF",
+        "SDL_POWER": "OFF",
+        "SDL_RENDER": "OFF",
+        "SDL_GPU": "OFF",
+        "SDL_OPENGL": "OFF",
+        "SDL_OPENGLES": "OFF",
+        "SDL_WAYLAND": "OFF",
+        "SDL_X11": "ON",
+        "SDL_VULKAN": "ON",
+        "SDL_DIALOG": "OFF"
+      },
+      "redistribution": "Statically linked. Zlib license: notice must not be removed from source distributions; binary attribution appreciated, not required."
+    },
+    {
+      "name": "Vulkan-Headers",
+      "purpose": "Vulkan API headers (no loader is linked; volk loads the system loader at runtime)",
+      "gate": "G1",
+      "configurations": ["dev-vulkan"],
+      "method": "git",
+      "origin": "https://github.com/KhronosGroup/Vulkan-Headers",
+      "selected_tag": "vulkan-sdk-1.4.341.0",
+      "revision": "b5c8f996196ba4aa6d8f97e52b5d3b6e70f7e4e2",
+      "revision_date": "2026-01-23T14:11:36+00:00",
+      "license": { "spdx": "Apache-2.0 OR MIT", "file": "LICENSE.md", "notice_copy": "third_party_notices/Vulkan-Headers/LICENSE.md", "sha256": "" },
+      "transitive": [],
+      "build_options": { "VULKAN_HEADERS_ENABLE_TESTS": "OFF", "VULKAN_HEADERS_ENABLE_INSTALL": "OFF" },
+      "redistribution": "Headers only; nothing from this package ships in binaries beyond compiled-in constants."
+    },
+    {
+      "name": "volk",
+      "purpose": "Vulkan meta-loader (function pointer loading)",
+      "gate": "G1",
+      "configurations": ["dev-vulkan"],
+      "method": "git",
+      "origin": "https://github.com/zeux/volk",
+      "selected_tag": "vulkan-sdk-1.4.341.0",
+      "revision": "d979819fd03de3a7606d6e23d6ff4968942599da",
+      "revision_date": "2026-01-23T17:21:21+00:00",
+      "license": { "spdx": "MIT", "file": "LICENSE.md", "notice_copy": "third_party_notices/volk/LICENSE.md", "sha256": "" },
+      "transitive": ["Vulkan-Headers (same SDK tag)"],
+      "build_options": { "VOLK_PULL_IN_VULKAN": "OFF", "VOLK_INSTALL": "OFF" },
+      "redistribution": "Compiled into the Vulkan backend; MIT notice required."
+    },
+    {
+      "name": "VulkanMemoryAllocator",
+      "purpose": "Vulkan device-memory allocation",
+      "gate": "G1",
+      "configurations": ["dev-vulkan"],
+      "method": "git",
+      "origin": "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator",
+      "selected_tag": "v3.3.0",
+      "revision": "1d8f600fd424278486eade7ed3e877c99f0846b1",
+      "revision_date": "2025-05-12T13:42:18+02:00",
+      "license": { "spdx": "MIT", "file": "LICENSE.txt", "notice_copy": "third_party_notices/VulkanMemoryAllocator/LICENSE.txt", "sha256": "" },
+      "transitive": ["Vulkan-Headers"],
+      "build_options": {},
+      "redistribution": "Header-only implementation compiled into the Vulkan backend; MIT notice required."
+    },
+    {
+      "name": "imgui",
+      "purpose": "Editor tool UI (docking branch) with SDL3 platform and Vulkan renderer backends",
+      "gate": "G1",
+      "configurations": ["dev-vulkan"],
+      "method": "git",
+      "origin": "https://github.com/ocornut/imgui",
+      "selected_tag": "v1.92.9b-docking",
+      "revision": "b48d1afbe8ee8b238e2961dc363a949dd7304e23",
+      "revision_date": "2026-07-31T16:25:00+02:00",
+      "license": { "spdx": "MIT", "file": "LICENSE.txt", "notice_copy": "third_party_notices/imgui/LICENSE.txt", "sha256": "" },
+      "transitive": ["SDL3", "volk (IMGUI_IMPL_VULKAN_USE_VOLK)"],
+      "build_options": {},
+      "redistribution": "Editor only; not linked into sovereign-runtime or sovereign-cli. MIT notice required."
+    },
+    {
+      "name": "dxc",
+      "purpose": "Offline HLSL -> SPIR-V shader compiler (build tool, never shipped)",
+      "gate": "G1",
+      "configurations": ["dev-vulkan"],
+      "method": "url",
+      "origin": "https://github.com/microsoft/DirectXShaderCompiler",
+      "selected_tag": "v1.8.2505.1",
+      "reported_version": "libdxcompiler.so: 1.9(dev;4950-b106a961); libdxil.so: 1.9 (as printed by 'dxc --version' from the Linux package)",
+      "platforms": {
+        "linux-x86_64": {
+          "url": "https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.8.2505.1/linux_dxc_2025_07_14.x86_64.tar.gz",
+          "archive_sha256": "f2213da1fc99dc8778c8823078e16ba97c7f80f86a1d4520ab1adf4b462bc48c",
+          "executable": "bin/dxc"
+        },
+        "windows-x64": {
+          "url": "https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.8.2505.1/dxc_2025_07_14.zip",
+          "archive_sha256": "9ad895a6b039e3a8f8c22a1009f866800b840a74b50db9218d13319e215ea8a4",
+          "executable": "bin/x64/dxc.exe",
+          "note": "Checksum recorded from the downloaded archive; this package has not been executed on Windows."
+        }
+      },
+      "license": { "spdx": "NCSA AND LicenseRef-MS-DXC", "file": "LICENSE-LLVM.txt", "notice_copy": "third_party_notices/dxc/LICENSE-LLVM.txt", "sha256": "", "additional_files": ["LICENSE-MS.txt"] },
+      "transitive": [],
+      "build_options": { "flags": "-spirv -fspv-target-env=vulkan1.3 -Zpc -WX -O3 -HV 2021" },
+      "redistribution": "Build tool only. Compiled SPIR-V output is engine-owned; the compiler binaries are not redistributed."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+# Build trees and fetched dependencies (FetchContent populates build/<preset>/_deps)
+/build/
+/out/
+
+# Per-scene local state written next to scene documents (writer lock, commit journal, backup, temp files)
+*.scene.json.lock
+*.scene.json.journal
+*.scene.json.journal.orphaned-*
+*.scene.json.bak
+.*.tmp-*
+
+# Editor-local settings
+imgui.ini
+
+# Tooling
+compile_commands.json
+.cache/
+__pycache__/
