@@ -1,1 +1,5 @@
-# placeholder until module lands
+add_library(sov_runtime STATIC src/simulation.cpp)
+add_library(sov::runtime ALIAS sov_runtime)
+sov_configure_target(sov_runtime)
+target_include_directories(sov_runtime PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(sov_runtime PUBLIC sov::world sov::core)

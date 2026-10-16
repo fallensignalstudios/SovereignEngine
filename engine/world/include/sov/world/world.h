@@ -80,6 +80,9 @@ class World {
 
   void ForEachEntity(const std::function<void(EntityHandle)>& fn) const;
 
+  // Number of World instances currently alive in this process (leak checks in play/stop loops).
+  static std::size_t LiveWorldCount();
+
  private:
   struct Impl;
   std::unique_ptr<Impl> impl_;

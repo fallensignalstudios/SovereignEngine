@@ -13,12 +13,14 @@ set(SOV_HEADLESS_TEST_SOURCES
   unit/test_world.cpp
   unit/test_commands.cpp
   unit/test_store.cpp
-  integration/test_cli.cpp)
-set(SOV_HEADLESS_SUITES core math scene world commands store cli)
+  integration/test_cli.cpp
+  integration/test_editor.cpp
+  integration/test_play.cpp)
+set(SOV_HEADLESS_SUITES core math scene world commands store cli editor play)
 
 add_executable(sovereign-tests support/test_main.cpp ${SOV_HEADLESS_TEST_SOURCES})
 sov_configure_target(sovereign-tests)
-target_link_libraries(sovereign-tests PRIVATE sov_test_harness sov::core sov::world sov::commands)
+target_link_libraries(sovereign-tests PRIVATE sov_test_harness sov::core sov::world sov::commands sov::runtime sov::game_sandbox sov::editor_authoring)
 
 target_compile_definitions(sovereign-tests PRIVATE SOV_CLI_PATH="$<TARGET_FILE:sovereign-cli>")
 add_dependencies(sovereign-tests sovereign-cli)

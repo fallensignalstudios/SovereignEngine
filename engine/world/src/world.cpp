@@ -13,6 +13,7 @@ namespace sov {
 namespace {
 
 std::atomic<std::uint32_t> g_next_world_id{1};
+std::atomic<std::size_t> g_live_worlds{0};
 
 struct IdC {
   Uuid id;
@@ -78,8 +79,10 @@ struct World::Impl {
   }
 };
 
-World::World(WorldKind kind) : impl_(std::make_unique<Impl>()), id_(g_next_world_id++), kind_(kind) {}
-World::~World() = default;
+World::World(WorldKind kind) : impl_(std::make_unique<Impl>()), id_(g_next_world_id++), kind_(kind) { ++g_live_worlds; }
+World::~World() { --g_live_worlds; }
+
+std::size_t World::LiveWorldCount() { return g_live_worlds.load(); }
 
 static entt::entity ToEntt(EntityHandle h) { return static_cast<entt::entity>(h.value); }
 
