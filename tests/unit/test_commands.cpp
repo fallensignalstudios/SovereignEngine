@@ -103,8 +103,9 @@ SOV_TEST(commands, failed_batch_rolls_back_entirely) {
   SOV_CHECK_EQ(r.errors[0].code, ErrorCode::UnknownEntity);
   SOV_CHECK_EQ(r.errors[0].op_index, 2);
   SOV_REQUIRE(r.operations.size() == 4);
-  SOV_CHECK(r.operations[0].status == OpStatus::Applied);
-  SOV_CHECK(r.operations[1].status == OpStatus::Applied);
+  // Ops before the failure passed staging but nothing was applied: "valid", never "applied".
+  SOV_CHECK(r.operations[0].status == OpStatus::Valid);
+  SOV_CHECK(r.operations[1].status == OpStatus::Valid);
   SOV_CHECK(r.operations[2].status == OpStatus::Failed);
   SOV_CHECK(r.operations[3].status == OpStatus::NotEvaluated);
   // No authored change at all: document, revision and history are exactly as before.
@@ -142,12 +143,16 @@ SOV_TEST(commands, dry_run_changes_nothing_and_reserves_nothing) {
   SOV_CHECK_EQ(dry.revision_after, std::uint64_t{3});
   SOV_CHECK(!dry.commit_id.has_value());
   SOV_CHECK_EQ(dry.ToJson()["diff"]["entities_created"].size(), std::size_t{1});
+  SOV_REQUIRE(dry.operations.size() == 1);
+  SOV_CHECK(dry.operations[0].status == OpStatus::Valid);  // a dry run never reports an applied edit
+  SOV_CHECK_EQ(dry.ToJson()["operations"][0]["status"].get<std::string>(), std::string("valid"));
   SOV_CHECK(s.document() == before);
   SOV_CHECK(s.history().empty());
   // The key was not reserved: a real commit with the same key and content applies normally.
   const auto real = s.ApplyBatch(Batch(3, {Operation::Create(NewBox(kNewId, "Banner"))}, "banner-1", false));
   SOV_CHECK(real.status == ResultStatus::Committed);
   SOV_CHECK(!real.replayed);
+  SOV_CHECK(real.operations[0].status == OpStatus::Applied);
 }
 
 SOV_TEST(commands, dry_run_still_validates) {

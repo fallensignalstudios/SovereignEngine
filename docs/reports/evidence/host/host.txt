@@ -1,0 +1,41 @@
+# collected 2026-10-16T21:10:13Z
+## uname
+Linux vm 6.18.44-fc-v139 #1 SMP PREEMPT_DYNAMIC @0 x86_64 x86_64 x86_64 GNU/Linux
+## os-release
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+## cpu
+Architecture:                            x86_64
+CPU(s):                                  4
+Model name:                              Intel(R) Xeon(R) Processor @ 2.10GHz
+Thread(s) per core:                      1
+Core(s) per socket:                      4
+Socket(s):                               1
+Flags:                                   (see below)
+Hypervisor vendor:                       KVM
+Virtualization type:                     full
+avx2 avx512f fma sse4_2 
+## memory
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       2.8Gi        11Gi        14Mi       1.6Gi        12Gi
+Swap:             0B          0B          0B
+## disk (session allowance; see note in report)
+/dev/vda        252G   12G   28G  29% /
+## pci display adapters
+lspci: none listed or not available
+pci device count: 11
+## /dev/dri
+ls: cannot access '/dev/dri': No such file or directory
+## displays
+DISPLAY=<unset> WAYLAND_DISPLAY=<unset>

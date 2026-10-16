@@ -519,6 +519,11 @@ std::string ContentHash(const SceneDocument& doc) {
   return Sha256Hex(SerializeScene(copy));
 }
 
+std::string ProvenanceLabel(const SceneDocument& doc, const std::filesystem::path& file) {
+  return std::format("{} ({}, revision {}, content sha256 {})", doc.name, file.filename().string(), doc.revision,
+                     ContentHash(doc));
+}
+
 Result<LoadedScene> LoadSceneFile(const std::filesystem::path& path) {
   auto bytes = fs::ReadFile(path, SceneLimits::kMaxFileBytes);
   if (!bytes) return bytes.take_error();

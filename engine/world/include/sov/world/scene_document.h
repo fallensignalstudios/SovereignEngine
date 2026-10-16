@@ -147,6 +147,10 @@ Json ComponentsToJson(const EntityData& entity);
 // content while revisions keep increasing).
 std::string ContentHash(const SceneDocument& doc);
 
+// Capture/report label that identifies the exact authored state without exposing host paths:
+//   "First Light (first_light.scene.json, revision 1, content sha256 0123abcd...)"
+std::string ProvenanceLabel(const SceneDocument& doc, const std::filesystem::path& file);
+
 struct LoadedScene {
   SceneDocument document;
   std::string file_bytes;

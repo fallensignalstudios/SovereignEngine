@@ -150,6 +150,7 @@ std::optional<Error> ApplyOne(SceneDocument& doc, const Operation& op, int index
 std::string_view ToString(OpStatus status) {
   switch (status) {
     case OpStatus::Applied: return "applied";
+    case OpStatus::Valid: return "valid";
     case OpStatus::Failed: return "failed";
     case OpStatus::NotEvaluated: return "not_evaluated";
   }
@@ -168,7 +169,7 @@ StageResult StageOperations(const SceneDocument& base, std::span<const Operation
         outcome.status = OpStatus::Failed;
         failed = true;
       } else {
-        outcome.status = OpStatus::Applied;
+        outcome.status = OpStatus::Valid;
       }
     }
     r.outcomes.push_back(outcome);

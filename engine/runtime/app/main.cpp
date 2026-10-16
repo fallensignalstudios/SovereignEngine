@@ -223,7 +223,7 @@ int main(int argc, char** argv) {
             exit_code = 4;
           } else if (auto w = WritePng(opt.screenshot, *shot,
                                        render::CaptureProvenance(r, "sovereign-runtime swapchain readback (presented frame)",
-                                                                 loaded->document.name + " (" + opt.scene + ")"));
+                                                                 scene::ProvenanceLabel(loaded->document, opt.scene)));
                      !w) {
             LogError("runtime", "cannot write screenshot: {}", w.error().Describe());
             exit_code = 4;

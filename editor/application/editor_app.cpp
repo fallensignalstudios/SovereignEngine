@@ -222,7 +222,7 @@ void EditorApp::ProcessCaptures() {
       LogError("editor", "viewport capture failed: {}", img.error().Describe());
     } else if (auto w = WritePng(*viewport_capture_path_, *img,
                                  render::CaptureProvenance(renderer_, "sovereign-editor viewport view readback",
-                                                           doc_->document().name + " (" + scene_path_.string() + ")"));
+                                                           scene::ProvenanceLabel(doc_->document(), scene_path_)));
                !w) {
       LogError("editor", "cannot write {}: {}", viewport_capture_path_->string(), w.error().Describe());
     } else {
@@ -237,7 +237,7 @@ void EditorApp::ProcessCaptures() {
       LogError("editor", "window capture failed: {}", img.error().Describe());
     } else if (auto w = WritePng(*window_capture_path_, *img,
                                  render::CaptureProvenance(renderer_, "sovereign-editor swapchain readback (full editor window)",
-                                                           doc_->document().name + " (" + scene_path_.string() + ")"));
+                                                           scene::ProvenanceLabel(doc_->document(), scene_path_)));
                !w) {
       LogError("editor", "cannot write {}: {}", window_capture_path_->string(), w.error().Describe());
     } else {

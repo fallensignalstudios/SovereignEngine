@@ -5,7 +5,7 @@
 #
 # Usage: scripts/build_dxc_from_source.sh [install-root]   (default: build/tools)
 # Result: <install-root>/dxc-<rev12>/bin/dxc, picked up automatically by cmake/Dependencies.cmake.
-# Cost: roughly 0.5-1.5 h and ~6 GB on a 4-core machine; needed once per host.
+# Cost: ~16 min of compilation and ~6 GB on the 4-vCPU recording host; needed once per host.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 ROOT="$(pwd)"

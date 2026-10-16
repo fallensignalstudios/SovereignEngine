@@ -114,7 +114,15 @@
         "spdx": "Apache-2.0 OR MIT",
         "file": "LICENSE.md",
         "notice_copy": "third_party_notices/Vulkan-Headers/LICENSE.md",
-        "sha256": "ac24e5ea920e4318e4d02c4086ae51f53cfb03feed06c18df1019e7ada1ec7bc"
+        "sha256": "ac24e5ea920e4318e4d02c4086ae51f53cfb03feed06c18df1019e7ada1ec7bc",
+        "additional_files": [
+          "LICENSES/Apache-2.0.txt",
+          "LICENSES/MIT.txt"
+        ],
+        "additional_sha256": {
+          "Apache-2.0.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "MIT.txt": "1ca3502222d967f3be5751c55f6b7ee735b5383909c3b501495f54b216dbf227"
+        }
       },
       "transitive": [],
       "build_options": {
@@ -250,9 +258,55 @@
           "files": [
             "LICENSE.TXT",
             "ThirdPartyNotices.txt"
-          ]
+          ],
+          "notice_copies": {
+            "LICENSE.TXT": {
+              "copy": "third_party_notices/dxc/LICENSE.TXT",
+              "sha256": "27a49e35d1da96eba18fba54bc882667ff0ff8c0254f16f2b6e165d605ba7df8"
+            },
+            "ThirdPartyNotices.txt": {
+              "copy": "third_party_notices/dxc/ThirdPartyNotices.txt",
+              "sha256": "19512a5d0a015ef16d167272c164da49a604614a786206212a80ad486ed0be6d"
+            }
+          }
         },
-        "note": "Default on non-Windows hosts (ADR-015). The prebuilt Linux package bundles LICENSE-MS.txt whose terms say 'solely for use on Windows' while its own ReleaseNotes say LICENSE-LLVM.txt applies to all files; that contradiction is unresolved, so the prebuilt Linux package is only used when SOV_DXC_ALLOW_PREBUILT=ON is set explicitly."
+        "note": "Default on non-Windows hosts (ADR-015). The prebuilt Linux package bundles LICENSE-MS.txt whose terms say 'solely for use on Windows' while its own ReleaseNotes say LICENSE-LLVM.txt applies to all files; that contradiction is unresolved, so the prebuilt Linux package is only used when SOV_DXC_ALLOW_PREBUILT=ON is set explicitly.",
+        "submodules": [
+          {
+            "path": "external/SPIRV-Headers",
+            "origin": "https://github.com/KhronosGroup/SPIRV-Headers",
+            "revision": "aa6cef192b8e693916eb713e7a9ccadf06062ceb",
+            "spdx": "MIT",
+            "notice_copy": "third_party_notices/dxc/submodules/SPIRV-Headers/LICENSE",
+            "sha256": "ff04ae7e6a468587fe59434fee2e67c0e2a749b592c794b764ff80f30b94a084"
+          },
+          {
+            "path": "external/SPIRV-Tools",
+            "origin": "https://github.com/KhronosGroup/SPIRV-Tools",
+            "revision": "a62abcb402009b9ca5975e6167c09f237f630e0e",
+            "spdx": "Apache-2.0",
+            "notice_copy": "third_party_notices/dxc/submodules/SPIRV-Tools/LICENSE",
+            "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+          },
+          {
+            "path": "external/DirectX-Headers",
+            "origin": "https://github.com/microsoft/DirectX-Headers",
+            "revision": "980971e835876dc0cde415e8f9bc646e64667bf7",
+            "spdx": "MIT",
+            "notice_copy": "third_party_notices/dxc/submodules/DirectX-Headers/LICENSE",
+            "sha256": "903df5512f7d02609fed0c780a9b704f5a3eeb6e4d84ebe42a29845c81899a3c"
+          }
+        ],
+        "build": {
+          "targets": [
+            "dxc"
+          ],
+          "cache": "cmake/caches/PredefinedParams.cmake",
+          "type": "Release",
+          "reported_version": "libdxcompiler.so: 1.9(dev;1-b106a961)",
+          "output": "build/tools/dxc-b106a961d092/{bin/dxc,lib/libdxcompiler.so,licenses,REVISION}"
+        },
+        "build_time_note": "About 16 minutes of compilation on the 4-vCPU recording host, plus the shallow clone."
       }
     }
   ]

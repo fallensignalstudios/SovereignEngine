@@ -25,7 +25,7 @@ function(sov_compile_shaders out_var)
     add_custom_command(
       OUTPUT "${output}"
       COMMAND "${CMAKE_COMMAND}" -E make_directory "${SOV_SHADER_OUTPUT_DIR}"
-      COMMAND "${SOV_DXC_EXECUTABLE}" ${SOV_DXC_FLAGS} -T ${stage}_6_0 -E ${entry}
+      COMMAND "${SOV_DXC}" ${SOV_DXC_FLAGS} -T ${stage}_6_0 -E ${entry}
               -Fo "${output}" "${abs_source}"
       DEPENDS "${abs_source}" ${ARG_DEPENDS}
       COMMENT "DXC ${name}.hlsl (${stage}, ${entry}) -> SPIR-V"

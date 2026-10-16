@@ -28,7 +28,7 @@
           "index": { "type": "integer" },
           "op": { "enum": ["entity.create", "entity.rename", "transform.set", "material.set", "entity.delete"] },
           "entity_id": { "type": "string" },
-          "status": { "enum": ["applied", "failed", "not_evaluated"] }
+          "status": { "enum": ["applied", "valid", "failed", "not_evaluated"], "description": "applied only in committed results; valid = passed staged validation but nothing was applied (dry_run, no_change, or rejected because a later operation failed)" }
         }
       }
     },

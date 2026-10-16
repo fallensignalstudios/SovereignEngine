@@ -310,6 +310,9 @@ CommandResult SceneSession::Commit(TransactionKind kind, const std::string& acto
   rec.timestamp_ms = options_.now_ms();
 
   r.status = ResultStatus::Committed;
+  for (auto& o : r.operations) {
+    if (o.status == OpStatus::Valid) o.status = OpStatus::Applied;
+  }
   r.revision_after = rec.new_revision;
   r.commit_id = rec.commit_id;
   r.diff = scene::DiffToJson(diff);

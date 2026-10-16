@@ -1330,7 +1330,7 @@ PngText CaptureProvenance(const Renderer& renderer, const std::string& source, c
           {"EvidenceClass", d.evidence_class},
           {"Device", d.name + " [" + d.device_type + "]"},
           {"Driver", d.driver},
-          {"Backend", "native Vulkan " + d.api_version + " (volk + VMA), engine-owned HLSL->SPIR-V shaders"},
+          {"Backend", "native Vulkan 1.3 (volk + VMA; device reports API " + d.api_version + "), engine-owned HLSL->SPIR-V shaders"},
           {"ShaderCompiler", SOV_SHADER_COMPILER_DESC},
           {"ValidationLayer", v.layer_enabled ? (v.synchronization_validation ? "on (+synchronization)" : "on") : "off"},
           {"ValidationErrorsAtCapture", std::to_string(v.errors)},

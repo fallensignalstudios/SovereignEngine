@@ -10,7 +10,9 @@
 
 namespace sov::cmd {
 
-enum class OpStatus { Applied, Failed, NotEvaluated };
+// Valid: passed staged validation but was not applied (dry run, no-change or rejected batch).
+// Applied: only in committed results.
+enum class OpStatus { Applied, Valid, Failed, NotEvaluated };
 std::string_view ToString(OpStatus status);
 
 struct OpOutcome {

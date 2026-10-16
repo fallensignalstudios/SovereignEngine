@@ -25,7 +25,7 @@
     {"do": "expect", "playing": false, "revision": 5, "dirty": false, "document_hash_equals_saved": true},
     {"do": "reopen"},
     {"do": "expect", "revision": 5, "dirty": false, "document_hash_equals_saved": true},
-    {"do": "cycles", "n": 10},
+    {"do": "cycles", "n": 50},
     {"do": "resize_window", "w": 1280, "h": 720},
     {"do": "minimize"},
     {"do": "restore"},
