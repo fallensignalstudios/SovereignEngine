@@ -29,3 +29,12 @@ foreach(suite IN LISTS SOV_HEADLESS_SUITES)
   add_test(NAME headless.${suite} COMMAND sovereign-tests --suite ${suite})
   set_tests_properties(headless.${suite} PROPERTIES LABELS "headless")
 endforeach()
+
+# --- Vulkan rendering tests (graphics configuration only) -----------------------------------
+if(SOV_ENABLE_GRAPHICS)
+  add_executable(sovereign-render-tests support/test_main.cpp rendering/test_rendering.cpp)
+  sov_configure_target(sovereign-render-tests)
+  target_link_libraries(sovereign-render-tests PRIVATE sov_test_harness sov::renderer sov::world sov::core)
+  add_test(NAME vulkan.rendering COMMAND sovereign-render-tests --suite rendering)
+  set_tests_properties(vulkan.rendering PROPERTIES LABELS "vulkan")
+endif()

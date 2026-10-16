@@ -166,3 +166,35 @@ SOV_TEST(core, file_lock_is_exclusive_and_released) {
   auto third = fs::FileLock::TryAcquire(lock_path, R"({"tool":"test-c"})");
   SOV_CHECK(third.ok());
 }
+
+#include "sov/core/png.h"
+
+// The encoder must produce a stream a standard decoder accepts. Python's zlib is used as an
+// independent decoder when available (test skips that half otherwise and says so).
+SOV_TEST(core, png_encoder_roundtrips_through_independent_decoder) {
+  ImageRgba8 img;
+  img.width = 37;
+  img.height = 23;
+  img.pixels.resize(std::size_t(img.width) * img.height * 4);
+  for (std::uint32_t y = 0; y < img.height; ++y) {
+    for (std::uint32_t x = 0; x < img.width; ++x) {
+      std::uint8_t* p = &img.pixels[(std::size_t(y) * img.width + x) * 4];
+      p[0] = static_cast<std::uint8_t>(x * 7);
+      p[1] = static_cast<std::uint8_t>(y * 11);
+      p[2] = static_cast<std::uint8_t>((x / 4 + y / 4) % 2 ? 200 : 20);  // blocks -> long matches
+      p[3] = 255;
+    }
+  }
+  const auto png_path = ctx.TempDir() / "test.png";
+  SOV_REQUIRE_OK(WritePng(png_path, img, {{"Source", "unit test"}}));
+  const std::string raw_path = (ctx.TempDir() / "pixels.raw").string();
+  SOV_REQUIRE_OK(fs::AtomicWriteFile(raw_path, std::string(img.pixels.begin(), img.pixels.end())));
+  const std::string script = (ctx.SourceDir() / "scripts" / "png_decode_check.py").string();
+  const std::string cmd = "python3 -I '" + script + "' '" + png_path.string() + "' '" + raw_path + "' > /dev/null 2>&1";
+  const int rc = std::system(cmd.c_str());
+  if (rc != 0 && std::system("python3 -c 1 > /dev/null 2>&1") != 0) {
+    ctx.Note("python3 unavailable: independent PNG decode check NOT run");
+    return;
+  }
+  SOV_CHECK_EQ(rc, 0);
+}

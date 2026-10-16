@@ -22,7 +22,8 @@ function(sov_configure_target target)
   else()
     target_compile_options(${target} PRIVATE
       -Wall -Wextra -Wpedantic -Wshadow -Wnon-virtual-dtor -Woverloaded-virtual
-      -Wcast-align -Wmissing-declarations -Wformat=2 -Wimplicit-fallthrough)
+      -Wcast-align -Wmissing-declarations -Wformat=2 -Wimplicit-fallthrough
+      -Wno-missing-field-initializers)  # Vulkan "Info info{sType}" idiom zero-initializes the rest
     if(SOV_WARNINGS_AS_ERRORS)
       target_compile_options(${target} PRIVATE -Werror)
     endif()

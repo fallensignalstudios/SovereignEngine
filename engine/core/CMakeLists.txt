@@ -6,7 +6,8 @@ add_library(sov_core STATIC
   src/result.cpp
   src/sha256.cpp
   src/uuid.cpp
-  src/build_info.cpp)
+  src/build_info.cpp
+  src/png.cpp)
 add_library(sov::core ALIAS sov_core)
 sov_configure_target(sov_core)
 add_dependencies(sov_core sov_build_info)

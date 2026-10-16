@@ -1,0 +1,5 @@
+add_library(sov_platform STATIC src/window.cpp)
+add_library(sov::platform ALIAS sov_platform)
+sov_configure_target(sov_platform)
+target_include_directories(sov_platform PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_link_libraries(sov_platform PUBLIC SDL3::SDL3-static sov::runtime sov::core PRIVATE Vulkan::Headers)

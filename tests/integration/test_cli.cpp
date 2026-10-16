@@ -54,7 +54,7 @@ std::filesystem::path StageFirstLight(sov::test::Context& ctx) {
 
 // The example as an explicitly committed request with its own request id and key.
 void WriteCommittedVariant(const std::filesystem::path& dir, const char* out_name, const char* key,
-                           double emissive_strength = 6.5) {
+                           double emissive_strength = 3.2) {
   Json b = *ParseStrictJson(Read(dir / "place_banner.json"));
   b["dry_run"] = false;
   b["request_id"] = "0b1e0000-0000-4000-8000-00000000c001";

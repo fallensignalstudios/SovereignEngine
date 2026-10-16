@@ -99,9 +99,9 @@ DEEP_RED = mat((0.300, 0.022, 0.026), roughness=0.55)
 RED_STONE = mat((0.220, 0.030, 0.030), roughness=0.40)
 BRONZE = mat((0.480, 0.290, 0.120), roughness=0.32, metallic=1.0)
 DARK_BRONZE = mat((0.300, 0.170, 0.070), roughness=0.45, metallic=1.0)
-AMBER = mat((0.08, 0.04, 0.01), roughness=0.5, emissive=(1.0, 0.55, 0.18), strength=4.0)
-EMBER = mat((0.08, 0.03, 0.01), roughness=0.5, emissive=(1.0, 0.42, 0.10), strength=7.0)
-SEAM = mat((0.06, 0.01, 0.01), roughness=0.5, emissive=(1.0, 0.16, 0.06), strength=5.0)
+AMBER = mat((0.08, 0.04, 0.01), roughness=0.5, emissive=(1.0, 0.45, 0.08), strength=1.6)
+EMBER = mat((0.08, 0.03, 0.01), roughness=0.5, emissive=(1.0, 0.34, 0.05), strength=3.0)
+SEAM = mat((0.06, 0.01, 0.01), roughness=0.5, emissive=(1.0, 0.18, 0.04), strength=2.2)
 
 fl = []
 fl.append(create("Hall Floor", (0, -0.25, 0), (18, 0.5, 30), shape="box", material=STONE))
@@ -110,7 +110,7 @@ for side, x in (("West", -1), ("East", 1)):
     fl.append(create(f"Walkway Trim ({side})", (x * 1.75, 0.03, 1.5), (0.15, 0.06, 23), shape="box", material=BRONZE))
     fl.append(create(f"Walkway Light Strip ({side})", (x * 2.25, 0.012, 1.5), (0.06, 0.024, 23), shape="box", material=AMBER))
 
-COLUMN_Z = [-6.0, -2.0, 2.0, 6.0, 10.0, 14.0]
+COLUMN_Z = [-8.0, -4.0, 0.0, 4.0, 8.0, 12.0]
 for side, x in (("West", -5.5), ("East", 5.5)):
     for i, z in enumerate(COLUMN_Z, start=1):
         pivot = f"Column {side[0]}{i}"
@@ -142,9 +142,9 @@ for side, x in (("West", -5.0), ("East", 5.0)):
     fl.append(create(f"Back Banner ({side})", (x, 5.6, -14.96), (2.2, 7.0, 0.06), shape="box", material=DEEP_RED))
     fl.append(create(f"Back Banner Rod ({side})", (x, 9.2, -14.9), (2.7, 0.12, 0.12), shape="box", material=BRONZE))
 for side, x in (("West", -8.97), ("East", 8.97)):
-    for i, z in enumerate((-4.0, 4.0, 12.0), start=1):
+    for i, z in enumerate((-6.0, 2.0, 10.0), start=1):
         fl.append(create(f"Wall Sconce ({side} {i})", (x, 4.2, z), (0.06, 0.9, 0.35), shape="box", material=AMBER))
-for i, z in enumerate((-6.0, 4.0, 14.0), start=1):
+for i, z in enumerate((-8.0, 2.0, 12.0), start=1):
     fl.append(create(f"Ceiling Beam {i}", (0, 9.6, z), (18.5, 0.5, 0.6), shape="box", material=DARK_BRONZE))
 
 # Key light: warm, from above-right-front, travelling down into the hall.
@@ -153,7 +153,7 @@ fl.append(create("Key Light", (0, 12, 0), rot=euler(pitch=-52, yaw=28),
 
 # The camera entity is created by `scene new`; place it at the entrance looking down the walkway.
 fl.append({"op": "transform.set", "entity_id": FIRST_LIGHT_CAMERA,
-           "transform": {"position": [0.0, 2.6, 21.5], "rotation": euler(pitch=-5.0), "scale": [1.0, 1.0, 1.0]}})
+           "transform": {"position": [0.0, 2.3, 14.6], "rotation": euler(pitch=-3.0), "scale": [1.0, 1.0, 1.0]}})
 
 write("content/source/first_light.environment.json", {
     "ambient_color": [0.42, 0.30, 0.26], "ambient_intensity": 0.22,
@@ -166,7 +166,7 @@ write("content/source/first_light.build.command_batch.json",
 banner_ops = [
     create("Banner (West Wall, Dais)", (-8.96, 5.4, -11.0), (0.06, 6.4, 2.2), shape="box", material=DEEP_RED),
     create("Banner Rod (West Wall, Dais)", (-8.92, 8.75, -11.0), (0.12, 0.12, 2.7), shape="box", material=BRONZE),
-    {"op": "material.set", "entity_id": uid("Monolith Seam"), "material": {"emissive_strength": 6.5}},
+    {"op": "material.set", "entity_id": uid("Monolith Seam"), "material": {"emissive_strength": 3.2}},
 ]
 write("examples/place_banner.command_batch.json",
       batch("place-banner-example", "agent:place-banner-example", FIRST_LIGHT_ID, 1, "place-banner-example-0001",

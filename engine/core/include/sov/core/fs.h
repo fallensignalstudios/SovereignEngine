@@ -63,6 +63,9 @@ class FileLock {
 #endif
 };
 
+// Directory containing the running executable (shaders and other runtime files live beside it).
+std::filesystem::path ExecutableDirectory();
+
 // Short description of this process for lock files and journal records.
 std::string ProcessDescription(std::string_view tool);
 

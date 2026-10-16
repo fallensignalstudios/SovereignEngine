@@ -191,6 +191,18 @@ Result<void> AppendDurable(const std::filesystem::path& path, std::string_view b
 #endif
 }
 
+std::filesystem::path ExecutableDirectory() {
+#if defined(_WIN32)
+  wchar_t buf[MAX_PATH];
+  const DWORD n = GetModuleFileNameW(nullptr, buf, MAX_PATH);
+  return std::filesystem::path(std::wstring(buf, n)).parent_path();
+#else
+  std::error_code ec;
+  const auto exe = std::filesystem::read_symlink("/proc/self/exe", ec);
+  return ec ? std::filesystem::current_path() : exe.parent_path();
+#endif
+}
+
 std::string ProcessDescription(std::string_view tool) {
 #if defined(_WIN32)
   const auto pid = static_cast<unsigned long>(_getpid());

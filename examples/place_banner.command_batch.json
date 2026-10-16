@@ -100,7 +100,7 @@
       "op": "material.set",
       "entity_id": "4b64139c-ec7c-5014-944d-69cb98f1a8d9",
       "material": {
-        "emissive_strength": 6.5
+        "emissive_strength": 3.2
       }
     }
   ]
