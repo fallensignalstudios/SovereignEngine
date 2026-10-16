@@ -448,6 +448,14 @@ Result<SceneDocument> ParseSceneDocument(const Json& j, Diagnostics* diagnostics
   return doc;
 }
 
+Result<Environment> ParseEnvironment(const Json& json) {
+  Diagnostics d;
+  Environment env;
+  ReadEnvironment(json, "/environment", env, d);
+  if (!d.ok()) return d.First();
+  return env;
+}
+
 Result<SceneDocument> ParseSceneText(std::string_view text, Diagnostics* diagnostics) {
   auto json = ParseStrictJson(text, SceneJsonLimits());
   if (!json) {

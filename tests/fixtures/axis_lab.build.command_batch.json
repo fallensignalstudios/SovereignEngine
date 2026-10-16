@@ -1,0 +1,684 @@
+{
+  "protocol": "sovereign.command_batch",
+  "protocol_version": 1,
+  "request_id": "d3f83f76-00cb-5662-9898-13ba3e440932",
+  "actor": "tool:scene-builder",
+  "scene_id": "7083bf1f-9684-5acb-aa3a-d10cafdd264b",
+  "base_revision": 0,
+  "idempotency_key": "axis-lab-build-v1",
+  "dry_run": false,
+  "operations": [
+    {
+      "op": "entity.create",
+      "entity_id": "7236fd42-cf38-5012-95b2-c72307994404",
+      "name": "X Marker (long box)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            2.0,
+            0,
+            0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            2.0,
+            0.3,
+            0.3
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            1,
+            0,
+            0
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "62e658ab-fe06-538c-9039-40113b04258f",
+      "name": "Y Marker (cylinder)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            0,
+            2.0,
+            0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            0.3,
+            2.0,
+            0.3
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "cylinder"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            0,
+            1,
+            0
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "afd10a00-a4ac-5252-956f-4395a66c20b4",
+      "name": "Z Marker (flat box)",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            0,
+            0,
+            1.5
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            0.5,
+            0.15,
+            1.5
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            0,
+            0,
+            1
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "8cd47368-5863-57eb-a378-525d3cd12238",
+      "name": "Origin Cube",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            1,
+            1,
+            1
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "d22ad718-ba31-5baa-8949-5c8801eb3aab",
+      "name": "Depth Near Box",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            -3.0,
+            -2.0,
+            1.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            0,
+            1,
+            1
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "d8f400c7-d628-5ace-a9ad-72f45f407779",
+      "name": "Depth Far Box",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            -3.5,
+            -2.0,
+            -2.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            2.5,
+            2.5,
+            1.0
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            1,
+            1,
+            0
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "3d872e2a-5bc9-5e6c-b8ec-86eb1dfd32c2",
+      "name": "Front-Facing Plane",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            3.5,
+            -2.0,
+            0
+          ],
+          "rotation": [
+            0.707106781,
+            0.0,
+            0.0,
+            0.707106781
+          ],
+          "scale": [
+            1.5,
+            1,
+            1.5
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "plane"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            1,
+            0.5,
+            0
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "b7489c15-cb66-5b2c-80f2-f192dbc07e3a",
+      "name": "Back-Facing Plane",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            3.5,
+            2.5,
+            0
+          ],
+          "rotation": [
+            -0.707106781,
+            0.0,
+            0.0,
+            0.707106781
+          ],
+          "scale": [
+            1.5,
+            1,
+            1.5
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "plane"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            1,
+            0,
+            1
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "225a22d9-3059-5c76-8e84-240230f5e1f6",
+      "name": "Hierarchy Parent",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            -4.0,
+            2.0,
+            0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.382683432,
+            0.923879533
+          ],
+          "scale": [
+            2.0,
+            2.0,
+            2.0
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            0.2,
+            0.2,
+            0.6
+          ],
+          "emissive_strength": 0.5
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "b6032c9d-b7b9-5f02-9185-ceaa5905be78",
+      "name": "Hierarchy Child",
+      "components": {
+        "transform": {
+          "parent": "225a22d9-3059-5c76-8e84-240230f5e1f6",
+          "position": [
+            0.9,
+            0,
+            0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0,
+            0,
+            0
+          ],
+          "roughness": 1.0,
+          "metallic": 0.0,
+          "emissive": [
+            1,
+            0,
+            0.5
+          ],
+          "emissive_strength": 1.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "e2efe6c2-db71-5dec-96b7-d0c4f6b61d59",
+      "name": "Swatch Floor",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            0,
+            -3.6,
+            0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            12,
+            1,
+            5
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "plane"
+        },
+        "material": {
+          "base_color": [
+            0.18,
+            0.18,
+            0.18
+          ],
+          "roughness": 0.9,
+          "metallic": 0.0,
+          "emissive": [
+            0,
+            0,
+            0
+          ],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "fbaf5c08-f2ae-5ae3-9d4d-20fa70e2484f",
+      "name": "Swatch Bronze",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            -1.5,
+            -3.2,
+            2.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            0.8
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0.48,
+            0.29,
+            0.12
+          ],
+          "roughness": 0.32,
+          "metallic": 1.0,
+          "emissive": [
+            0,
+            0,
+            0
+          ],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "eaf9bff8-295d-5c3e-a94e-598a3199bbce",
+      "name": "Swatch Deep Red",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            0.0,
+            -3.2,
+            2.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            0.8
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0.3,
+            0.022,
+            0.026
+          ],
+          "roughness": 0.55,
+          "metallic": 0.0,
+          "emissive": [
+            0,
+            0,
+            0
+          ],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "7fa878f1-b15d-5ecf-9c68-f8e19a3dce56",
+      "name": "Swatch Charcoal",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            1.5,
+            -3.2,
+            2.0
+          ],
+          "rotation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            0.8
+          ]
+        },
+        "primitive_mesh": {
+          "shape": "box"
+        },
+        "material": {
+          "base_color": [
+            0.03,
+            0.03,
+            0.034
+          ],
+          "roughness": 0.85,
+          "metallic": 0.0,
+          "emissive": [
+            0,
+            0,
+            0
+          ],
+          "emissive_strength": 0.0
+        }
+      }
+    },
+    {
+      "op": "entity.create",
+      "entity_id": "b8ab7a2e-1bc2-51a5-9d05-bc00d3ff1e43",
+      "name": "Axis Lab Light",
+      "components": {
+        "transform": {
+          "parent": null,
+          "position": [
+            0,
+            10,
+            0
+          ],
+          "rotation": [
+            -0.492403877,
+            0.150383734,
+            0.086824089,
+            0.852868532
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "directional_light": {
+          "color": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "intensity": 2.0
+        }
+      }
+    },
+    {
+      "op": "transform.set",
+      "entity_id": "a8d31808-fe78-5037-a920-fd2fa1aed080",
+      "transform": {
+        "position": [
+          0.0,
+          0.0,
+          10.0
+        ],
+        "rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    }
+  ]
+}

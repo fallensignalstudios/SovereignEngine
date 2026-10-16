@@ -12,12 +12,16 @@ set(SOV_HEADLESS_TEST_SOURCES
   unit/test_scene.cpp
   unit/test_world.cpp
   unit/test_commands.cpp
-  unit/test_store.cpp)
-set(SOV_HEADLESS_SUITES core math scene world commands store)
+  unit/test_store.cpp
+  integration/test_cli.cpp)
+set(SOV_HEADLESS_SUITES core math scene world commands store cli)
 
 add_executable(sovereign-tests support/test_main.cpp ${SOV_HEADLESS_TEST_SOURCES})
 sov_configure_target(sovereign-tests)
 target_link_libraries(sovereign-tests PRIVATE sov_test_harness sov::core sov::world sov::commands)
+
+target_compile_definitions(sovereign-tests PRIVATE SOV_CLI_PATH="$<TARGET_FILE:sovereign-cli>")
+add_dependencies(sovereign-tests sovereign-cli)
 
 foreach(suite IN LISTS SOV_HEADLESS_SUITES)
   add_test(NAME headless.${suite} COMMAND sovereign-tests --suite ${suite})

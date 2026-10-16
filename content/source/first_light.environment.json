@@ -1,0 +1,20 @@
+{
+  "ambient_color": [
+    0.42,
+    0.3,
+    0.26
+  ],
+  "ambient_intensity": 0.22,
+  "background_color": [
+    0.004,
+    0.0035,
+    0.005
+  ],
+  "fog_color": [
+    0.035,
+    0.02,
+    0.018
+  ],
+  "fog_density": 0.018,
+  "exposure": 1.1
+}

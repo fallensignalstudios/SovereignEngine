@@ -134,6 +134,9 @@ Result<SceneDocument> ParseSceneText(std::string_view text, Diagnostics* diagnos
 // parents, hierarchy depth, active camera reference, light count, entity count.
 void ValidateStructure(const SceneDocument& doc, Diagnostics& diagnostics);
 
+// Strict parse of an "environment" object (same rules as inside a scene document).
+Result<Environment> ParseEnvironment(const Json& json);
+
 // Canonical serialized form (schema field order, entities ascending by id).
 Json SceneToJson(const SceneDocument& doc);
 std::string SerializeScene(const SceneDocument& doc);
