@@ -1,5 +1,5 @@
 $ cmake --preset dev-vulkan
-# started 2026-10-16T23:03:44Z at commit 77d5c39b1359c0c287463efe94085fc16c3597b7
+# started 2026-10-16T23:18:47Z at commit 16f3c539170acc405e20317666985b3593c1fc5a
 Preset CMake variables:
 
   CMAKE_BUILD_TYPE="Debug"
@@ -21,7 +21,7 @@ Preset CMake variables:
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
 -- Found Git: /usr/bin/git (found version "2.43.0") 
--- Using the multi-header code from /home/user/SovereignEngine/build/dev-vulkan/_deps/nlohmann_json-src/include/
+-- Using the multi-header code from build/dev-vulkan/_deps/nlohmann_json-src/include/
 -- Dependency nlohmann_json: https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz (sha256 42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
 -- Dependency EnTT: v3.15.0 @ d4014c74dc3793aba95ae354d6e23a026c2796db (verified)
 -- Dependency Vulkan-Headers: vulkan-sdk-1.4.341.0 @ b5c8f996196ba4aa6d8f97e52b5d3b6e70f7e4e2 (verified)
@@ -584,9 +584,9 @@ Preset CMake variables:
 -- 
 -- Dependency SDL3: release-3.2.30 @ f5e5f6588921eed3d7d048ce43d9eb1ff0da0ffc (verified)
 -- Dependency imgui: v1.92.9b-docking @ b48d1afbe8ee8b238e2961dc363a949dd7304e23 (verified)
--- Shader compiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA) -> /home/user/SovereignEngine/build/tools/dxc-b106a961d092/bin/dxc (libdxcompiler.so: 1.9(dev;1-b106a961))
+-- Shader compiler: DXC v1.8.2505.1 built from source @ b106a961d092 (NCSA) -> build/tools/dxc-b106a961d092/bin/dxc (libdxcompiler.so: 1.9(dev;1-b106a961))
 -- Found Python3: /usr/bin/python3 (found version "3.13.16") found components: Interpreter 
--- Configuring done (51.2s)
+-- Configuring done (49.4s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/user/SovereignEngine/build/dev-vulkan
-# finished 2026-10-16T23:04:36Z exit 0 after 52s
+-- Build files have been written to: build/dev-vulkan
+# finished 2026-10-16T23:19:37Z exit 0 after 50s

@@ -1,5 +1,5 @@
 $ cmake --preset dev-headless
-# started 2026-10-16T23:03:06Z at commit 77d5c39b1359c0c287463efe94085fc16c3597b7
+# started 2026-10-16T23:18:10Z at commit 16f3c539170acc405e20317666985b3593c1fc5a
 Preset CMake variables:
 
   CMAKE_BUILD_TYPE="Debug"
@@ -21,11 +21,11 @@ Preset CMake variables:
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
 -- Found Git: /usr/bin/git (found version "2.43.0") 
--- Using the multi-header code from /home/user/SovereignEngine/build/dev-headless/_deps/nlohmann_json-src/include/
+-- Using the multi-header code from build/dev-headless/_deps/nlohmann_json-src/include/
 -- Dependency nlohmann_json: https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz (sha256 42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa)
 -- Dependency EnTT: v3.15.0 @ d4014c74dc3793aba95ae354d6e23a026c2796db (verified)
 -- Found Python3: /usr/bin/python3 (found version "3.13.16") found components: Interpreter 
--- Configuring done (4.5s)
+-- Configuring done (2.8s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/user/SovereignEngine/build/dev-headless
-# finished 2026-10-16T23:03:11Z exit 0 after 5s
+-- Build files have been written to: build/dev-headless
+# finished 2026-10-16T23:18:13Z exit 0 after 3s

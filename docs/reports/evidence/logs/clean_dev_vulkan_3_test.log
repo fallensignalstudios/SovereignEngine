@@ -1,81 +1,56 @@
 $ ctest --preset dev-vulkan --output-on-failure
-# started 2026-10-16T23:05:32Z at commit 77d5c39b1359c0c287463efe94085fc16c3597b7
-Test project /home/user/SovereignEngine/build/dev-vulkan
+# started 2026-10-16T23:20:32Z at commit 16f3c539170acc405e20317666985b3593c1fc5a
+Test project build/dev-vulkan
       Start  1: headless.core
- 1/29 Test  #1: headless.core ......................................   Passed    0.20 sec
+ 1/29 Test  #1: headless.core ......................................   Passed    0.12 sec
       Start  2: headless.math
  2/29 Test  #2: headless.math ......................................   Passed    0.00 sec
       Start  3: headless.scene
- 3/29 Test  #3: headless.scene .....................................   Passed    0.04 sec
+ 3/29 Test  #3: headless.scene .....................................   Passed    0.03 sec
       Start  4: headless.world
  4/29 Test  #4: headless.world .....................................   Passed    0.00 sec
       Start  5: headless.commands
  5/29 Test  #5: headless.commands ..................................   Passed    0.04 sec
       Start  6: headless.store
- 6/29 Test  #6: headless.store .....................................   Passed    1.04 sec
+ 6/29 Test  #6: headless.store .....................................   Passed    0.97 sec
       Start  7: headless.cli
- 7/29 Test  #7: headless.cli .......................................   Passed    0.28 sec
+ 7/29 Test  #7: headless.cli .......................................   Passed    0.29 sec
       Start  8: headless.editor
- 8/29 Test  #8: headless.editor ....................................   Passed    0.12 sec
+ 8/29 Test  #8: headless.editor ....................................   Passed    0.11 sec
       Start  9: headless.play
  9/29 Test  #9: headless.play ......................................   Passed    0.11 sec
       Start 10: vulkan.rendering
 10/29 Test #10: vulkan.rendering ...................................   Passed    1.04 sec
       Start 11: static.no_unreal_dependency
-11/29 Test #11: static.no_unreal_dependency ........................   Passed    0.43 sec
+11/29 Test #11: static.no_unreal_dependency ........................   Passed    0.41 sec
       Start 12: static.runtime_has_no_editor_code
 12/29 Test #12: static.runtime_has_no_editor_code ..................   Passed    0.29 sec
       Start 13: vulkan.runtime_first_light
-13/29 Test #13: vulkan.runtime_first_light .........................   Passed    2.73 sec
+13/29 Test #13: vulkan.runtime_first_light .........................   Passed    2.45 sec
       Start 14: vulkan.runtime_window_lifecycle_stress
-14/29 Test #14: vulkan.runtime_window_lifecycle_stress .............   Passed    7.69 sec
+14/29 Test #14: vulkan.runtime_window_lifecycle_stress .............   Passed    7.42 sec
       Start 17: vulkan.editor_clean_stage
 15/29 Test #17: vulkan.editor_clean_stage ..........................   Passed    0.01 sec
       Start 16: vulkan.editor_stage_scene
 16/29 Test #16: vulkan.editor_stage_scene ..........................   Passed    0.01 sec
       Start 15: vulkan.editor_first_success_automation
-17/29 Test #15: vulkan.editor_first_success_automation .............   Passed   28.56 sec
+17/29 Test #15: vulkan.editor_first_success_automation .............   Passed   27.12 sec
       Start 18: vulkan.editor_real_x11_input
-18/29 Test #18: vulkan.editor_real_x11_input .......................***Failed   32.27 sec
-[gui-real-input] editor pid 18710 window 4194350
-[gui-real-input] ok: scene open at revision 0
-[gui-real-input] sovereign-cli commit while editor open: exit 3 (expected 3)
-[gui-real-input] captured x11_01_opened.png
-[gui-real-input] ok: hierarchy click selected Column 2
-[gui-real-input] ok: inspector shows Column 2
-[gui-real-input] ok: typed Position X = -5.5 committed as revision 1
-[gui-real-input] captured x11_02_position_typed.png
-[gui-real-input] ok: hierarchy click selected Platform light strip
-[gui-real-input] ok: typed Emissive R = 3 committed as revision 2
-[gui-real-input] captured x11_03_material_typed.png
-[gui-real-input] ok: viewport click picked Raised platform
-[gui-real-input] captured x11_04_viewport_pick.png
-[gui-real-input] ok: Delete key removed Raised platform (revision 3)
-[gui-real-input] ok: History panel showing
-[gui-real-input] ok: Undo button restored the platform (revision 4)
-[gui-real-input] ok: Redo button deleted it again (revision 5)
-[gui-real-input] ok: Ctrl+Z restored it (revision 6)
-[gui-real-input] captured x11_05_history.png
-[gui-real-input] ok: Diagnostics panel showing
-[gui-real-input] ok: Validation tab shows layer on, 0 errors
-[gui-real-input] captured x11_06_diagnostics_validation.png
-[gui-real-input] ok: Commands tab lists the session's command results
-[gui-real-input] FAIL: timed out waiting for: Ctrl+S saved (not dirty) (state: {'History_shown': False, 'Diagnostics_shown': True, 'diagnostics_tab': 'Commands', 'diagnostics_command_results': 6, 'revision': 6, 'dirty': True, 'playing': False, 'entity_count': 12, 'history_size': 6, 'window': [1600, 900], 'selected': None})
-
+18/29 Test #18: vulkan.editor_real_x11_input .......................   Passed   16.23 sec
       Start 19: vulkan.failure_paths_unwind_cleanly
-19/29 Test #19: vulkan.failure_paths_unwind_cleanly ................   Passed    2.42 sec
+19/29 Test #19: vulkan.failure_paths_unwind_cleanly ................   Passed    2.47 sec
       Start 20: static.sovereign-cli_link_dependencies
 20/29 Test #20: static.sovereign-cli_link_dependencies .............   Passed    0.22 sec
       Start 21: static.sovereign-tests_link_dependencies
 21/29 Test #21: static.sovereign-tests_link_dependencies ...........   Passed    0.30 sec
       Start 22: static.sovereign-runtime_link_dependencies
-22/29 Test #22: static.sovereign-runtime_link_dependencies .........   Passed    0.33 sec
+22/29 Test #22: static.sovereign-runtime_link_dependencies .........   Passed    0.35 sec
       Start 23: static.sovereign-editor_link_dependencies
-23/29 Test #23: static.sovereign-editor_link_dependencies ..........   Passed    0.31 sec
+23/29 Test #23: static.sovereign-editor_link_dependencies ..........   Passed    0.32 sec
       Start 24: static.sovereign-render-tests_link_dependencies
-24/29 Test #24: static.sovereign-render-tests_link_dependencies ....   Passed    0.27 sec
+24/29 Test #24: static.sovereign-render-tests_link_dependencies ....   Passed    0.28 sec
       Start 25: vulkan.loaded_libraries_are_system_only
-25/29 Test #25: vulkan.loaded_libraries_are_system_only ............   Passed    1.40 sec
+25/29 Test #25: vulkan.loaded_libraries_are_system_only ............   Passed    1.41 sec
       Start 26: static.license_notices_match_lock
 26/29 Test #26: static.license_notices_match_lock ..................   Passed    0.02 sec
       Start 27: static.packet_files_verbatim
@@ -85,17 +60,13 @@ Test project /home/user/SovereignEngine/build/dev-vulkan
       Start 29: static.repository_files_conform_to_owner_schemas
 29/29 Test #29: static.repository_files_conform_to_owner_schemas ...   Passed    0.15 sec
 
-97% tests passed, 1 tests failed out of 29
+100% tests passed, 0 tests failed out of 29
 
 Label Time Summary:
-display     =  75.09 sec*proc (8 tests)
-headless    =   4.11 sec*proc (19 tests)
-static      =   3.96 sec*proc (12 tests)
-vulkan      =  76.42 sec*proc (10 tests)
+display     =  57.11 sec*proc (8 tests)
+headless    =   3.98 sec*proc (19 tests)
+static      =   3.99 sec*proc (12 tests)
+vulkan      =  58.45 sec*proc (10 tests)
 
-Total Test time (real) =  80.54 sec
-
-The following tests FAILED:
-	 18 - vulkan.editor_real_x11_input (Failed)
-Errors while running CTest
-# finished 2026-10-16T23:06:53Z exit 8 after 81s
+Total Test time (real) =  62.44 sec
+# finished 2026-10-16T23:21:34Z exit 0 after 62s
