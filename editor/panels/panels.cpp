@@ -335,6 +335,14 @@ void Viewport(EditorApp& app) {
   vp.desired_w = static_cast<std::uint32_t>(std::max(64.0f, avail.x));
   vp.desired_h = static_cast<std::uint32_t>(std::max(64.0f, avail.y));
   const ImVec2 origin = ImGui::GetCursorScreenPos();
+  static ImVec2 logged_origin{-1, -1};
+  static std::uint32_t logged_w = 0, logged_h = 0;
+  if (origin.x != logged_origin.x || origin.y != logged_origin.y || vp.width != logged_w || vp.height != logged_h) {
+    logged_origin = origin;
+    logged_w = vp.width;
+    logged_h = vp.height;
+    LogInfo("editor", "viewport image at window ({}, {}) size {}x{}", origin.x, origin.y, vp.width, vp.height);
+  }
   const ImTextureID tex = app.ui().ViewTexture(vp.view);
   if (tex) ImGui::Image(ImTextureRef(tex), ImVec2(static_cast<float>(vp.width), static_cast<float>(vp.height)));
   vp.hovered = ImGui::IsItemHovered();

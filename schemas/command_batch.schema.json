@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.invalid/schemas/command_batch.schema.json",
+  "title": "Sovereign Engine command batch (sovereign.command_batch v1)",
+  "description": "Wire contract for scene edit batches (TDD v0.1 section 19.2). RECONSTRUCTED from the TDD because the original packet fixture was not supplied; reconcile with Matthew's original if it exists. This schema describes shape only. The engine (engine/commands) implements and enforces the semantics: staged whole-batch validation in array order, base_revision equality, idempotency scoped to (scene, actor) and bound to the request-content hash, dry runs that never write or reserve keys, one revision increment per committed non-empty batch. Undo and redo are history-service calls (sovereign-cli scene undo/redo), not batch operations.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol", "protocol_version", "request_id", "actor", "scene_id", "base_revision", "idempotency_key", "operations"],
+  "properties": {
+    "protocol": { "const": "sovereign.command_batch" },
+    "protocol_version": { "const": 1 },
+    "request_id": { "$ref": "#/$defs/uuid", "description": "Transport identity of this delivery. Not part of the content hash: a retry may carry a new request_id." },
+    "actor": { "type": "string", "pattern": "^[A-Za-z0-9._:@-]{1,64}$", "description": "Who is asking (e.g. agent:layout-bot, cli:matthew). Idempotency keys are scoped per actor." },
+    "scene_id": { "$ref": "#/$defs/uuid" },
+    "base_revision": { "type": "integer", "minimum": 0, "description": "Revision the batch was prepared against. Any other current revision is rejected as stale_revision." },
+    "idempotency_key": { "type": "string", "pattern": "^[A-Za-z0-9._:-]{1,128}$" },
+    "dry_run": { "type": "boolean", "default": true, "description": "Defaults to true: a batch must explicitly set false to commit." },
+    "operations": { "type": "array", "minItems": 1, "maxItems": 512, "items": { "$ref": "#/$defs/operation" } }
+  },
+  "$defs": {
+    "uuid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" },
+    "vec3": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+    "operation": {
+      "oneOf": [
+        { "$ref": "#/$defs/entity_create" },
+        { "$ref": "#/$defs/entity_rename" },
+        { "$ref": "#/$defs/transform_set" },
+        { "$ref": "#/$defs/material_set" },
+        { "$ref": "#/$defs/entity_delete" }
+      ]
+    },
+    "entity_create": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "entity_id", "name"],
+      "description": "Creates an entity with an explicit stable id. Component fields omitted here take their documented defaults; unknown components/fields are rejected. A parent must exist (possibly created earlier in the same batch).",
+      "properties": {
+        "op": { "const": "entity.create" },
+        "entity_id": { "$ref": "#/$defs/uuid" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "components": { "type": "object", "description": "Same component objects as scene.schema.json#/$defs/components, with every field optional." }
+      }
+    },
+    "entity_rename": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "entity_id", "name"],
+      "properties": {
+        "op": { "const": "entity.rename" },
+        "entity_id": { "$ref": "#/$defs/uuid" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "transform_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "entity_id", "transform"],
+      "properties": {
+        "op": { "const": "transform.set" },
+        "entity_id": { "$ref": "#/$defs/uuid" },
+        "transform": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["position", "rotation", "scale"],
+          "description": "Complete local position/rotation/scale. parent is optional: omitted keeps the current parent; null moves the entity to the scene root. Cycles and missing parents are rejected.",
+          "properties": {
+            "parent": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/uuid" }] },
+            "position": { "$ref": "#/$defs/vec3" },
+            "rotation": { "type": "array", "items": { "type": "number" }, "minItems": 4, "maxItems": 4 },
+            "scale": { "$ref": "#/$defs/vec3" }
+          }
+        }
+      }
+    },
+    "material_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "entity_id", "material"],
+      "description": "Sets one or more material fields on an entity that has a material component (component_missing otherwise).",
+      "properties": {
+        "op": { "const": "material.set" },
+        "entity_id": { "$ref": "#/$defs/uuid" },
+        "material": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "properties": {
+            "base_color": { "$ref": "#/$defs/vec3" },
+            "roughness": { "type": "number", "minimum": 0.02, "maximum": 1 },
+            "metallic": { "type": "number", "minimum": 0, "maximum": 1 },
+            "emissive": { "$ref": "#/$defs/vec3" },
+            "emissive_strength": { "type": "number", "minimum": 0, "maximum": 100 }
+          }
+        }
+      }
+    },
+    "entity_delete": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "entity_id"],
+      "description": "Rejected (missing_dependency) while children reference the entity or it is the scene's active_camera. No cascading delete: delete or re-parent dependents earlier in the same batch.",
+      "properties": {
+        "op": { "const": "entity.delete" },
+        "entity_id": { "$ref": "#/$defs/uuid" }
+      }
+    }
+  }
+}

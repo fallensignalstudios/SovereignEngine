@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign.invalid/schemas/command_result.schema.json",
+  "title": "Sovereign Engine command result (sovereign.command_result v1)",
+  "description": "Result returned for batches, undo and redo (TDD v0.1 section 19.3). RECONSTRUCTED from the TDD. A duplicate delivery returns the originally recorded result verbatim with delivery = \"replayed\".",
+  "type": "object",
+  "required": ["protocol", "protocol_version", "request_id", "status", "delivery", "kind", "actor", "scene_id", "revision_before", "revision_after", "commit_id", "operations", "errors", "warnings", "diff", "conflict"],
+  "properties": {
+    "protocol": { "const": "sovereign.command_result" },
+    "protocol_version": { "const": 1 },
+    "request_id": { "type": ["string", "null"] },
+    "status": { "enum": ["committed", "dry_run", "no_change", "rejected"] },
+    "delivery": { "enum": ["original", "replayed"] },
+    "kind": { "enum": ["edit", "undo", "redo"] },
+    "actor": { "type": "string" },
+    "scene_id": { "type": "string" },
+    "revision_before": { "type": "integer", "minimum": 0 },
+    "revision_after": { "type": "integer", "minimum": 0, "description": "Equals revision_before unless status is committed." },
+    "commit_id": { "type": ["string", "null"], "description": "Commit token (journal record id) for committed results." },
+    "target_commit": { "type": ["string", "null"], "description": "Undo/redo: the edit transaction undone or redone." },
+    "request_hash": { "type": ["string", "null"], "description": "SHA-256 of the normalized request content the idempotency key is bound to." },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "op", "entity_id", "status"],
+        "properties": {
+          "index": { "type": "integer" },
+          "op": { "enum": ["entity.create", "entity.rename", "transform.set", "material.set", "entity.delete"] },
+          "entity_id": { "type": "string" },
+          "status": { "enum": ["applied", "failed", "not_evaluated"] }
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "enum": ["schema_error", "unknown_schema_version", "invalid_value", "duplicate_entity", "unknown_entity",
+                     "missing_dependency", "unsupported_component", "component_missing", "cycle_detected", "limit_exceeded",
+                     "stale_revision", "scene_mismatch", "idempotency_conflict", "idempotency_expired", "nothing_to_undo",
+                     "nothing_to_redo", "invalid_state", "permission_denied", "lock_unavailable", "io_failure", "internal"]
+          },
+          "message": { "type": "string" },
+          "path": { "type": ["string", "null"], "description": "JSON pointer into the request" },
+          "op_index": { "type": ["integer", "null"] },
+          "entity_id": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "diff": { "type": ["object", "null"], "description": "Structural diff (entities created/deleted/modified with field-level before/after)." },
+    "conflict": { "type": ["object", "null"], "description": "stale_revision: current revision and the commits newer than base_revision." }
+  }
+}

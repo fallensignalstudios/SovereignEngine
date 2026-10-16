@@ -1,3 +1,4 @@
+#include <set>
 #include "scene_fixtures.h"
 #include "sov/commands/command_batch.h"
 #include "sov/commands/scene_session.h"
@@ -397,4 +398,41 @@ SOV_TEST(commands, request_hash_binds_content_not_transport_fields) {
   auto reparsed = ParseCommandBatch(CommandBatchToJson(a));
   SOV_REQUIRE_OK(reparsed);
   SOV_CHECK_EQ(reparsed->ContentHash(), a.ContentHash());
+}
+
+#include "sov/core/fs.h"
+
+SOV_TEST(commands, schema_contracts_match_engine_codes_and_operations) {
+  auto result_text = fs::ReadFile(ctx.SourceDir() / "schemas" / "command_result.schema.json", 1 << 20);
+  auto batch_text = fs::ReadFile(ctx.SourceDir() / "schemas" / "command_batch.schema.json", 1 << 20);
+  SOV_REQUIRE_OK(result_text);
+  SOV_REQUIRE_OK(batch_text);
+  auto result_schema = ParseStrictJson(*result_text);
+  auto batch_schema = ParseStrictJson(*batch_text);
+  SOV_REQUIRE_OK(result_schema);
+  SOV_REQUIRE_OK(batch_schema);
+  // Every engine error code is in the published enum, and the enum has nothing extra.
+  const Json& codes = (*result_schema)["properties"]["errors"]["items"]["properties"]["code"]["enum"];
+  std::set<std::string> published;
+  for (const auto& c : codes) published.insert(c.get<std::string>());
+  std::set<std::string> engine;
+  for (int i = 0; i <= static_cast<int>(ErrorCode::Internal); ++i) engine.insert(std::string(ToString(static_cast<ErrorCode>(i))));
+  SOV_CHECK(published == engine);
+  // The batch schema's operation kinds are exactly the engine's.
+  std::set<std::string> ops;
+  for (const auto& ref : (*batch_schema)["$defs"]["operation"]["oneOf"]) {
+    const std::string def = ref["$ref"].get<std::string>().substr(std::string("#/$defs/").size());
+    ops.insert((*batch_schema)["$defs"][def]["properties"]["op"]["const"].get<std::string>());
+  }
+  std::set<std::string> engine_ops;
+  for (auto k : {OpKind::EntityCreate, OpKind::EntityRename, OpKind::TransformSet, OpKind::MaterialSet, OpKind::EntityDelete}) {
+    engine_ops.insert(std::string(ToString(k)));
+  }
+  SOV_CHECK(ops == engine_ops);
+  // The shipped example parses with the engine and defaults to a dry run.
+  auto example = fs::ReadFile(ctx.SourceDir() / "examples" / "place_banner.command_batch.json", 1 << 20);
+  SOV_REQUIRE_OK(example);
+  auto batch = ParseCommandBatchText(*example);
+  SOV_REQUIRE_OK(batch);
+  SOV_CHECK(batch->dry_run);
 }
